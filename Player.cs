@@ -47,7 +47,7 @@ namespace OSHO
             asprite.AddAnimation(downRunAnimation);
 
             // Test animation
-            asprite.animationController.SetActiveAnimation(idleLeftAnimation);
+            asprite.animationController.SetActiveAnimation(idleRightAnimation);
 
             this.world = world;
             collider = new CharacterCollider("player", new Vector2(64, 64), this.position);
@@ -141,24 +141,28 @@ namespace OSHO
             if (keyboard.IsKeyDown(Key.KeyCode.W))
             {
                 this.collider.AddVelocity(new Vector2(0, -vel));
+                this.asprite.animationController.SetActiveAnimation(idleUpAnimation);
             }
 
             //down
             if (keyboard.IsKeyDown(Key.KeyCode.S))
             {
                 this.collider.AddVelocity(new Vector2(0, vel));
+                this.asprite.animationController.SetActiveAnimation(idleDownAnimation);
             }
 
             //left
             if (keyboard.IsKeyDown(Key.KeyCode.A))
             {
                 this.collider.AddVelocity(new Vector2(-vel, 0));
+                this.asprite.animationController.SetActiveAnimation(idleLeftAnimation);
             }
 
             //right
             if (keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
+                this.asprite.animationController.SetActiveAnimation(idleRightAnimation);
             }
 
             //space
