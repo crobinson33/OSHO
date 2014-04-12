@@ -76,16 +76,12 @@ namespace OSHO
         public override void Draw(Surface surface, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-<<<<<<< HEAD
-            surface.Draw(asprite, new Vector2(300, 300), deltaTime);
-=======
-            surface.Draw(asprite, this.position);
+            surface.Draw(asprite, this.position, deltaTime);
 
             foreach(Bullet bullet in bullets)
             {
                 bullet.Draw(surface);
             }
->>>>>>> e01a109876d80ff4bced64bb415230d20ae1fbd5
 
 
             base.Draw(surface, deltaTime);
