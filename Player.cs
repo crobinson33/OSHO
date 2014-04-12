@@ -26,8 +26,8 @@ namespace OSHO
 
             
             // Create animations
-            downRunAnimation = new Animation("default", 10, 10);
-            defaultAnimation = new Animation("downRun", 11, 7);
+            downRunAnimation = new Animation("downRun", 10, 10);
+            defaultAnimation = new Animation("default", 11, 7);
 
             // Add animations
             asprite.AddAnimation(defaultAnimation);
@@ -45,13 +45,13 @@ namespace OSHO
             base.Update(deltaTime);
         }
 
-        public override void Draw(Surface surface)
+        public override void Draw(Surface surface, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            surface.Draw(asprite, new Vector2(300, 300));
+            surface.Draw(asprite, new Vector2(300, 300), deltaTime);
 
 
-            base.Draw(surface);
+            base.Draw(surface, deltaTime);
         }
     }
 }
