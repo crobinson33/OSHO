@@ -42,11 +42,11 @@ namespace OSHO
             base.Update(deltaTime);
         }
 
-        public override void Draw(Surface surface)
+        public override void Draw(Surface surface, float deltaTime)
         {
             surface.Draw(sprite, this.position);
 
-            base.Draw(surface);
+            base.Draw(surface, deltaTime);
         }
 
         public void Dispose()

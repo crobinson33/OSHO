@@ -50,11 +50,11 @@ namespace OSHO
             base.Update(deltaTime);
         }
 
-        public override void Draw(Surface surface)
+        public override void Draw(Surface surface, float deltaTime)
         {
-            surface.Draw(asprite, this.position);
+            surface.Draw(asprite, this.position, deltaTime);
 
-            base.Draw(surface);
+            base.Draw(surface, deltaTime);
         }
     }
 }

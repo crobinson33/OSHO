@@ -80,7 +80,7 @@ namespace OSHO
 
             foreach(Bullet bullet in bullets)
             {
-                bullet.Draw(surface);
+                bullet.Draw(surface, deltaTime);
             }
 
 
