@@ -17,7 +17,7 @@ namespace OSHO
             game.SetCurrentLevel(0);
 
 
-            Player player1 = new Player("one", new Vector2(0, 0), level1.world);
+            Player player1 = new Player("one", new Vector2(0, 0), level1.world, level1.mouse);
 
             Item item1 = new Item("box1", new Vector2(300, 300), level1.world);
 

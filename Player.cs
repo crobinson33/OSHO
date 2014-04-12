@@ -16,7 +16,12 @@ namespace OSHO
 
         public CharacterCollider collider;
 
-        public Player(string tag, Vector2 position, World world) : base(tag)
+        List<Bullet> bullets = new List<Bullet>();
+        World world;
+
+        Mouse mouse;
+
+        public Player(string tag, Vector2 position, World world, Mouse mouse) : base(tag)
         {
             Console.WriteLine("player start...");
             this.position = position;
@@ -38,8 +43,12 @@ namespace OSHO
             // Test animation
             asprite.animationController.SetActiveAnimation(downRunAnimation);
 
+            this.world = world;
             collider = new CharacterCollider("player", new Vector2(64, 64), this.position);
-            world.AddCollider(collider);
+            collider.AddTagToIgnore("bullet");
+            this.world.AddCollider(collider);
+
+            this.mouse = mouse;
 
             Console.WriteLine("player end...");
         }
@@ -51,6 +60,16 @@ namespace OSHO
             //asprite.Update(this.position);
             HandleInput();
             //Console.WriteLine("getting called...");
+
+            //Console.WriteLine(bullets.Count);
+            foreach(Bullet bullet in bullets)
+            {
+                bullet.Update(deltaTime);
+            }
+
+            //remove bullets off screen
+            CheckBulletScreenBounds();
+
             base.Update(deltaTime);
         }
 
@@ -59,14 +78,58 @@ namespace OSHO
             //Console.WriteLine("getting called...");
             surface.Draw(asprite, this.position);
 
+            foreach(Bullet bullet in bullets)
+            {
+                bullet.Draw(surface);
+            }
+
 
             base.Draw(surface);
+        }
+
+        public void CheckBulletScreenBounds()
+        {
+            for (int i = bullets.Count - 1; i >= 0; i--)
+            {
+                
+                if (bullets[i].position.X < 0)
+                {
+                    Console.WriteLine("removed");
+                    world.RemoveCollider(bullets[i].collider);
+                    bullets.RemoveAt(i);
+                    return;
+                }
+                //Console.WriteLine(bullets[i].position.X + ", " + (bullets[i].position.X + bullets[i].width )+ ", " + bullets[i].collider.bottomRight.X);
+                if (bullets[i].position.X + bullets[i].width > 800)
+                {
+                    Console.WriteLine("removed");
+                    //bullets[i].Dispose();
+                    //bullets[i] = null;
+                    world.RemoveCollider(bullets[i].collider);
+                    bullets.RemoveAt(i);
+                    return;
+                }
+                if (bullets[i].position.Y < 0)
+                {
+                    Console.WriteLine("removed");
+                    world.RemoveCollider(bullets[i].collider);
+                    bullets.RemoveAt(i);
+                    return;
+                }
+                if (bullets[i].position.Y + bullets[i].height > 600)
+                {
+                    Console.WriteLine("removed");
+                    world.RemoveCollider(bullets[i].collider);
+                    bullets.RemoveAt(i);
+                    return;
+                }
+            }
         }
 
         public void HandleInput()
         {
             Keyboard keyboard = new Keyboard();
-            float vel = 50;
+            float vel = 20;
 
             //up
             if (keyboard.IsKeyDown(Key.KeyCode.W))
@@ -90,6 +153,24 @@ namespace OSHO
             if (keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
+            }
+
+            //space
+            if (keyboard.IsKeyDown(Key.KeyCode.Space))
+            {
+                Vector2 target = mouse.GetMousePosition();
+
+                Vector2 direction = target - this.position;
+                direction.Normalize();
+
+                //Console.WriteLine(target);
+                //Console.WriteLine(direction);
+                float velocity = 500000;
+                //Console.WriteLine(direction * velocity);
+
+                Bullet newBullet = new Bullet("bullet", this.position, this.world, direction * velocity);
+                newBullet.collider.AddVelocity(direction * (velocity));
+                bullets.Add(newBullet);
             }
 
             //Console.WriteLine(this.position + ", " + this.collider.position + ", " + this.collider.velocity);

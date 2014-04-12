@@ -38,6 +38,7 @@ namespace OSHO
             asprite.animationController.SetActiveAnimation(downRunAnimation);
 
             collider = new BoxCollider(tag, new Vector2(64, 64), this.position);
+            collider.isStatic = true;
             world.AddCollider(collider);
         }
 
