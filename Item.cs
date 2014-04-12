@@ -21,7 +21,7 @@ namespace OSHO
         {
             this.position = pos;
 
-            atexture = new Texture("HunchWideSprites.png");
+            atexture = new Texture("HunchSprite.png");
 
             asprite = new AnimatedSprite(atexture, 64, 64);
 

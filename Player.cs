@@ -11,7 +11,10 @@ namespace OSHO
     {
         public Texture atexture;
         public AnimatedSprite asprite;
-        public Animation defaultAnimation;
+        public Animation idleDownAnimation;
+        public Animation idleUpAnimation;
+        public Animation idleLeftAnimation;
+        public Animation idleRightAnimation;
         public Animation downRunAnimation;
 
         public CharacterCollider collider;
@@ -27,21 +30,24 @@ namespace OSHO
             this.position = position;
 
 
-            atexture = new Texture("HunchWideSprites.png");
+            atexture = new Texture("HunchSprite.png");
 
             asprite = new AnimatedSprite(atexture, 64, 64);
 
             
             // Create animations
-            downRunAnimation = new Animation("downRun", 10, 10);
-            defaultAnimation = new Animation("default", 11, 7);
+            downRunAnimation = new Animation("downRun", 0, 10);
+            idleDownAnimation = new Animation("idleDown", 10, 7);
+            idleUpAnimation = new Animation("idleUp", 20, 7);
+            idleLeftAnimation = new Animation("idleLeft", 30, 7, true);
+            idleRightAnimation = new Animation("idleRight", 30, 7);
 
             // Add animations
-            asprite.AddAnimation(defaultAnimation);
+            asprite.AddAnimation(idleDownAnimation);
             asprite.AddAnimation(downRunAnimation);
 
             // Test animation
-            asprite.animationController.SetActiveAnimation(downRunAnimation);
+            asprite.animationController.SetActiveAnimation(idleLeftAnimation);
 
             this.world = world;
             collider = new CharacterCollider("player", new Vector2(64, 64), this.position);
