@@ -30,6 +30,7 @@ namespace OSHO
             collider = new BoxCollider(tag, new Vector2(width, height), this.position);
             collider.AddTagToIgnore("player");
             collider.AddTagToIgnore(tag);
+            collider.clearVelocityAmount = 1;
             world.AddCollider(collider);
 
             this.velocity = vel;
