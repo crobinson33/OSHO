@@ -16,6 +16,7 @@ namespace OSHO
         public Animation idleLeftAnimation;
         public Animation idleRightAnimation;
         public Animation downRunAnimation;
+        public Shader test;
 
         public CharacterCollider collider;
 
@@ -30,9 +31,11 @@ namespace OSHO
             this.position = position;
 
 
-            atexture = new Texture("HunchSprite.png");
+            atexture = new Texture("assets/HunchSprite.png");
 
             asprite = new AnimatedSprite(atexture, 64, 64);
+
+            test = new Shader(null, "assets/test.frag");
 
             
             // Create animations
@@ -45,6 +48,10 @@ namespace OSHO
             // Add animations
             asprite.AddAnimation(idleDownAnimation);
             asprite.AddAnimation(downRunAnimation);
+
+            // Add shader
+            test.SetCurrentTextureParameter("texture");
+            asprite.addShader(test);
 
             // Test animation
             asprite.animationController.SetActiveAnimation(idleRightAnimation);

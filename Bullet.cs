@@ -22,7 +22,7 @@ namespace OSHO
         {
             this.position = pos;
 
-            texture = new Texture("laser.png");
+            texture = new Texture("assets/laser.png");
             sprite = new Sprite(texture, new Vector2(0, 0), 60, 60);
             width = texture.width;
             height = texture.height;
