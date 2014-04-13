@@ -11,11 +11,18 @@ namespace OSHO
     {
         public Texture atexture;
         public AnimatedSprite asprite;
+
         public Animation idleDownAnimation;
         public Animation idleUpAnimation;
         public Animation idleLeftAnimation;
         public Animation idleRightAnimation;
         public Animation downRunAnimation;
+
+        public Animation runDownAnimation;
+        public Animation runUpAnimation;
+        public Animation runLeftAnimation;
+        public Animation runRightAnimation;
+
         public Shader test;
 
         public CharacterCollider collider;
@@ -33,8 +40,7 @@ namespace OSHO
             this.position = position;
 
 
-            atexture = new Texture("assets/HunchSprite.png");
-
+            atexture = new Texture("assets/HunchSpriteFinal.png");
             asprite = new AnimatedSprite(atexture, 64, 64);
 
             test = new Shader(null, "assets/test.frag");
@@ -46,6 +52,12 @@ namespace OSHO
             idleUpAnimation = new Animation("idleUp", 20, 7);
             idleLeftAnimation = new Animation("idleLeft", 30, 7, true);
             idleRightAnimation = new Animation("idleRight", 30, 7);
+
+            //runs.
+            runDownAnimation = new Animation("runDown", 40, 10);
+            runUpAnimation = new Animation("runUp", 50, 10);
+            runRightAnimation = new Animation("runRight", 60, 10);
+            runLeftAnimation = new Animation("runLeft", 70, 10);
 
             // Add animations
             asprite.AddAnimation(idleDownAnimation);
@@ -84,6 +96,7 @@ namespace OSHO
 
             //remove bullets off screen
             CheckBulletScreenBounds();
+            CheckForIdle();
 
             base.Update(deltaTime);
         }
@@ -100,6 +113,14 @@ namespace OSHO
 
 
             base.Draw(surface, deltaTime);
+        }
+
+        public void CheckForIdle()
+        {
+            if (this.collider.velocity.X < 0.3f && this.collider.velocity.Y < 0.3f)
+            {
+                this.asprite.animationController.SetActiveAnimation(idleDownAnimation);
+            }
         }
 
         public void CheckBulletScreenBounds()
@@ -151,34 +172,34 @@ namespace OSHO
         public void HandleInput()
         {
             Keyboard keyboard = new Keyboard();
-            float vel = 20;
+            float vel = 15;
 
             //up
             if (keyboard.IsKeyDown(Key.KeyCode.W))
             {
                 this.collider.AddVelocity(new Vector2(0, -vel));
-                this.asprite.animationController.SetActiveAnimation(idleUpAnimation);
+                this.asprite.animationController.SetActiveAnimation(runUpAnimation);
             }
 
             //down
             if (keyboard.IsKeyDown(Key.KeyCode.S))
             {
                 this.collider.AddVelocity(new Vector2(0, vel));
-                this.asprite.animationController.SetActiveAnimation(idleDownAnimation);
+                this.asprite.animationController.SetActiveAnimation(runDownAnimation);
             }
 
             //left
             if (keyboard.IsKeyDown(Key.KeyCode.A))
             {
                 this.collider.AddVelocity(new Vector2(-vel, 0));
-                this.asprite.animationController.SetActiveAnimation(idleLeftAnimation);
+                this.asprite.animationController.SetActiveAnimation(runLeftAnimation);
             }
 
             //right
             if (keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
-                this.asprite.animationController.SetActiveAnimation(idleRightAnimation);
+                this.asprite.animationController.SetActiveAnimation(runRightAnimation);
             }
 
             //space
