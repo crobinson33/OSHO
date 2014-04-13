@@ -25,6 +25,8 @@ namespace OSHO
 
         Mouse mouse;
 
+        public delegate void DestroyBullet(Bullet bullet);
+
         public Player(string tag, Vector2 position, World world, Mouse mouse) : base(tag)
         {
             Console.WriteLine("player start...");
@@ -107,7 +109,7 @@ namespace OSHO
                 
                 if (bullets[i].position.X < 0)
                 {
-                    Console.WriteLine("removed");
+                    //Console.WriteLine("removed");
                     world.RemoveCollider(bullets[i].collider);
                     bullets.RemoveAt(i);
                     return;
@@ -115,7 +117,7 @@ namespace OSHO
                 //Console.WriteLine(bullets[i].position.X + ", " + (bullets[i].position.X + bullets[i].width )+ ", " + bullets[i].collider.bottomRight.X);
                 if (bullets[i].position.X + bullets[i].width > 800)
                 {
-                    Console.WriteLine("removed");
+                    //Console.WriteLine("removed");
                     //bullets[i].Dispose();
                     //bullets[i] = null;
                     world.RemoveCollider(bullets[i].collider);
@@ -124,19 +126,26 @@ namespace OSHO
                 }
                 if (bullets[i].position.Y < 0)
                 {
-                    Console.WriteLine("removed");
+                    //Console.WriteLine("removed");
                     world.RemoveCollider(bullets[i].collider);
                     bullets.RemoveAt(i);
                     return;
                 }
                 if (bullets[i].position.Y + bullets[i].height > 600)
                 {
-                    Console.WriteLine("removed");
+                    //Console.WriteLine("removed");
                     world.RemoveCollider(bullets[i].collider);
                     bullets.RemoveAt(i);
                     return;
                 }
             }
+        }
+
+        public void DeleteBullet(Bullet bullet)
+        {
+            Console.WriteLine("got here");
+            world.RemoveCollider(bullet.collider);
+            bullets.Remove(bullet);
         }
 
         public void HandleInput()
@@ -187,6 +196,8 @@ namespace OSHO
 
                 Bullet newBullet = new Bullet("bullet", this.position, this.world, direction * velocity);
                 newBullet.collider.AddVelocity(direction * (velocity));
+                DestroyBullet bulletCallback = DeleteBullet;
+                newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
                 bullets.Add(newBullet);
             }
 
