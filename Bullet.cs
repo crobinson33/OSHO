@@ -10,7 +10,8 @@ namespace OSHO
     public class Bullet : BaseObject
     {
         public Texture texture;
-        public Sprite sprite;
+        public AnimatedSprite aSprite;
+        public Animation shooting;
         public float width;
         public float height;
 
@@ -22,8 +23,13 @@ namespace OSHO
         {
             this.position = pos;
 
-            texture = new Texture("assets/laser.png");
-            sprite = new Sprite(texture, new Vector2(0, 0), 60, 60);
+            texture = new Texture("assets/bullet.png");
+            aSprite = new AnimatedSprite(texture, 16, 16);
+            shooting = new Animation("Shooting", 0, 2);
+
+            aSprite.AddAnimation(shooting);
+            aSprite.animationController.SetActiveAnimation(shooting);
+
             width = texture.width;
             height = texture.height;
 
@@ -45,7 +51,7 @@ namespace OSHO
 
         public override void Draw(Surface surface, float deltaTime)
         {
-            surface.Draw(sprite, this.position);
+            surface.Draw(aSprite, this.position, deltaTime);
 
             base.Draw(surface, deltaTime);
         }
@@ -54,7 +60,7 @@ namespace OSHO
         {
             this.collider = null;
             this.texture = null;
-            this.sprite = null;
+            this.aSprite = null;
         }
     }
 }

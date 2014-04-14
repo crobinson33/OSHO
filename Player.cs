@@ -10,9 +10,10 @@ namespace OSHO
     public class Player : BaseObject
     {
         public Texture atexture;
-        public AnimatedSprite asprite;
+        public MultiDrawable playerDrawable;
 
         //public Texture playerWeapon;
+        public AnimatedSprite baseSprite;
         public AnimatedSprite playerWeaponSprite;
         public AnimatedSprite playerArm;
 
@@ -20,13 +21,17 @@ namespace OSHO
         public Animation idleUpAnimation;
         public Animation idleLeftAnimation;
         public Animation idleRightAnimation;
-        public Animation downRunAnimation;
 
         public Animation weaponDown;
         public Animation weaponUp;
         public Animation weaponLeft;
         public Animation weaponRight;
         public Animation weaponBlank;
+
+        public Animation weaponDownFire;
+        public Animation weaponUpFire;
+        public Animation weaponLeftFire;
+        public Animation weaponRightFire;
 
         public Animation runDownAnimation;
         public Animation runUpAnimation;
@@ -40,6 +45,8 @@ namespace OSHO
 
         public Shader test;
 
+        public Camera camera;
+
         public CharacterCollider collider;
 
         List<Bullet> bullets = new List<Bullet>();
@@ -49,50 +56,64 @@ namespace OSHO
 
         public delegate void DestroyBullet(Bullet bullet);
 
-        public Player(string tag, Vector2 position, World world, Mouse mouse) : base(tag)
+        public Player(string tag, Vector2 position, World world, Mouse mouse, Camera camera) : base(tag)
         {
             Console.WriteLine("player start...");
             this.position = position;
 
 
-            atexture = new Texture("assets/HunchSpriteFinal.png");
-            asprite = new AnimatedSprite(atexture, 64, 64);
+            atexture = new Texture("assets/HunchSprite.png");
+
+            baseSprite = new AnimatedSprite(atexture, 64, 64);
             playerWeaponSprite = new AnimatedSprite(atexture, 64, 64);
             playerArm = new AnimatedSprite(atexture, 64, 64);
+
+            playerDrawable = new MultiDrawable(baseSprite);
+            playerDrawable.AddDrawable(playerArm);
+            playerDrawable.AddDrawable(playerWeaponSprite);
+
+            this.camera = camera;
+
 
             test = new Shader(null, "assets/test.frag");
 
             
             // Create animations
-            downRunAnimation = new Animation("downRun", 0, 10);
-            idleDownAnimation = new Animation("idleDown", 10, 7);
-            idleUpAnimation = new Animation("idleUp", 20, 7);
-            idleLeftAnimation = new Animation("idleLeft", 30, 7, true);
-            idleRightAnimation = new Animation("idleRight", 30, 7);
+            idleDownAnimation = new Animation("idleDown", 20, 7);
+            idleUpAnimation = new Animation("idleUp", 30, 7);
+            idleRightAnimation = new Animation("idleRight", 40, 7);
+            idleLeftAnimation = new Animation("idleLeft", 40, 7, true);
 
             //runs.
-            runDownAnimation = new Animation("runDown", 40, 10);
-            runUpAnimation = new Animation("runUp", 50, 10);
-            runRightAnimation = new Animation("runRight", 60, 10);
-            runLeftAnimation = new Animation("runLeft", 70, 10);
+            runDownAnimation = new Animation("runDown", 50, 10);
+            runUpAnimation = new Animation("runUp", 60, 10);
+            runRightAnimation = new Animation("runRight", 70, 10);
+            runLeftAnimation = new Animation("runLeft", 80, 10);
 
-            weaponDown = new Animation("weaponDown", 0, 1);
-            weaponUp = new Animation("weaponUp", 1, 1);
-            weaponLeft = new Animation("weaponLeft", 2, 1);
-            weaponRight = new Animation("weaponRight", 3, 1);
+            weaponDown = new Animation("weaponDown", 10, 1);
+            weaponUp = new Animation("weaponUp", 11, 1);
+            weaponLeft = new Animation("weaponLeft", 12, 1);
+            weaponRight = new Animation("weaponRight", 13, 1);
 
-            playerArmDown = new Animation("armDown", 4, 1);
-            playerArmUp = new Animation("armUp", 5, 1);
-            playerArmLeft = new Animation("armLeft", 6, 1);
-            playerArmRight = new Animation("armRight", 7, 1);
+            weaponDownFire = new Animation("weaponDownFire", 0, 1);
+            weaponUpFire = new Animation("weaponUpFire", 1, 1);
+            weaponLeftFire = new Animation("weaponLeftFire", 2, 1);
+            weaponRightFire = new Animation("weaponRightFire", 3, 1);
+
+            playerArmDown = new Animation("armDown", 14, 1);
+            playerArmUp = new Animation("armUp", 15, 1);
+            playerArmLeft = new Animation("armLeft", 16, 1);
+            playerArmRight = new Animation("armRight", 17, 1);
 
             // Add animations
-            asprite.AddAnimation(idleDownAnimation);
-            asprite.AddAnimation(downRunAnimation);
-            asprite.AddAnimation(runDownAnimation);
-            asprite.AddAnimation(runUpAnimation);
-            asprite.AddAnimation(runRightAnimation);
-            asprite.AddAnimation(runLeftAnimation);
+            baseSprite.AddAnimation(idleDownAnimation);
+            baseSprite.AddAnimation(idleUpAnimation);
+            baseSprite.AddAnimation(idleRightAnimation);
+            baseSprite.AddAnimation(idleLeftAnimation);
+            baseSprite.AddAnimation(runDownAnimation);
+            baseSprite.AddAnimation(runUpAnimation);
+            baseSprite.AddAnimation(runRightAnimation);
+            baseSprite.AddAnimation(runLeftAnimation);
 
             playerWeaponSprite.AddAnimation(weaponDown);
             playerWeaponSprite.AddAnimation(weaponUp);
@@ -106,11 +127,12 @@ namespace OSHO
 
 
             // Add shader
-            test.SetCurrentTextureParameter("texture");
-            //asprite.addShader(test);
+            //test.SetCurrentTextureParameter("texture");
+            //baseSprite.AddShader(test);
 
             // Test animation
-            asprite.animationController.SetActiveAnimation(idleRightAnimation);
+            baseSprite.animationController.SetActiveAnimation(idleRightAnimation);
+            playerDrawable.drawPartsInFront = false;
             playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
             playerArm.animationController.SetActiveAnimation(playerArmRight);
 
@@ -143,22 +165,18 @@ namespace OSHO
             //CheckForIdle();
 
             base.Update(deltaTime);
+            camera.SetCenterPosition(this.position);
         }
 
         public override void Draw(Surface surface, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            surface.Draw(asprite, this.position, deltaTime);
-            surface.Draw(playerArm, this.position, deltaTime);
-            surface.Draw(playerWeaponSprite, this.position, deltaTime);
-            
-                        
+            surface.Draw(playerDrawable, this.position, deltaTime);
 
             foreach(Bullet bullet in bullets)
             {
                 bullet.Draw(surface, deltaTime);
             }
-
 
             base.Draw(surface, deltaTime);
         }
@@ -167,7 +185,7 @@ namespace OSHO
         {
             if (Math.Abs(this.collider.velocity.X) < 1f && Math.Abs(this.collider.velocity.Y) < 1f)
             {
-                this.asprite.animationController.SetActiveAnimation(idleDownAnimation);
+                this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
             }
         }
 
@@ -222,40 +240,84 @@ namespace OSHO
             Keyboard keyboard = new Keyboard();
             float vel = 15;
 
-            //up
+            //up keydown
             if (keyboard.IsKeyDown(Key.KeyCode.W))
             {
                 this.collider.AddVelocity(new Vector2(0, -vel));
-                this.asprite.animationController.SetActiveAnimation(runUpAnimation);
+                this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmUp);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponUp);
+                this.playerDrawable.drawPartsInFront = false;
             }
 
-            //down
+            //down keydown
             if (keyboard.IsKeyDown(Key.KeyCode.S))
             {
                 this.collider.AddVelocity(new Vector2(0, vel));
-                this.asprite.animationController.SetActiveAnimation(runDownAnimation);
+                this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmDown);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
+                this.playerDrawable.drawPartsInFront = true;
             }
 
-            //left
+            //left keydown
             if (keyboard.IsKeyDown(Key.KeyCode.A))
             {
                 this.collider.AddVelocity(new Vector2(-vel, 0));
-                this.asprite.animationController.SetActiveAnimation(runLeftAnimation);
+                this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmLeft);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponLeft);
+                this.playerDrawable.drawPartsInFront = true;
             }
 
-            //right
+            //right keydown
             if (keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
-                this.asprite.animationController.SetActiveAnimation(runRightAnimation);
+                this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmRight);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
+                this.playerDrawable.drawPartsInFront = false;
+            }
+
+            //up keyup
+            if (keyboard.IsKeyDown(Key.KeyCode.W))
+            {
+                this.collider.AddVelocity(new Vector2(0, -vel));
+                this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
+                this.playerArm.animationController.SetActiveAnimation(playerArmUp);
+                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponUp);
+                this.playerDrawable.drawPartsInFront = false;
+            }
+
+            //down keyup
+            if (keyboard.IsKeyDown(Key.KeyCode.S))
+            {
+                this.collider.AddVelocity(new Vector2(0, vel));
+                this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
+                this.playerArm.animationController.SetActiveAnimation(playerArmDown);
+                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
+                this.playerDrawable.drawPartsInFront = true;
+            }
+
+            //left keyup
+            if (keyboard.IsKeyDown(Key.KeyCode.A))
+            {
+                this.collider.AddVelocity(new Vector2(-vel, 0));
+                this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
+                this.playerArm.animationController.SetActiveAnimation(playerArmLeft);
+                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponLeft);
+                this.playerDrawable.drawPartsInFront = true;
+            }
+
+            //right keyup
+            if (keyboard.IsKeyDown(Key.KeyCode.D))
+            {
+                this.collider.AddVelocity(new Vector2(vel, 0));
+                this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
+                this.playerArm.animationController.SetActiveAnimation(playerArmRight);
+                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
+                this.playerDrawable.drawPartsInFront = false;
             }
 
             //space
@@ -268,7 +330,7 @@ namespace OSHO
 
                 //Console.WriteLine(target);
                 //Console.WriteLine(direction);
-                float velocity = 500000;
+                float velocity = 50000;
                 //Console.WriteLine(direction * velocity);
 
                 Bullet newBullet = new Bullet("bullet", this.position, this.world, direction * velocity);
