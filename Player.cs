@@ -32,6 +32,7 @@ namespace OSHO
         public Animation weaponUpFire;
         public Animation weaponLeftFire;
         public Animation weaponRightFire;
+        public Animation weaponClear;
 
         public Animation runDownAnimation;
         public Animation runUpAnimation;
@@ -42,6 +43,7 @@ namespace OSHO
         public Animation playerArmUp;
         public Animation playerArmLeft;
         public Animation playerArmRight;
+        public Animation playerArmClear;
 
         public Shader test;
 
@@ -94,6 +96,8 @@ namespace OSHO
             weaponUp = new Animation("weaponUp", 11, 1);
             weaponLeft = new Animation("weaponLeft", 12, 1);
             weaponRight = new Animation("weaponRight", 13, 1);
+            weaponClear = new Animation("weaponClear", 29, 1);
+            
 
             weaponDownFire = new Animation("weaponDownFire", 0, 1);
             weaponUpFire = new Animation("weaponUpFire", 1, 1);
@@ -104,6 +108,7 @@ namespace OSHO
             playerArmUp = new Animation("armUp", 15, 1);
             playerArmLeft = new Animation("armLeft", 16, 1);
             playerArmRight = new Animation("armRight", 17, 1);
+            playerArmClear = new Animation("armClear", 29, 1);
 
             // Add animations
             baseSprite.AddAnimation(idleDownAnimation);
@@ -119,11 +124,13 @@ namespace OSHO
             playerWeaponSprite.AddAnimation(weaponUp);
             playerWeaponSprite.AddAnimation(weaponLeft);
             playerWeaponSprite.AddAnimation(weaponRight);
+            playerWeaponSprite.AddAnimation(weaponClear);
 
             playerArm.AddAnimation(playerArmDown);
             playerArm.AddAnimation(playerArmUp);
             playerArm.AddAnimation(playerArmLeft);
             playerArm.AddAnimation(playerArmRight);
+            playerArm.AddAnimation(playerArmClear);
 
 
             // Add shader
@@ -162,7 +169,7 @@ namespace OSHO
 
             //remove bullets off screen
             CheckBulletScreenBounds();
-            //CheckForIdle();
+            CheckForIdle();
 
             base.Update(deltaTime);
             camera.SetCenterPosition(this.position);
@@ -186,6 +193,8 @@ namespace OSHO
             if (Math.Abs(this.collider.velocity.X) < 1f && Math.Abs(this.collider.velocity.Y) < 1f)
             {
                 this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+                this.playerArm.animationController.SetActiveAnimation(playerArmClear);
             }
         }
 
@@ -238,7 +247,7 @@ namespace OSHO
         public void HandleInput()
         {
             Keyboard keyboard = new Keyboard();
-            float vel = 15;
+            float vel = 5;
 
             //up keydown
             if (keyboard.IsKeyDown(Key.KeyCode.W))
@@ -319,16 +328,16 @@ namespace OSHO
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
                 this.playerDrawable.drawPartsInFront = false;
             }
-
+            //Console.WriteLine(mouse.GetMousePosition());
             //space
             if (keyboard.IsKeyDown(Key.KeyCode.Space))
             {
-                Vector2 target = mouse.GetMousePosition();
+                Vector2 target = mouse.GetMouseWorldPosition();
 
                 Vector2 direction = target - this.position;
                 direction.Normalize();
 
-                //Console.WriteLine(target);
+                Console.WriteLine(target);
                 //Console.WriteLine(direction);
                 float velocity = 50000;
                 //Console.WriteLine(direction * velocity);
@@ -340,7 +349,7 @@ namespace OSHO
                 bullets.Add(newBullet);
             }
 
-            //Console.WriteLine(this.position + ", " + this.collider.position + ", " + this.collider.velocity);
+            Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
         }
     }
 }
