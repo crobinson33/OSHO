@@ -58,6 +58,13 @@ namespace OSHO
 
         public delegate void DestroyBullet(Bullet bullet);
 
+
+        // for fire rate.
+        //int fireRateSeconds = 1;
+        TimeSpan timeSinceLastFire = new TimeSpan(0, 0, 0); // can't pass a variable in here so make it the same as firerate
+        TimeSpan timeToFire = new TimeSpan(0, 0, 0, 0, 300);
+        //bool hasFired = false;
+
         public Player(string tag, Vector2 position, World world, Mouse mouse, Camera camera) : base(tag)
         {
             Console.WriteLine("player start...");
@@ -154,7 +161,7 @@ namespace OSHO
             this.collider.CalculatePoints();
             this.position = this.collider.position;
             //asprite.Update(this.position);
-            HandleInput();
+            HandleInput(deltaTime);
             //Console.WriteLine("getting called...");
 
             //Console.WriteLine(bullets.Count);
@@ -240,7 +247,7 @@ namespace OSHO
             bullets.Remove(bullet);
         }
 
-        public void HandleInput()
+        public void HandleInput(float deltaTime)
         {
             Keyboard keyboard = new Keyboard();
             float vel = 5;
@@ -391,22 +398,34 @@ namespace OSHO
             //space
             if (keyboard.IsKeyDown(Key.KeyCode.Space))
             {
-                Vector2 target = mouse.GetMouseWorldPosition();
+                //Console.WriteLine(timeSinceLastFire + ", " + timeToFire);
+                if (timeSinceLastFire > timeToFire)
+                {
+                    Vector2 target = mouse.GetMouseWorldPosition();
 
-                Vector2 direction = target - this.position;
-                direction.Normalize();
+                    Vector2 direction = target - this.position;
+                    direction.Normalize();
 
-                //Console.WriteLine(target);
-                //Console.WriteLine(direction);
-                float velocity = 50000;
-                //Console.WriteLine(direction * velocity);
+                    //Console.WriteLine(target);
+                    //Console.WriteLine(direction);
+                    float velocity = 50000;
+                    //Console.WriteLine(direction * velocity);
 
-                Bullet newBullet = new Bullet("bullet", new Vector2(this.position.X + 32, this.position.Y + 32), this.world, direction * velocity);
-                newBullet.collider.AddVelocity(direction * (velocity));
-                DestroyBullet bulletCallback = DeleteBullet;
-                newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
-                bullets.Add(newBullet);
+                    Bullet newBullet = new Bullet("bullet", new Vector2(this.position.X + 32, this.position.Y + 32), this.world, direction * velocity);
+                    newBullet.collider.AddVelocity(direction * (velocity));
+                    DestroyBullet bulletCallback = DeleteBullet;
+                    newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
+                    bullets.Add(newBullet);
+
+                    //reset fire.
+                    //timeSinceLastFire = new TimeSpan(0, 0, fireRateSeconds);
+
+                    timeSinceLastFire = new TimeSpan();
+                }
             }
+            //Console.WriteLine((int)(deltaTime * 1000));
+            timeSinceLastFire += new TimeSpan(0, 0, 0, 0,(int)(deltaTime * 1000));
+            //timeSinceLastFire.Milliseconds += (int)(deltaTime * 1000);
 
             //Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
         }
