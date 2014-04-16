@@ -235,7 +235,7 @@ namespace OSHO
 
         public void DeleteBullet(Bullet bullet)
         {
-            Console.WriteLine("got here");
+            //Console.WriteLine("got here");
             world.RemoveCollider(bullet.collider);
             bullets.Remove(bullet);
         }
@@ -246,7 +246,10 @@ namespace OSHO
             float vel = 5;
 
             //up keydown
-            if (keyboard.IsKeyDown(Key.KeyCode.W))
+            if (keyboard.IsKeyDown(Key.KeyCode.W) 
+                && !keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(0, -vel));
                 this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
@@ -256,7 +259,10 @@ namespace OSHO
             }
 
             //down keydown
-            if (keyboard.IsKeyDown(Key.KeyCode.S))
+            if (keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.D)
+                && !keyboard.IsKeyDown(Key.KeyCode.W))
             {
                 this.collider.AddVelocity(new Vector2(0, vel));
                 this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
@@ -266,7 +272,10 @@ namespace OSHO
             }
 
             //left keydown
-            if (keyboard.IsKeyDown(Key.KeyCode.A))
+            if (keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.D)
+                && !keyboard.IsKeyDown(Key.KeyCode.W)
+                && !keyboard.IsKeyDown(Key.KeyCode.S))
             {
                 this.collider.AddVelocity(new Vector2(-vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
@@ -276,7 +285,10 @@ namespace OSHO
             }
 
             //right keydown
-            if (keyboard.IsKeyDown(Key.KeyCode.D))
+            if (keyboard.IsKeyDown(Key.KeyCode.D)
+                && !keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.W))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
@@ -286,7 +298,10 @@ namespace OSHO
             }
 
             //up keyup
-            if (keyboard.IsKeyDown(Key.KeyCode.W))
+            if (keyboard.IsKeyDown(Key.KeyCode.W)
+                && !keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(0, -vel));
                 this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
@@ -296,7 +311,10 @@ namespace OSHO
             }
 
             //down keyup
-            if (keyboard.IsKeyDown(Key.KeyCode.S))
+            if (keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.D)
+                && !keyboard.IsKeyDown(Key.KeyCode.W)
+                && !keyboard.IsKeyDown(Key.KeyCode.A))
             {
                 this.collider.AddVelocity(new Vector2(0, vel));
                 this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
@@ -306,7 +324,10 @@ namespace OSHO
             }
 
             //left keyup
-            if (keyboard.IsKeyDown(Key.KeyCode.A))
+            if (keyboard.IsKeyDown(Key.KeyCode.A)
+                && !keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.W)
+                && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
                 this.collider.AddVelocity(new Vector2(-vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
@@ -316,7 +337,10 @@ namespace OSHO
             }
 
             //right keyup
-            if (keyboard.IsKeyDown(Key.KeyCode.D))
+            if (keyboard.IsKeyDown(Key.KeyCode.D)
+                && !keyboard.IsKeyDown(Key.KeyCode.S)
+                && !keyboard.IsKeyDown(Key.KeyCode.W)
+                && !keyboard.IsKeyDown(Key.KeyCode.A))
             {
                 this.collider.AddVelocity(new Vector2(vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
@@ -324,6 +348,45 @@ namespace OSHO
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
                 this.playerDrawable.drawPartsInFront = false;
             }
+
+            // now we need horizontal directions
+
+            //w & a
+            if (keyboard.IsKeyDown(Key.KeyCode.W) && keyboard.IsKeyDown(Key.KeyCode.A))
+            {
+                this.collider.AddVelocity(new Vector2(-vel, -vel));
+            }
+
+            //a & s
+            if (keyboard.IsKeyDown(Key.KeyCode.A) && keyboard.IsKeyDown(Key.KeyCode.S))
+            {
+                this.collider.AddVelocity(new Vector2(-vel, vel));
+            }
+
+            //s & d
+            if (keyboard.IsKeyDown(Key.KeyCode.S) && keyboard.IsKeyDown(Key.KeyCode.D))
+            {
+                this.collider.AddVelocity(new Vector2(vel, vel));
+            }
+
+            //d & w
+            if (keyboard.IsKeyDown(Key.KeyCode.D) && keyboard.IsKeyDown(Key.KeyCode.W))
+            {
+                this.collider.AddVelocity(new Vector2(vel, -vel));
+            }
+
+            //w & s
+            if (keyboard.IsKeyDown(Key.KeyCode.W) && keyboard.IsKeyDown(Key.KeyCode.S))
+            {
+                this.collider.AddVelocity(new Vector2(0, 0));
+            }
+
+            //a & d
+            if (keyboard.IsKeyDown(Key.KeyCode.A) && keyboard.IsKeyDown(Key.KeyCode.D))
+            {
+                this.collider.AddVelocity(new Vector2(0, 0));
+            }
+
             //Console.WriteLine(mouse.GetMousePosition());
             //space
             if (keyboard.IsKeyDown(Key.KeyCode.Space))
@@ -333,12 +396,12 @@ namespace OSHO
                 Vector2 direction = target - this.position;
                 direction.Normalize();
 
-                Console.WriteLine(target);
+                //Console.WriteLine(target);
                 //Console.WriteLine(direction);
                 float velocity = 50000;
                 //Console.WriteLine(direction * velocity);
 
-                Bullet newBullet = new Bullet("bullet", this.position, this.world, direction * velocity);
+                Bullet newBullet = new Bullet("bullet", new Vector2(this.position.X + 32, this.position.Y + 32), this.world, direction * velocity);
                 newBullet.collider.AddVelocity(direction * (velocity));
                 DestroyBullet bulletCallback = DeleteBullet;
                 newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
