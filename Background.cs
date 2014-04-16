@@ -12,16 +12,17 @@ namespace OSHO
         public Texture bgtex;
         public Sprite bg;
 
-        public Background(string tag)  : base(tag)
+        public Background(string tag, Vector2 position)  : base(tag)
         {
             bgtex = new Texture("assets/background.png");
             bg = new Sprite(bgtex, 640, 400);
+            this.position = position;
         }
 
         public override void Draw(Surface surface, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            surface.Draw(bg, new Vector2(0,0), deltaTime);
+            surface.Draw(bg, position, deltaTime);
 
             base.Draw(surface, deltaTime);
         }

@@ -75,10 +75,6 @@ namespace OSHO
             playerDrawable.AddDrawable(playerWeaponSprite);
 
             this.camera = camera;
-
-
-            test = new Shader(null, "assets/test.frag");
-
             
             // Create animations
             idleDownAnimation = new Animation("idleDown", 20, 7);
@@ -349,7 +345,7 @@ namespace OSHO
                 bullets.Add(newBullet);
             }
 
-            Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
+            //Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
         }
     }
 }
