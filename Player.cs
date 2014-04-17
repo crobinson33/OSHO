@@ -193,7 +193,7 @@ namespace OSHO
 
         public void CheckForIdle()
         {
-            if (Math.Abs(this.collider.velocity.X) < 1f && Math.Abs(this.collider.velocity.Y) < 1f)
+            if (Math.Abs(this.collider.velocity.X) < 2f && Math.Abs(this.collider.velocity.Y) < 2f)
             {
                 this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
@@ -206,43 +206,34 @@ namespace OSHO
             for (int i = bullets.Count - 1; i >= 0; i--)
             {
                 
-                if (bullets[i].position.X < 0)
+                if (bullets[i].position.X < camera.GetTopLeftScreenBounds().X)
                 {
-                    //Console.WriteLine("removed");
-                    world.RemoveCollider(bullets[i].collider);
-                    bullets.RemoveAt(i);
+                    DeleteBullet(bullets[i]);
                     return;
                 }
                 //Console.WriteLine(bullets[i].position.X + ", " + (bullets[i].position.X + bullets[i].width )+ ", " + bullets[i].collider.bottomRight.X);
-                if (bullets[i].position.X + bullets[i].width > 800)
+                if (bullets[i].position.X + bullets[i].width > camera.GetBottomRightScreenBounds().X)
                 {
-                    //Console.WriteLine("removed");
-                    //bullets[i].Dispose();
-                    //bullets[i] = null;
-                    world.RemoveCollider(bullets[i].collider);
-                    bullets.RemoveAt(i);
+                    DeleteBullet(bullets[i]);
                     return;
                 }
-                if (bullets[i].position.Y < 0)
+                if (bullets[i].position.Y < camera.GetTopLeftScreenBounds().Y)
                 {
-                    //Console.WriteLine("removed");
-                    world.RemoveCollider(bullets[i].collider);
-                    bullets.RemoveAt(i);
+                    DeleteBullet(bullets[i]);
                     return;
                 }
-                if (bullets[i].position.Y + bullets[i].height > 600)
+                if (bullets[i].position.Y + bullets[i].height > camera.GetBottomRightScreenBounds().Y)
                 {
-                    //Console.WriteLine("removed");
-                    world.RemoveCollider(bullets[i].collider);
-                    bullets.RemoveAt(i);
+                    DeleteBullet(bullets[i]);
                     return;
                 }
+                
             }
         }
 
         public void DeleteBullet(Bullet bullet)
         {
-            //Console.WriteLine("got here");
+            Console.WriteLine("removed");
             world.RemoveCollider(bullet.collider);
             bullets.Remove(bullet);
         }
@@ -251,6 +242,7 @@ namespace OSHO
         {
             Keyboard keyboard = new Keyboard();
             float vel = 5;
+            //Console.WriteLine(camera.GetTopLeftScreenBounds() + ", " + camera.GetBottomRightScreenBounds());
 
             //up keydown
             if (keyboard.IsKeyDown(Key.KeyCode.W) 
@@ -394,7 +386,7 @@ namespace OSHO
                 this.collider.AddVelocity(new Vector2(0, 0));
             }
 
-            //Console.WriteLine(mouse.GetMousePosition());
+            //Console.WriteLine(mouse.GetMouseWorldPosition());
             //space
             if (keyboard.IsKeyDown(Key.KeyCode.Space))
             {
