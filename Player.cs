@@ -158,7 +158,7 @@ namespace OSHO
 
         public override void Update(float deltaTime)
         {
-            this.collider.CalculatePoints();
+            //this.collider.CalculatePoints();
             this.position = this.collider.position;
             //asprite.Update(this.position);
             HandleInput(deltaTime);

@@ -30,6 +30,7 @@ namespace OSHO
             Spotlight sLight6 = new Spotlight(10, new Color(0.6f, 0.4f, 0.1f), new Vector2(103, 123));
 
             Item item1 = new Item("box1", new Vector2(300, 300), level1.world);
+            Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
 
             level1.AddObject(bg);
             level1.AddObject(bg2);
@@ -37,6 +38,8 @@ namespace OSHO
             level1.AddObject(bg4);
             level1.AddObject(player1);
             level1.AddObject(item1);
+            level1.AddObject(newEnemy);
+
             level1.AddLight(sLight);
             level1.AddLight(sLight2);
             level1.AddLight(sLight3);
