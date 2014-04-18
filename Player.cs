@@ -57,6 +57,7 @@ namespace OSHO
         Mouse mouse;
 
         public delegate void DestroyBullet(Bullet bullet);
+		public delegate void HurtPlayer();
 
 
         // for fire rate.
@@ -147,9 +148,16 @@ namespace OSHO
             playerArm.animationController.SetActiveAnimation(playerArmRight);
 
             this.world = world;
-            collider = new CharacterCollider("player", new Vector2(64, 64), this.position);
-            collider.AddTagToIgnore("bullet");
-            this.world.AddCollider(collider);
+            this.collider = new CharacterCollider(tag, new Vector2(64, 64), this.position);
+            this.collider.AddTagToIgnore("bullet");
+
+			//add on collision enter with enemies.
+			HurtPlayer damageCallback = TakeDamage;
+			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
+
+            this.world.AddCollider(this.collider);
+
+
 
             this.mouse = mouse;
 
@@ -190,6 +198,11 @@ namespace OSHO
 
             base.Draw(surface, deltaTime);
         }
+
+		public void TakeDamage()
+		{
+			Console.WriteLine("i got hit!");
+		}
 
         public void CheckForIdle()
         {
@@ -407,6 +420,7 @@ namespace OSHO
                     newBullet.collider.AddVelocity(direction * (velocity));
                     DestroyBullet bulletCallback = DeleteBullet;
                     newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
+					newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback(newBullet));
                     bullets.Add(newBullet);
 
                     //reset fire.

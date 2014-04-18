@@ -21,6 +21,9 @@ namespace OSHO
 
         // need to know where the player is.
         public Player player;
+		public bool isAlive = true;
+
+		public delegate void DestroyEnemy();
 
         public Enemy(string tag, Vector2 position, World world, Player player) : base(tag)
         {
@@ -43,6 +46,9 @@ namespace OSHO
             this.collider = new BoxCollider(tag, new Vector2(32, 32), this.position);
             this.world.AddCollider(collider);
 
+			DestroyEnemy enemyCallback = DeleteEnemy;
+			this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
+
             this.player = player;
         }
 
@@ -54,6 +60,12 @@ namespace OSHO
 
             base.Update(deltaTime);
         }
+
+		public void DeleteEnemy()
+		{
+			Console.WriteLine ("deleted enemy");
+			this.world.RemoveCollider(this.collider);
+		}
 
         public override void Draw(Surface surface, float deltaTime)
         {
