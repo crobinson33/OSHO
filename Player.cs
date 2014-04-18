@@ -63,7 +63,7 @@ namespace OSHO
         // for fire rate.
         //int fireRateSeconds = 1;
         TimeSpan timeSinceLastFire = new TimeSpan(0, 0, 0); // can't pass a variable in here so make it the same as firerate
-        TimeSpan timeToFire = new TimeSpan(0, 0, 0, 0, 300);
+        TimeSpan timeToFire = new TimeSpan(0, 0, 0, 0, 150);
         //bool hasFired = false;
 
         public Player(string tag, Vector2 position, World world, Mouse mouse, Camera camera) : base(tag)
@@ -406,6 +406,7 @@ namespace OSHO
                 //Console.WriteLine(timeSinceLastFire + ", " + timeToFire);
                 if (timeSinceLastFire > timeToFire)
                 {
+					/*
                     Vector2 target = mouse.GetMouseWorldPosition();
 
                     Vector2 direction = target - this.position;
@@ -424,7 +425,44 @@ namespace OSHO
                     bullets.Add(newBullet);
 
                     //reset fire.
-                    //timeSinceLastFire = new TimeSpan(0, 0, fireRateSeconds);
+                    //timeSinceLastFire = new TimeSpan(0, 0, fireRateSeconds);*/
+
+					Console.WriteLine (	this.baseSprite.animationController.GetActiveAnimationName() );
+
+					// for reference while building
+					/*runDownAnimation = new Animation("runDown", 50, 10);
+					runUpAnimation = new Animation("runUp", 60, 10);
+					runRightAnimation = new Animation("runRight", 70, 10);
+					runLeftAnimation = new Animation("runLeft", 80, 10);*/
+
+					float bulletVelocity = 500;
+
+					switch (this.baseSprite.animationController.GetActiveAnimationName() )
+					{
+						case "runDown":
+							//Console.WriteLine("Case 1");
+							Vector2 velocityToAdd = new Vector2(0, bulletVelocity);
+							FireBullet(velocityToAdd);
+							break;
+						case "runUp":
+							//Console.WriteLine("Case 2");
+							Vector2 velocityToAdd2 = new Vector2(0, -(bulletVelocity));
+							FireBullet(velocityToAdd2);
+							break;
+						case "runRight":
+							//Console.WriteLine("Case 2");
+							Vector2 velocityToAdd3 = new Vector2(bulletVelocity, 0);
+							FireBullet(velocityToAdd3);
+							break;
+						case "runLeft":
+							//Console.WriteLine("Case 2");
+							Vector2 velocityToAdd4 = new Vector2(-(bulletVelocity), 0);
+							FireBullet(velocityToAdd4);
+							break;
+						default:
+							Console.WriteLine("Default case");
+							break;
+					}
 
                     timeSinceLastFire = new TimeSpan();
                 }
@@ -435,5 +473,17 @@ namespace OSHO
 
             //Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
         }
+
+		public void FireBullet(Vector2 velocityToAdd)
+		{
+			Bullet newBullet = new Bullet("bullet", new Vector2(this.position.X + 32, this.position.Y + 32), this.world, velocityToAdd);
+			newBullet.collider.AddVelocity(velocityToAdd);
+			DestroyBullet bulletCallback = DeleteBullet;
+			newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
+			newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback(newBullet));
+			bullets.Add(newBullet);
+		}
     }
+
+
 }
