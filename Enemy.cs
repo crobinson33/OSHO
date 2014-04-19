@@ -22,7 +22,8 @@ namespace OSHO
         public float hitCooldown;
 
         public Animation black;
-        public Animation red;
+        public Animation dying;
+        public Animation dead;
 
         // need to know where the player is.
         public Player player;
@@ -34,22 +35,24 @@ namespace OSHO
         {
             this.position = position;
             invulnerable = false;
-            health = 10;
+            health = 4;
             shaderTween = 0;
             hitCooldown = 2;
 
-            texture = new Texture("assets/enemy.png");
+            texture = new Texture("assets/EyeflyFinal.png");
             sprite = new AnimatedSprite(texture, 32, 32);
             enemyDrawable = new MultiDrawable(sprite);
 
             enemyHit = new Shader(null, "shaders/enemyHit.frag");
             enemyHit.SetCurrentTextureParameter("texture");
 
-            black = new Animation("blackEnemy", 0, 1);
-            red = new Animation("redEnemy", 1, 1);
+            black = new Animation("blackEnemy", 0, 8);
+            dying = new Animation("dyingEnemy", 8, 6);
+            dead = new Animation("deadEnemy", 13, 1);
 
             sprite.AddAnimation(black);
-            sprite.AddAnimation(red);
+            sprite.AddAnimation(dying);
+            sprite.AddAnimation(dead);
 
             sprite.animationController.SetActiveAnimation(black);
 
@@ -65,26 +68,39 @@ namespace OSHO
 
         public override void Update(float deltaTime)
         {
-            this.position = this.collider.position;
-            //Console.WriteLine(this.player.position);
-            FollowPlayer();
-
-            if (invulnerable)
+            if (isAlive)
             {
-                shaderTween += 0.05f;
-                enemyHit.SetParameter("tweenValue", shaderTween);
+                this.position = this.collider.position;
+                //Console.WriteLine(this.player.position);
+                FollowPlayer();
+
+                if (invulnerable)
+                {
+                    shaderTween += 0.05f;
+                    enemyHit.SetParameter("tweenValue", shaderTween);
+                }
+
+                if (shaderTween > 1)
+                {
+                    invulnerable = false;
+                    shaderTween = 0;
+                    sprite.shader = null;
+                }
+
+                //Console.WriteLine(shaderTween);
+
+                if (health == 0)
+                {
+                    if (this.sprite.animationController.hasReachedEnd)
+                    {
+                        this.sprite.animationController.SetActiveAnimation(dead);
+                        isAlive = false;
+                    }
+                }
+
+                base.Update(deltaTime);
             }
 
-            if (shaderTween > 1)
-            {
-                invulnerable = false;
-                shaderTween = 0;
-                sprite.shader = null;
-            }
-
-            //Console.WriteLine(shaderTween);
-
-            base.Update(deltaTime);
         }
 
 		public void DeleteEnemy()
@@ -97,6 +113,7 @@ namespace OSHO
                 if (health == 0)
                 {
                     this.world.RemoveCollider(this.collider);
+                    this.sprite.animationController.SetActiveAnimation(dying);
                 }
             }
         }
