@@ -15,6 +15,11 @@ namespace OSHO
         public Texture texture;
         public MultiDrawable enemyDrawable;
         public AnimatedSprite sprite;
+        public int health;
+        public bool invulnerable;
+        public Shader enemyHit;
+        public float shaderTween;
+        public float hitCooldown;
 
         public Animation black;
         public Animation red;
@@ -28,11 +33,17 @@ namespace OSHO
         public Enemy(string tag, Vector2 position, World world, Player player) : base(tag)
         {
             this.position = position;
+            invulnerable = false;
+            health = 10;
+            shaderTween = 0;
+            hitCooldown = 2;
 
             texture = new Texture("assets/enemy.png");
             sprite = new AnimatedSprite(texture, 32, 32);
             enemyDrawable = new MultiDrawable(sprite);
-            //enemyDrawable.AddDrawable(sprite);
+
+            enemyHit = new Shader(null, "shaders/enemyHit.frag");
+            enemyHit.SetCurrentTextureParameter("texture");
 
             black = new Animation("blackEnemy", 0, 1);
             red = new Animation("redEnemy", 1, 1);
@@ -58,14 +69,37 @@ namespace OSHO
             //Console.WriteLine(this.player.position);
             FollowPlayer();
 
+            if (invulnerable)
+            {
+                shaderTween += 0.05f;
+                enemyHit.SetParameter("tweenValue", shaderTween);
+            }
+
+            if (shaderTween > 1)
+            {
+                invulnerable = false;
+                shaderTween = 0;
+                sprite.shader = null;
+            }
+
+            Console.WriteLine(shaderTween);
+
             base.Update(deltaTime);
         }
 
 		public void DeleteEnemy()
 		{
-			Console.WriteLine ("deleted enemy");
-			this.world.RemoveCollider(this.collider);
-		}
+            if (!invulnerable)
+            {
+                invulnerable = true;
+                health -= 1;
+                sprite.AddShader(enemyHit);
+                if (health == 0)
+                {
+                    this.world.RemoveCollider(this.collider);
+                }
+            }
+        }
 
         public override void Draw(Surface surface, float deltaTime)
         {
