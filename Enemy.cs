@@ -39,7 +39,7 @@ namespace OSHO
             shaderTween = 0;
             hitCooldown = 2;
 
-            texture = new Texture("assets/EyeflyFinal.png");
+            texture = new Texture("assets/Eyefly.png");
             sprite = new AnimatedSprite(texture, 32, 32);
             enemyDrawable = new MultiDrawable(sprite);
 
