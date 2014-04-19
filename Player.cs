@@ -177,7 +177,7 @@ namespace OSHO
 
             //this.mouse = mouse;
 
-            //this.collider.debug = true;
+            this.collider.debug = true;
 
             Console.WriteLine("player end...");
         }
@@ -232,7 +232,7 @@ namespace OSHO
 
 			if (this.meleeCollider.debug)
 			{
-				this.meleeCollider.DrawDebugBox(surface, deltaTime);
+				this.meleeCollider.DrawDebugBox(diffuseSurface, deltaTime);
 			}
 
             foreach(Bullet bullet in bullets)

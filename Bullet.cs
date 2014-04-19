@@ -43,7 +43,7 @@ namespace OSHO
 
             this.velocity = vel;
 
-            //this.collider.debug = true;
+            this.collider.debug = true;
 
             this.light = new Spotlight(20, new Color(1f, 1f, 1f), this.collider.position, 100, 0.05f, true);
             light.shader.SetParameter("thisLightIntensity", light.intensity);
