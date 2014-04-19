@@ -54,7 +54,7 @@ namespace OSHO
             sprite.animationController.SetActiveAnimation(black);
 
             this.world = world;
-            this.collider = new BoxCollider(tag, new Vector2(32, 32), this.position);
+            this.collider = new BoxCollider("enemy", new Vector2(32, 32), this.position);
             this.world.AddCollider(collider);
 
 			DestroyEnemy enemyCallback = DeleteEnemy;
@@ -82,7 +82,7 @@ namespace OSHO
                 sprite.shader = null;
             }
 
-            Console.WriteLine(shaderTween);
+            //Console.WriteLine(shaderTween);
 
             base.Update(deltaTime);
         }

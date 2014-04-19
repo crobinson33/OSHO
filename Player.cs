@@ -246,7 +246,7 @@ namespace OSHO
 
         public void DeleteBullet(Bullet bullet)
         {
-            Console.WriteLine("removed");
+            //Console.WriteLine("removed");
             world.RemoveCollider(bullet.collider);
             bullets.Remove(bullet);
         }
@@ -427,7 +427,7 @@ namespace OSHO
                     //reset fire.
                     //timeSinceLastFire = new TimeSpan(0, 0, fireRateSeconds);*/
 
-					Console.WriteLine (	this.baseSprite.animationController.GetActiveAnimationName() );
+					//Console.WriteLine (	this.baseSprite.animationController.GetActiveAnimationName() );
 
 					// for reference while building
 					/*runDownAnimation = new Animation("runDown", 50, 10);
@@ -442,22 +442,26 @@ namespace OSHO
 						case "runDown":
 							//Console.WriteLine("Case 1");
 							Vector2 velocityToAdd = new Vector2(0, bulletVelocity);
-							FireBullet(velocityToAdd);
+                            Vector2 spawnPosition = new Vector2(this.position.X + 26, this.position.Y + 44);
+							FireBullet(velocityToAdd, spawnPosition);
 							break;
 						case "runUp":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd2 = new Vector2(0, -(bulletVelocity));
-							FireBullet(velocityToAdd2);
+                            Vector2 spawnPosition2 = new Vector2(this.position.X + 22, this.position.Y);
+							FireBullet(velocityToAdd2, spawnPosition2);
 							break;
 						case "runRight":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd3 = new Vector2(bulletVelocity, 0);
-							FireBullet(velocityToAdd3);
+                            Vector2 spawnPosition3 = new Vector2(this.position.X + 42, this.position.Y + 18);
+							FireBullet(velocityToAdd3, spawnPosition3);
 							break;
 						case "runLeft":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd4 = new Vector2(-(bulletVelocity), 0);
-							FireBullet(velocityToAdd4);
+                            Vector2 spawnPosition4 = new Vector2(this.position.X + 6, this.position.Y + 18);
+							FireBullet(velocityToAdd4, spawnPosition4);
 							break;
 						default:
 							Console.WriteLine("Default case");
@@ -474,13 +478,14 @@ namespace OSHO
             //Console.WriteLine(this.position + ", " + mouse.GetMouseWorldPosition() + ", " + this.collider.velocity);
         }
 
-		public void FireBullet(Vector2 velocityToAdd)
+		public void FireBullet(Vector2 velocityToAdd, Vector2 spawnPosition)
 		{
-			Bullet newBullet = new Bullet("bullet", new Vector2(this.position.X + 32, this.position.Y + 32), this.world, velocityToAdd);
+			Bullet newBullet = new Bullet("bullet", spawnPosition, this.world, velocityToAdd);
 			newBullet.collider.AddVelocity(velocityToAdd);
 			DestroyBullet bulletCallback = DeleteBullet;
+            DestroyBullet bulletCallback2 = DeleteBullet;
 			newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
-			newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback(newBullet));
+			newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback2(newBullet));
 			bullets.Add(newBullet);
 		}
     }
