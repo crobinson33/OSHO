@@ -177,7 +177,7 @@ namespace OSHO
 
             //this.mouse = mouse;
 
-            collider.debug = true;
+            //this.collider.debug = true;
 
             Console.WriteLine("player end...");
         }
@@ -220,14 +220,14 @@ namespace OSHO
 			}
         }
 
-        public override void Draw(Surface surface, float deltaTime)
+        public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            surface.Draw(playerDrawable, this.position, deltaTime);
+            diffuseSurface.Draw(playerDrawable, this.position, deltaTime);
 
             if (collider.debug)
             {
-                collider.DrawDebugBox(surface, deltaTime);
+                collider.DrawDebugBox(diffuseSurface, deltaTime);
             }
 
 			if (this.meleeCollider.debug)
@@ -237,15 +237,15 @@ namespace OSHO
 
             foreach(Bullet bullet in bullets)
             {
-                bullet.Draw(surface, deltaTime);
+                bullet.Draw(diffuseSurface, lightMap, deltaTime);
 
                 if (bullet.collider.debug)
                 {
-                    bullet.collider.DrawDebugBox(surface, deltaTime);
+                    bullet.collider.DrawDebugBox(diffuseSurface, deltaTime);
                 }
             }
 
-            base.Draw(surface, deltaTime);
+            base.Draw(diffuseSurface, lightMap, deltaTime);
         }
 
 		/*public void CheckMeleeRange()

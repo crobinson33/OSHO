@@ -69,7 +69,7 @@ namespace OSHO
 
             this.player = player;
 
-            this.collider.debug = true;
+            //this.collider.debug = true;
         }
 
         public override void Update(float deltaTime)
@@ -129,6 +129,7 @@ namespace OSHO
             }
         }
 
+<<<<<<< HEAD
 		public void MeleeEnemy()
 		{
 			if (this.player.meleeButtonDown)
@@ -145,15 +146,18 @@ namespace OSHO
 		}
 
         public override void Draw(Surface surface, float deltaTime)
+=======
+        public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
+>>>>>>> FETCH_HEAD
         {
-            surface.Draw(enemyDrawable, this.position, deltaTime);
+            diffuseSurface.Draw(enemyDrawable, this.position, deltaTime);
 
             if (collider.debug)
             {
-                collider.DrawDebugBox(surface, deltaTime);
+                collider.DrawDebugBox(diffuseSurface, deltaTime);
             }
 
-            base.Draw(surface, deltaTime);
+            base.Draw(diffuseSurface, lightMap, deltaTime);
         }
 
         public void FollowPlayer()

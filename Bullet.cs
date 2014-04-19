@@ -12,6 +12,7 @@ namespace OSHO
         public Texture texture;
         public AnimatedSprite aSprite;
         public Animation shooting;
+        public Spotlight light;
         public float width;
         public float height;
 
@@ -42,7 +43,12 @@ namespace OSHO
 
             this.velocity = vel;
 
-            this.collider.debug = true;
+            //this.collider.debug = true;
+
+            this.light = new Spotlight(20, new Color(1f, 1f, 1f), this.collider.position, 100, 0.05f, true);
+            light.shader.SetParameter("thisLightIntensity", light.intensity);
+
+            aSprite.selfIlluminateShader = new Shader(null, "shaders/selfIlluminate.frag");
         }
 
         public override void Update(float deltaTime)
@@ -50,13 +56,20 @@ namespace OSHO
             //this.collider.AddVelocity(this.velocity);
             this.position = this.collider.position;
             base.Update(deltaTime);
+            light.Update(new Vector2((this.collider.position.X + (aSprite.width / 2)), (this.collider.position.Y + (aSprite.height / 2))), deltaTime);
         }
 
-        public override void Draw(Surface surface, float deltaTime)
+        public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
-            surface.Draw(aSprite, this.position, deltaTime);
+            diffuseSurface.Draw(aSprite, this.position, deltaTime);
 
-            base.Draw(surface, deltaTime);
+            lightMap.Draw(this.light, light.position, deltaTime);
+
+            aSprite.AddShader(aSprite.selfIlluminateShader);
+            lightMap.Draw(aSprite, this.position, deltaTime);
+            aSprite.RemoveShader();
+
+            base.Draw(diffuseSurface, lightMap, deltaTime);
         }
 
         public void Dispose()

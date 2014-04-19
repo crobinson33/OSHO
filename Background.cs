@@ -19,12 +19,12 @@ namespace OSHO
             this.position = position;
         }
 
-        public override void Draw(Surface surface, float deltaTime)
+        public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            surface.Draw(bg, position, deltaTime);
+            diffuseSurface.Draw(bg, position, deltaTime);
 
-            base.Draw(surface, deltaTime);
+            base.Draw(diffuseSurface, lightMap, deltaTime);
         }
     }
 }
