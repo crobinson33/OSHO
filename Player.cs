@@ -50,14 +50,17 @@ namespace OSHO
         public Camera camera;
 
         public CharacterCollider collider;
+		public BoxCollider meleeCollider;
 
         List<Bullet> bullets = new List<Bullet>();
         World world;
 
-        Mouse mouse;
+        //Mouse mouse;
 
         public delegate void DestroyBullet(Bullet bullet);
 		public delegate void HurtPlayer();
+		public delegate void CheckMelee();
+		public bool meleeButtonDown = false;
 
 
         // for fire rate.
@@ -150,16 +153,28 @@ namespace OSHO
             this.world = world;
             this.collider = new CharacterCollider(tag, new Vector2(64, 64), this.position);
             this.collider.AddTagToIgnore("bullet");
+			this.collider.AddTagToIgnore("characterMelee");
 
 			//add on collision enter with enemies.
 			HurtPlayer damageCallback = TakeDamage;
 			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
 
+			// our melee weapons
+			this.meleeCollider = new BoxCollider("characterMelee", new Vector2(128, 128), new Vector2(this.position.X - 64, this.position.Y - 64));
+			this.meleeCollider.isStatic = true; // i think making it static will allow us to modify position instead of it modifying our position
+			this.meleeCollider.AddTagToIgnore("one");
+			this.meleeCollider.AddTagToIgnore("bullet");
+
+			CheckMelee meleeCallback = CheckMeleeRange;
+			this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
+
+
+
             this.world.AddCollider(this.collider);
+			this.world.AddCollider(this.meleeCollider);
 
 
-
-            this.mouse = mouse;
+            //this.mouse = mouse;
 
             collider.debug = true;
 
@@ -220,6 +235,14 @@ namespace OSHO
 
             base.Draw(surface, deltaTime);
         }
+
+		public void CheckMeleeRange()
+		{
+			// this will be called when enemies are in melee range.
+			// if our key is down we can do damage.
+			Console.WriteLine ("melee range!");
+			Console.WriteLine ("do we do dmg: " + meleeButtonDown);
+		}
 
 		public void TakeDamage()
 		{
@@ -420,6 +443,18 @@ namespace OSHO
             {
                 this.collider.AddVelocity(new Vector2(0, 0));
             }
+
+			// melee key (,)
+			if (keyboard.IsKeyDown(Key.KeyCode.Comma))
+			{
+				meleeButtonDown = true;
+			}
+
+			// reset melee
+			if (keyboard.IsKeyDown(Key.KeyCode.Comma) == false)
+			{
+				meleeButtonDown = false;
+			}
 
             //Console.WriteLine(mouse.GetMouseWorldPosition());
             //space

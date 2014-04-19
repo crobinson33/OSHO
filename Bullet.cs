@@ -36,6 +36,7 @@ namespace OSHO
             collider = new BoxCollider(tag, new Vector2(width, height), this.position);
             collider.AddTagToIgnore("one");
             collider.AddTagToIgnore(tag);
+			collider.AddTagToIgnore("characterMelee");
             collider.clearVelocityAmount = 1;
             world.AddCollider(collider);
 
