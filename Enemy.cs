@@ -30,6 +30,7 @@ namespace OSHO
 		public bool isAlive = true;
 
 		public delegate void DestroyEnemy();
+		public delegate void MeleeDestoryEnemy();
 
         public Enemy(string tag, Vector2 position, World world, Player player) : base(tag)
         {
@@ -63,6 +64,8 @@ namespace OSHO
 
 			DestroyEnemy enemyCallback = DeleteEnemy;
 			this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
+			MeleeDestoryEnemy meleeEnemyCallback = MeleeEnemy;
+			this.collider.CreateOnCollisionEnter("characterMelee", () => meleeEnemyCallback());
 
             this.player = player;
 
@@ -125,6 +128,21 @@ namespace OSHO
                 }
             }
         }
+
+		public void MeleeEnemy()
+		{
+			if (this.player.meleeButtonDown)
+			{
+				Vector2 target = this.player.position;
+				Vector2 direction = target - this.position;
+				direction.Normalize();
+
+				direction *= 6000;
+
+				this.collider.AddVelocity(-direction);
+				DeleteEnemy();
+			}
+		}
 
         public override void Draw(Surface surface, float deltaTime)
         {

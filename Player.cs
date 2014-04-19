@@ -160,13 +160,14 @@ namespace OSHO
 			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
 
 			// our melee weapons
-			this.meleeCollider = new BoxCollider("characterMelee", new Vector2(128, 128), new Vector2(this.position.X - 64, this.position.Y - 64));
+			this.meleeCollider = new BoxCollider("characterMelee", new Vector2(128, 128), new Vector2(this.position.X - 32, this.position.Y - 32));
 			this.meleeCollider.isStatic = true; // i think making it static will allow us to modify position instead of it modifying our position
 			this.meleeCollider.AddTagToIgnore("one");
 			this.meleeCollider.AddTagToIgnore("bullet");
 
-			CheckMelee meleeCallback = CheckMeleeRange;
-			this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
+			//CheckMelee meleeCallback = CheckMeleeRange;
+			//this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
+			this.meleeCollider.debug = true;
 
 
 
@@ -185,6 +186,8 @@ namespace OSHO
         {
             //this.collider.CalculatePoints();
             this.position = this.collider.position;
+			this.meleeCollider.position = new Vector2(this.position.X - 32, this.position.Y - 32);
+			//Console.WriteLine ("pos: " + this.position + ", col pos: " + this.meleeCollider.position);
             //asprite.Update(this.position);
             HandleInput(deltaTime);
             //Console.WriteLine("getting called...");
@@ -211,6 +214,10 @@ namespace OSHO
             {
                 collider.UpdateVertices();
             }
+			if (this.meleeCollider.debug)
+			{
+				this.meleeCollider.UpdateVertices();
+			}
         }
 
         public override void Draw(Surface surface, float deltaTime)
@@ -222,6 +229,11 @@ namespace OSHO
             {
                 collider.DrawDebugBox(surface, deltaTime);
             }
+
+			if (this.meleeCollider.debug)
+			{
+				this.meleeCollider.DrawDebugBox(surface, deltaTime);
+			}
 
             foreach(Bullet bullet in bullets)
             {
@@ -236,13 +248,13 @@ namespace OSHO
             base.Draw(surface, deltaTime);
         }
 
-		public void CheckMeleeRange()
+		/*public void CheckMeleeRange()
 		{
 			// this will be called when enemies are in melee range.
 			// if our key is down we can do damage.
 			Console.WriteLine ("melee range!");
 			Console.WriteLine ("do we do dmg: " + meleeButtonDown);
-		}
+		}*/
 
 		public void TakeDamage()
 		{
