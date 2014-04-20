@@ -63,6 +63,15 @@ namespace OSHO
 		public bool meleeButtonDown = false;
 
 
+		// for the sheild.
+		public bool inSheild = false;
+		public bool sheildOnCooldown = false;
+		TimeSpan timeInSheild = new TimeSpan(0, 0, 0);
+		TimeSpan timeAllowedInSheild = new TimeSpan(0, 0, 4);
+		TimeSpan timeSinceLastSheild = new TimeSpan(0, 0, 0);
+		TimeSpan sheildCooldown = new TimeSpan(0, 0, 5);
+
+
         // for fire rate.
         //int fireRateSeconds = 1;
         TimeSpan timeSinceLastFire = new TimeSpan(0, 0, 0); // can't pass a variable in here so make it the same as firerate
@@ -154,6 +163,7 @@ namespace OSHO
             this.collider = new CharacterCollider(tag, new Vector2(64, 64), this.position);
             this.collider.AddTagToIgnore("bullet");
 			this.collider.AddTagToIgnore("characterMelee");
+			this.collider.clearVelocityAmount = 0.91f;
 
 			//add on collision enter with enemies.
 			HurtPlayer damageCallback = TakeDamage;
@@ -248,7 +258,7 @@ namespace OSHO
             base.Draw(diffuseSurface, lightMap, deltaTime);
         }
 
-		/*public void CheckMeleeRange()
+		/*public void CheckMeleeRange() // moved to the enemy class
 		{
 			// this will be called when enemies are in melee range.
 			// if our key is down we can do damage.
@@ -258,7 +268,16 @@ namespace OSHO
 
 		public void TakeDamage()
 		{
-			Console.WriteLine("i got hit!");
+			// not in our shell
+			if (inSheild != true)
+			{
+				Console.WriteLine("i got hit!");
+				this.collider.isStatic = false;
+			}
+			else
+			{
+				this.collider.isStatic = true;
+			}
 		}
 
         public void CheckForIdle()
@@ -468,6 +487,24 @@ namespace OSHO
 				meleeButtonDown = false;
 			}
 
+			Console.WriteLine (inSheild);
+			// sheild key (.)
+			if (keyboard.IsOnlyKeyDown(Key.KeyCode.Period))
+			{
+				CheckSheild(deltaTime);
+			}
+			else
+			{
+				inSheild = false;
+			}
+
+			// need to add to the cooldown whether we have the button down or not.
+			if (sheildOnCooldown)
+			{
+				timeSinceLastSheild += new TimeSpan(0, 0, 0, 0,(int)(deltaTime * 1000));
+			}
+
+
             //Console.WriteLine(mouse.GetMouseWorldPosition());
             //space
             if (keyboard.IsKeyDown(Key.KeyCode.Space))
@@ -556,6 +593,55 @@ namespace OSHO
 			newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
 			newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback2(newBullet));
 			bullets.Add(newBullet);
+		}
+
+		public void CheckSheild(float deltaTime)
+		{
+			// if we have been holding the button.
+			if (inSheild)
+			{
+				// have we been in the sheild too long?
+				if (timeAllowedInSheild < timeInSheild)
+				{
+					//yes
+					inSheild = false;
+					sheildOnCooldown = true;
+					if (sheildCooldown < timeSinceLastSheild)
+					{
+						timeInSheild = new TimeSpan();
+						timeSinceLastSheild = new TimeSpan();
+						sheildOnCooldown = false;
+					}
+				}
+				else
+				{
+					// no
+					inSheild = true;
+				}
+				timeInSheild += new TimeSpan(0, 0, 0, 0,(int)(deltaTime * 1000));
+			}
+			else // we either had let go or ran out of sheild
+			{
+				if (sheildOnCooldown)
+				{
+					// is our cooldown up yet?
+					if (sheildCooldown < timeSinceLastSheild)
+					{
+						timeInSheild = new TimeSpan();
+						timeSinceLastSheild = new TimeSpan();
+						sheildOnCooldown = false;
+						inSheild = true;
+					}
+				}
+				else
+				{
+					inSheild = true;
+					timeInSheild = new TimeSpan();
+					timeSinceLastSheild = new TimeSpan();
+					sheildOnCooldown = false;
+					inSheild = true;
+				}
+			}
 		}
     }
 
