@@ -40,6 +40,8 @@ namespace OSHO
             world.AddCollider(collider);
 
             this.velocity = vel;
+
+            this.collider.debug = true;
         }
 
         public override void Update(float deltaTime)

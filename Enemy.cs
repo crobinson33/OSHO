@@ -64,6 +64,8 @@ namespace OSHO
 			this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
 
             this.player = player;
+
+            this.collider.debug = true;
         }
 
         public override void Update(float deltaTime)
@@ -98,6 +100,11 @@ namespace OSHO
                     }
                 }
 
+                if (collider.debug)
+                {
+                    collider.UpdateVertices();
+                }
+
                 base.Update(deltaTime);
             }
 
@@ -121,6 +128,12 @@ namespace OSHO
         public override void Draw(Surface surface, float deltaTime)
         {
             surface.Draw(enemyDrawable, this.position, deltaTime);
+
+            if (collider.debug)
+            {
+                collider.DrawDebugBox(surface, deltaTime);
+            }
+
             base.Draw(surface, deltaTime);
         }
 

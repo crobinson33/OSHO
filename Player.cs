@@ -161,6 +161,8 @@ namespace OSHO
 
             this.mouse = mouse;
 
+            collider.debug = true;
+
             Console.WriteLine("player end...");
         }
 
@@ -176,6 +178,11 @@ namespace OSHO
             foreach(Bullet bullet in bullets)
             {
                 bullet.Update(deltaTime);
+
+                if (bullet.collider.debug)
+                {
+                    bullet.collider.UpdateVertices();
+                }
             }
 
             //remove bullets off screen
@@ -184,6 +191,11 @@ namespace OSHO
 
             base.Update(deltaTime);
             camera.SetCenterPosition(this.position);
+
+            if (collider.debug)
+            {
+                collider.UpdateVertices();
+            }
         }
 
         public override void Draw(Surface surface, float deltaTime)
@@ -191,9 +203,19 @@ namespace OSHO
             //Console.WriteLine("getting called...");
             surface.Draw(playerDrawable, this.position, deltaTime);
 
+            if (collider.debug)
+            {
+                collider.DrawDebugBox(surface, deltaTime);
+            }
+
             foreach(Bullet bullet in bullets)
             {
                 bullet.Draw(surface, deltaTime);
+
+                if (bullet.collider.debug)
+                {
+                    bullet.collider.DrawDebugBox(surface, deltaTime);
+                }
             }
 
             base.Draw(surface, deltaTime);

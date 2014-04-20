@@ -40,6 +40,7 @@ namespace OSHO
             collider = new BoxCollider(tag, new Vector2(64, 64), this.position);
             collider.isStatic = true;
             world.AddCollider(collider);
+            collider.debug = true;
         }
 
 
@@ -53,6 +54,11 @@ namespace OSHO
         public override void Draw(Surface surface, float deltaTime)
         {
             surface.Draw(asprite, this.position, deltaTime);
+
+            if (collider.debug)
+            {
+                collider.DrawDebugBox(surface, deltaTime);
+            }
 
             base.Draw(surface, deltaTime);
         }
