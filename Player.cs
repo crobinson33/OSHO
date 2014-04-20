@@ -18,9 +18,11 @@ namespace OSHO
         public AnimatedSprite playerArm;
 
         public Animation idleDownAnimation;
-        public Animation idleUpAnimation;
-        public Animation idleLeftAnimation;
-        public Animation idleRightAnimation;
+        public Animation idleDownFire;
+        //public Animation idleUpAnimation;
+        //public Animation idleLeftAnimation;
+        //public Animation idleRightAnimation;
+
 
         public Animation weaponDown;
         public Animation weaponUp;
@@ -44,6 +46,11 @@ namespace OSHO
         public Animation playerArmLeft;
         public Animation playerArmRight;
         public Animation playerArmClear;
+
+        public Animation playerStartShell;
+        public Animation playerEndShell;
+        public Animation shellShine;
+        public Animation shellEndWarning;
 
         public Shader test;
 
@@ -85,7 +92,7 @@ namespace OSHO
             this.position = position;
 
 
-            atexture = new Texture("assets/HunchSprite.png");
+            atexture = new Texture("assets/Hunch2.png");
 
             baseSprite = new AnimatedSprite(atexture, 64, 64);
             playerWeaponSprite = new AnimatedSprite(atexture, 64, 64);
@@ -99,15 +106,16 @@ namespace OSHO
             
             // Create animations
             idleDownAnimation = new Animation("idleDown", 20, 7);
-            idleUpAnimation = new Animation("idleUp", 30, 7);
-            idleRightAnimation = new Animation("idleRight", 40, 7);
-            idleLeftAnimation = new Animation("idleLeft", 40, 7, true);
+            idleDownFire = new Animation("idleFire", 50, 7);
+            //idleUpAnimation = new Animation("idleUp", 30, 7);
+            //idleRightAnimation = new Animation("idleRight", 40, 7);
+            //idleLeftAnimation = new Animation("idleLeft", 40, 7, true);
 
             //runs.
-            runDownAnimation = new Animation("runDown", 50, 10);
-            runUpAnimation = new Animation("runUp", 60, 10);
-            runRightAnimation = new Animation("runRight", 70, 10);
-            runLeftAnimation = new Animation("runLeft", 80, 10);
+            runDownAnimation = new Animation("runDown", 90, 10);
+            runUpAnimation = new Animation("runUp", 100, 10);
+            runRightAnimation = new Animation("runRight", 110, 10);
+            runLeftAnimation = new Animation("runLeft", 120, 10);
 
             weaponDown = new Animation("weaponDown", 10, 1);
             weaponUp = new Animation("weaponUp", 11, 1);
@@ -127,15 +135,25 @@ namespace OSHO
             playerArmRight = new Animation("armRight", 17, 1);
             playerArmClear = new Animation("armClear", 29, 1);
 
+            playerStartShell = new Animation("startShell", 130, 4);
+            playerEndShell = new Animation("endShell", 140, 4);
+            shellShine = new Animation("shellShine", 150, 8);
+            shellEndWarning = new Animation("endShellWarning", 160, 8);
+
             // Add animations
             baseSprite.AddAnimation(idleDownAnimation);
-            baseSprite.AddAnimation(idleUpAnimation);
-            baseSprite.AddAnimation(idleRightAnimation);
-            baseSprite.AddAnimation(idleLeftAnimation);
+            baseSprite.AddAnimation(idleDownFire);
+            //baseSprite.AddAnimation(idleUpAnimation);
+            //baseSprite.AddAnimation(idleRightAnimation);
+            //baseSprite.AddAnimation(idleLeftAnimation);
             baseSprite.AddAnimation(runDownAnimation);
             baseSprite.AddAnimation(runUpAnimation);
             baseSprite.AddAnimation(runRightAnimation);
             baseSprite.AddAnimation(runLeftAnimation);
+            baseSprite.AddAnimation(playerStartShell);
+            baseSprite.AddAnimation(playerEndShell);
+            baseSprite.AddAnimation(shellShine);
+            baseSprite.AddAnimation(shellEndWarning);
 
             playerWeaponSprite.AddAnimation(weaponDown);
             playerWeaponSprite.AddAnimation(weaponUp);
@@ -155,10 +173,10 @@ namespace OSHO
             //baseSprite.AddShader(test);
 
             // Test animation
-            baseSprite.animationController.SetActiveAnimation(idleRightAnimation);
+            baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
             playerDrawable.drawPartsInFront = false;
-            playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
-            playerArm.animationController.SetActiveAnimation(playerArmRight);
+            playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
+            playerArm.animationController.SetActiveAnimation(playerArmDown);
 
             this.world = world;
 			colliderOffset = new Vector2(-20, -10);
@@ -285,11 +303,26 @@ namespace OSHO
 
         public void CheckForIdle()
         {
+            /*playerStartShell = new Animation("startShell", 130, 4);
+            playerEndShell = new Animation("endShell", 140, 4);
+            shellShine = new Animation("shellShine", 150, 8);
+            shellEndWarning = new Animation("endShellWarning", 160, 8);*/
+
             if (Math.Abs(this.collider.velocity.X) < 2f && Math.Abs(this.collider.velocity.Y) < 2f)
             {
-                this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
-                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
-                this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+                if (this.baseSprite.animationController.GetActiveAnimationName() != "idleFire")
+                {
+                    if (this.baseSprite.animationController.GetActiveAnimationName() != "shellShine" &&
+                        this.baseSprite.animationController.GetActiveAnimationName() != "startShell" &&
+                        this.baseSprite.animationController.GetActiveAnimationName() != "endShell" &&
+                        this.baseSprite.animationController.GetActiveAnimationName() != "endShellWarning")
+                    {
+                        //Console.WriteLine("setting idle");
+                        this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                        this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+                        this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+                    }
+                }
             }
         }
 
@@ -498,7 +531,22 @@ namespace OSHO
 			}
 			else
 			{
-				inSheild = false;
+                //Console.WriteLine(inSheild);
+                // check to see if we had this button
+                if (inSheild)
+                {
+                    // we ending shell
+                    this.baseSprite.animationController.SetActiveAnimation(playerEndShell);
+                    this.baseSprite.animationController.dontLoop = true;
+                }
+
+                // see if we have finished yet.
+                if (this.baseSprite.animationController.GetActiveAnimationName() == "endShell")
+                {
+                    this.baseSprite.animationController.dontLoop = false;
+                    this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                    inSheild = false;
+                }
 			}
 
 			// need to add to the cooldown whether we have the button down or not.
@@ -551,26 +599,41 @@ namespace OSHO
 						case "runDown":
 							//Console.WriteLine("Case 1");
 							Vector2 velocityToAdd = new Vector2(0, bulletVelocity);
-                            Vector2 spawnPosition = new Vector2(this.position.X + 26, this.position.Y + 44);
+                            Vector2 spawnPosition = new Vector2(this.position.X + 30, this.position.Y + 44);
 							FireBullet(velocityToAdd, spawnPosition);
 							break;
 						case "runUp":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd2 = new Vector2(0, -(bulletVelocity));
-                            Vector2 spawnPosition2 = new Vector2(this.position.X + 22, this.position.Y);
+                            Vector2 spawnPosition2 = new Vector2(this.position.X + 28, this.position.Y);
 							FireBullet(velocityToAdd2, spawnPosition2);
 							break;
 						case "runRight":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd3 = new Vector2(bulletVelocity, 0);
-                            Vector2 spawnPosition3 = new Vector2(this.position.X + 42, this.position.Y + 18);
+                            Vector2 spawnPosition3 = new Vector2(this.position.X + 50, this.position.Y + 24);
 							FireBullet(velocityToAdd3, spawnPosition3);
 							break;
 						case "runLeft":
 							//Console.WriteLine("Case 2");
 							Vector2 velocityToAdd4 = new Vector2(-(bulletVelocity), 0);
-                            Vector2 spawnPosition4 = new Vector2(this.position.X + 6, this.position.Y + 18);
+                            Vector2 spawnPosition4 = new Vector2(this.position.X + 10, this.position.Y + 24);
 							FireBullet(velocityToAdd4, spawnPosition4);
+							break;
+                        case "idleDown":
+                        case "idleFire":
+                            // animation stuff
+                            //this.collider.AddVelocity(new Vector2(0, vel));
+                            this.baseSprite.animationController.SetActiveAnimation(idleDownFire);
+                            this.playerArm.animationController.SetActiveAnimation(playerArmDown);
+                            this.playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
+                            this.playerDrawable.drawPartsInFront = true;
+
+                            // bullet stuff
+                            Vector2 velocityToAdd5 = new Vector2(0, bulletVelocity);
+                            Vector2 spawnPosition5 = new Vector2(this.position.X + 30, this.position.Y + 44);
+							FireBullet(velocityToAdd5, spawnPosition5);
+
 							break;
 						default:
 							Console.WriteLine("Default case");
@@ -578,6 +641,15 @@ namespace OSHO
 					}
 
                     timeSinceLastFire = new TimeSpan();
+                }
+            }
+            else
+            {
+                if (this.baseSprite.animationController.GetActiveAnimationName() == "idleFire")
+                {
+                    this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                    this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+                    this.playerArm.animationController.SetActiveAnimation(playerArmClear);
                 }
             }
             //Console.WriteLine((int)(deltaTime * 1000));
@@ -603,18 +675,43 @@ namespace OSHO
 			// if we have been holding the button.
 			if (inSheild)
 			{
+                // did we just start? need to check animation
+                if (this.baseSprite.animationController.GetActiveAnimationName() == "startShell")
+                {
+                    if (this.baseSprite.animationController.hasReachedEnd)
+                    {
+                        this.baseSprite.animationController.dontLoop = false;
+                        this.baseSprite.animationController.hasReachedEnd = false;
+                        this.baseSprite.animationController.SetActiveAnimation(shellShine);
+                        
+                    }
+                }
+
+                //Console.WriteLine(timeAllowedInSheild.Seconds + ", " + (timeInSheild.TotalSeconds / 2));
+                // need to check if we expire soon. play flashing white.
+                if (timeAllowedInSheild.Seconds /2 < timeInSheild.TotalSeconds)
+                {
+                    this.baseSprite.animationController.SetActiveAnimation(shellEndWarning);
+                }
+
+
 				// have we been in the sheild too long?
 				if (timeAllowedInSheild < timeInSheild)
 				{
 					//yes
 					inSheild = false;
 					sheildOnCooldown = true;
-					if (sheildCooldown < timeSinceLastSheild)
+					/*if (sheildCooldown < timeSinceLastSheild)
 					{
 						timeInSheild = new TimeSpan();
 						timeSinceLastSheild = new TimeSpan();
 						sheildOnCooldown = false;
-					}
+					}*/
+
+                    this.baseSprite.animationController.SetActiveAnimation(playerEndShell);
+                    this.baseSprite.animationController.dontLoop = true;
+
+                    
 				}
 				else
 				{
@@ -634,10 +731,27 @@ namespace OSHO
 						timeSinceLastSheild = new TimeSpan();
 						sheildOnCooldown = false;
 						inSheild = true;
+                        this.baseSprite.animationController.SetActiveAnimation(playerStartShell);
+                        this.baseSprite.animationController.dontLoop = true;
 					}
+
+                    // see if we have finished yet.
+                    if (this.baseSprite.animationController.GetActiveAnimationName() == "endShell")
+                    {
+                        this.baseSprite.animationController.dontLoop = false;
+                        this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                        //inSheild = false;
+                    }
 				}
 				else
 				{
+                    //Console.WriteLine("started anim");
+                    // start our animation -- need to check when this one is done.
+                    this.baseSprite.animationController.SetActiveAnimation(playerStartShell);
+                    this.baseSprite.animationController.dontLoop = true;
+                    this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+                    this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+
 					inSheild = true;
 					timeInSheild = new TimeSpan();
 					timeSinceLastSheild = new TimeSpan();

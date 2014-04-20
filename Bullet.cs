@@ -17,6 +17,7 @@ namespace OSHO
         public float height;
 
         public BoxCollider collider;
+        public Vector2 colliderOffset;
 
         public Vector2 velocity;
 
@@ -34,7 +35,8 @@ namespace OSHO
             width = texture.width;
             height = texture.height;
 
-            collider = new BoxCollider(tag, new Vector2(width, height), this.position);
+            colliderOffset = new Vector2(-3, -3);
+            collider = new BoxCollider(tag, new Vector2(10, 10), this.position + this.colliderOffset);
             collider.AddTagToIgnore("one");
             collider.AddTagToIgnore(tag);
 			collider.AddTagToIgnore("characterMelee");
@@ -54,7 +56,7 @@ namespace OSHO
         public override void Update(float deltaTime)
         {
             //this.collider.AddVelocity(this.velocity);
-            this.position = this.collider.position;
+            this.position = this.collider.position + this.colliderOffset;
             base.Update(deltaTime);
             light.Update(new Vector2((this.collider.position.X + (aSprite.width / 2)), (this.collider.position.Y + (aSprite.height / 2))), deltaTime);
         }
