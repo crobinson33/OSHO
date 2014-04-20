@@ -13,7 +13,7 @@ namespace OSHO
         {
             Game game = new Game();
 
-            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1000, 1000), new Color(1f, 1f, 1f, 1f));
+            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1000, 1000), new Color(0.05f, 0.1f, 0.25f, 1f));
             game.SetCurrentLevel(0);
 
             Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera);
@@ -57,7 +57,7 @@ namespace OSHO
             level1.AddObject(item1);
             level1.AddObject(newEnemy);
 
-            level1.AddLight(sLight);
+            /*level1.AddLight(sLight);
             level1.AddLight(sLight2);
             level1.AddLight(sLight3);
             level1.AddLight(sLight21);
@@ -74,7 +74,7 @@ namespace OSHO
             level1.AddLight(asLight32);
             level1.AddLight(asLight31);
             level1.AddLight(asLight23);
-            level1.AddLight(asLight33);
+            level1.AddLight(asLight33);*/
 
             game.Start();
         }
