@@ -308,7 +308,7 @@ namespace OSHO
             shellShine = new Animation("shellShine", 150, 8);
             shellEndWarning = new Animation("endShellWarning", 160, 8);*/
 
-            if (Math.Abs(this.collider.velocity.X) < 2f && Math.Abs(this.collider.velocity.Y) < 2f)
+            if (Math.Abs(this.collider.velocity.X) < 2.5f && Math.Abs(this.collider.velocity.Y) < 2.5f)
             {
                 if (this.baseSprite.animationController.GetActiveAnimationName() != "idleFire")
                 {

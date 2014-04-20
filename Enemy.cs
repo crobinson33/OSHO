@@ -127,6 +127,7 @@ namespace OSHO
                 {
                     this.world.RemoveCollider(this.collider);
                     this.sprite.animationController.SetActiveAnimation(dying);
+                    this.sprite.animationController.dontLoop = true;
                 }
             }
         }
