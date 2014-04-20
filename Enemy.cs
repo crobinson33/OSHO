@@ -12,6 +12,7 @@ namespace OSHO
 
         World world;
         public BoxCollider collider;
+		Vector2 colliderOffset;
         public Texture texture;
         public MultiDrawable enemyDrawable;
         public AnimatedSprite sprite;
@@ -58,7 +59,8 @@ namespace OSHO
             sprite.animationController.SetActiveAnimation(black);
 
             this.world = world;
-            this.collider = new BoxCollider("enemy", new Vector2(32, 32), this.position);
+			colliderOffset = new Vector2(-5, -5);
+            this.collider = new BoxCollider("enemy", new Vector2(20, 20), this.position + this.colliderOffset);
 			this.collider.AddTagToIgnore("characterMelee");
             this.world.AddCollider(collider);
 
@@ -76,7 +78,7 @@ namespace OSHO
         {
             if (isAlive)
             {
-                this.position = this.collider.position;
+                this.position = this.collider.position + this.colliderOffset;
                 //Console.WriteLine(this.player.position);
                 FollowPlayer();
 
@@ -133,8 +135,8 @@ namespace OSHO
 		{
 			if (this.player.meleeButtonDown)
 			{
-				Vector2 target = this.player.position;
-				Vector2 direction = target - this.position;
+				Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+				Vector2 direction = target - this.collider.position;
 				direction.Normalize();
 
 				direction *= 6000;
@@ -159,8 +161,8 @@ namespace OSHO
 
         public void FollowPlayer()
         {
-            Vector2 target = this.player.position;
-            Vector2 direction = target - this.position;
+			Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+            Vector2 direction = target - this.collider.position;
             direction.Normalize();
 
             direction *= 500;

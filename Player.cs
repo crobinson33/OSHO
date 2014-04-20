@@ -50,6 +50,7 @@ namespace OSHO
         public Camera camera;
 
         public CharacterCollider collider;
+		Vector2 colliderOffset;
 		public BoxCollider meleeCollider;
 
         List<Bullet> bullets = new List<Bullet>();
@@ -160,7 +161,8 @@ namespace OSHO
             playerArm.animationController.SetActiveAnimation(playerArmRight);
 
             this.world = world;
-            this.collider = new CharacterCollider(tag, new Vector2(64, 64), this.position);
+			colliderOffset = new Vector2(-20, -10);
+            this.collider = new CharacterCollider(tag, new Vector2(23, 42), this.position + this.colliderOffset);
             this.collider.AddTagToIgnore("bullet");
 			this.collider.AddTagToIgnore("characterMelee");
 			this.collider.clearVelocityAmount = 0.91f;
@@ -170,6 +172,7 @@ namespace OSHO
 			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
 
 			// our melee weapons
+
 			this.meleeCollider = new BoxCollider("characterMelee", new Vector2(128, 128), new Vector2(this.position.X - 32, this.position.Y - 32));
 			this.meleeCollider.isStatic = true; // i think making it static will allow us to modify position instead of it modifying our position
 			this.meleeCollider.AddTagToIgnore("one");
@@ -195,7 +198,7 @@ namespace OSHO
         public override void Update(float deltaTime)
         {
             //this.collider.CalculatePoints();
-            this.position = this.collider.position;
+            this.position = this.collider.position + this.colliderOffset;
 			this.meleeCollider.position = new Vector2(this.position.X - 32, this.position.Y - 32);
 			//Console.WriteLine ("pos: " + this.position + ", col pos: " + this.meleeCollider.position);
             //asprite.Update(this.position);
@@ -487,7 +490,7 @@ namespace OSHO
 				meleeButtonDown = false;
 			}
 
-			Console.WriteLine (inSheild);
+			//Console.WriteLine (inSheild);
 			// sheild key (.)
 			if (keyboard.IsOnlyKeyDown(Key.KeyCode.Period))
 			{
