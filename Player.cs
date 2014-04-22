@@ -183,6 +183,8 @@ namespace OSHO
             this.collider = new CharacterCollider(tag, new Vector2(23, 42), this.position + this.colliderOffset);
             this.collider.AddTagToIgnore("bullet");
 			this.collider.AddTagToIgnore("characterMelee");
+            //this.collider.isStatic = true;
+            this.collider.mass = 100;
 			this.collider.clearVelocityAmount = 0.91f;
 
 			//add on collision enter with enemies.
@@ -293,11 +295,12 @@ namespace OSHO
 			if (inSheild != true)
 			{
 				Console.WriteLine("i got hit!");
-				this.collider.isStatic = false;
+				//this.collider.isStatic = false;
 			}
 			else
 			{
-				this.collider.isStatic = true;
+                Console.WriteLine("im safe!");
+				//this.collider.isStatic = true;
 			}
 		}
 

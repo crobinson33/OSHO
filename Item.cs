@@ -39,6 +39,7 @@ namespace OSHO
 
             collider = new BoxCollider(tag, new Vector2(64, 64), this.position);
             collider.isStatic = true;
+            this.collider.mass = 100000000;
             world.AddCollider(collider);
             collider.debug = true;
         }
