@@ -62,6 +62,7 @@ namespace OSHO
 			colliderOffset = new Vector2(-5, -5);
             this.collider = new BoxCollider("enemy", new Vector2(20, 20), this.position + this.colliderOffset);
 			this.collider.AddTagToIgnore("characterMelee");
+            this.collider.AddTagToIgnore("characterWalk");
             this.world.AddCollider(collider);
 
 			DestroyEnemy enemyCallback = DeleteEnemy;
@@ -70,6 +71,8 @@ namespace OSHO
 			this.collider.CreateOnCollisionEnter("characterMelee", () => meleeEnemyCallback());
 
             this.player = player;
+
+            this.objectDrawable = enemyDrawable;
 
             this.collider.debug = true;
         }

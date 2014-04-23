@@ -9,7 +9,7 @@ namespace OSHO
 {
     public class Item : BaseObject
     {
-        BoxCollider collider;
+        public BoxCollider collider;
 
         public Texture atexture;
         public AnimatedSprite asprite;
@@ -23,7 +23,7 @@ namespace OSHO
 
             atexture = new Texture("assets/HunchSprite.png");
 
-            asprite = new AnimatedSprite(atexture, 64, 64);
+            asprite = new AnimatedSprite(atexture, 64, 64, 0);
 
 
             // Create animations
@@ -41,6 +41,9 @@ namespace OSHO
             collider.isStatic = true;
             this.collider.mass = 100000000;
             world.AddCollider(collider);
+
+            this.objectDrawable = asprite;
+
             collider.debug = true;
         }
 

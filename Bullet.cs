@@ -39,6 +39,7 @@ namespace OSHO
             collider = new BoxCollider(tag, new Vector2(10, 10), this.position + this.colliderOffset);
             collider.AddTagToIgnore("one");
             collider.AddTagToIgnore(tag);
+            collider.AddTagToIgnore("characterWalk");
 			collider.AddTagToIgnore("characterMelee");
             collider.clearVelocityAmount = 1;
             world.AddCollider(collider);
@@ -51,6 +52,7 @@ namespace OSHO
             light.shader.SetParameter("thisLightIntensity", light.intensity);
 
             aSprite.selfIlluminateShader = new Shader(null, "shaders/selfIlluminate.frag");
+            this.objectDrawable = aSprite;
         }
 
         public override void Update(float deltaTime)

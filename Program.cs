@@ -16,12 +16,6 @@ namespace OSHO
 			Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1000, 1000), new Color(1f, 1f, 1f, 1f));
             game.SetCurrentLevel(0);
 
-            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera);
-            Background bg = new Background("bg", new Vector2(0,0));
-            Background bg2 = new Background("bg2", new Vector2(640, 0));
-            Background bg3 = new Background("bg3", new Vector2(0,400));
-            Background bg4 = new Background("bg4", new Vector2(640,400));
-
             Spotlight sLight = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
             Spotlight sLight2 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(150, 100), 100, 1f);
             Spotlight sLight3 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(125, 150), 100, 1f);
@@ -46,16 +40,25 @@ namespace OSHO
             Spotlight asLight23 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(550, 300), 100, 0.33f, true);
             Spotlight asLight33 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
 
+            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera);
             Item item1 = new Item("box1", new Vector2(300, 300), level1.world);
             Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
+            Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
+            Tree tree2 = new Tree("tree", new Vector2(305, 95), level1.world);
+            Tree tree3 = new Tree("tree", new Vector2(350, 102), level1.world);
+            Tree tree4 = new Tree("tree", new Vector2(310, 80), level1.world);
+            Tree tree5 = new Tree("tree", new Vector2(280, 91), level1.world);
+            Tree tree6 = new Tree("tree", new Vector2(265, 115), level1.world);
 
-            level1.AddObject(bg);
-            level1.AddObject(bg2);
-            level1.AddObject(bg3);
-            level1.AddObject(bg4);
             level1.AddObject(player1);
             level1.AddObject(item1);
             level1.AddObject(newEnemy);
+            level1.AddObject(tree1);
+            level1.AddObject(tree2);
+            level1.AddObject(tree3);
+            level1.AddObject(tree4);
+            level1.AddObject(tree5);
+            level1.AddObject(tree6);
 
             /*level1.AddLight(sLight);
             level1.AddLight(sLight2);

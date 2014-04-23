@@ -59,6 +59,8 @@ namespace OSHO
         public CharacterCollider collider;
 		Vector2 colliderOffset;
 		public BoxCollider meleeCollider;
+        public BoxCollider walkCollider;
+        Vector2 walkColliderOffset;
 
         List<Bullet> bullets = new List<Bullet>();
         World world;
@@ -94,7 +96,7 @@ namespace OSHO
 
             atexture = new Texture("assets/Hunch2.png");
 
-            baseSprite = new AnimatedSprite(atexture, 64, 64);
+            baseSprite = new AnimatedSprite(atexture, 64, 64, 48);
             playerWeaponSprite = new AnimatedSprite(atexture, 64, 64);
             playerArm = new AnimatedSprite(atexture, 64, 64);
 
@@ -183,6 +185,8 @@ namespace OSHO
             this.collider = new CharacterCollider(tag, new Vector2(23, 42), this.position + this.colliderOffset);
             this.collider.AddTagToIgnore("bullet");
 			this.collider.AddTagToIgnore("characterMelee");
+            this.collider.AddTagToIgnore("characterWalk");
+            //this.collider.AddTagToIgnore("tree");
             //this.collider.isStatic = true;
             this.collider.mass = 100;
 			this.collider.clearVelocityAmount = 0.91f;
@@ -196,17 +200,29 @@ namespace OSHO
 			this.meleeCollider = new BoxCollider("characterMelee", new Vector2(128, 128), new Vector2(this.position.X - 32, this.position.Y - 32));
 			this.meleeCollider.isStatic = true; // i think making it static will allow us to modify position instead of it modifying our position
 			this.meleeCollider.AddTagToIgnore("one");
+            this.meleeCollider.AddTagToIgnore("characterWalk");
 			this.meleeCollider.AddTagToIgnore("bullet");
 
 			//CheckMelee meleeCallback = CheckMeleeRange;
 			//this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
 			this.meleeCollider.debug = true;
 
+            // Walk collider on his little feetsies
+            this.walkColliderOffset = new Vector2(26, 41);
+            this.walkCollider = new BoxCollider("characterWalk", new Vector2(12, 7), this.position + this.walkColliderOffset);
+            //this.walkCollider.isStatic = true; // i think making it static will allow us to modify position instead of it modifying our position
+            this.walkCollider.AddTagToIgnore("one");
+            this.walkCollider.AddTagToIgnore("bullet");
+            this.walkCollider.AddTagToIgnore("characterMelee");
+            this.walkCollider.AddTagToIgnore("enemy");
 
+            this.walkCollider.debug = true;
 
+            this.world.AddCollider(this.walkCollider);
             this.world.AddCollider(this.collider);
 			this.world.AddCollider(this.meleeCollider);
 
+            this.objectDrawable = playerDrawable;
 
             //this.mouse = mouse;
 
@@ -218,8 +234,10 @@ namespace OSHO
         public override void Update(float deltaTime)
         {
             //this.collider.CalculatePoints();
-            this.position = this.collider.position + this.colliderOffset;
+            this.position = this.walkCollider.position - this.walkColliderOffset;
 			this.meleeCollider.position = new Vector2(this.position.X - 32, this.position.Y - 32);
+            this.collider.position = this.position - this.colliderOffset;
+
 			//Console.WriteLine ("pos: " + this.position + ", col pos: " + this.meleeCollider.position);
             //asprite.Update(this.position);
             HandleInput(deltaTime);
@@ -251,6 +269,10 @@ namespace OSHO
 			{
 				this.meleeCollider.UpdateVertices();
 			}
+            if (this.walkCollider.debug)
+            {
+                this.walkCollider.UpdateVertices(Color.Magenta);
+            }
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
@@ -267,6 +289,11 @@ namespace OSHO
 			{
 				this.meleeCollider.DrawDebugBox(diffuseSurface, deltaTime);
 			}
+
+            if (this.walkCollider.debug)
+            {
+                this.walkCollider.DrawDebugBox(diffuseSurface, deltaTime);
+            }
 
             foreach(Bullet bullet in bullets)
             {
@@ -311,7 +338,7 @@ namespace OSHO
             shellShine = new Animation("shellShine", 150, 8);
             shellEndWarning = new Animation("endShellWarning", 160, 8);*/
 
-            if (Math.Abs(this.collider.velocity.X) < 2.5f && Math.Abs(this.collider.velocity.Y) < 2.5f)
+            if (Math.Abs(this.walkCollider.velocity.X) < 2.5f && Math.Abs(this.walkCollider.velocity.Y) < 2.5f)
             {
                 if (this.baseSprite.animationController.GetActiveAnimationName() != "idleFire")
                 {
@@ -378,7 +405,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.S)
                 && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
-                this.collider.AddVelocity(new Vector2(0, -vel));
+                this.walkCollider.AddVelocity(new Vector2(0, -vel));
                 this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmUp);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponUp);
@@ -391,7 +418,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.D)
                 && !keyboard.IsKeyDown(Key.KeyCode.W))
             {
-                this.collider.AddVelocity(new Vector2(0, vel));
+                this.walkCollider.AddVelocity(new Vector2(0, vel));
                 this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmDown);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
@@ -404,7 +431,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.W)
                 && !keyboard.IsKeyDown(Key.KeyCode.S))
             {
-                this.collider.AddVelocity(new Vector2(-vel, 0));
+                this.walkCollider.AddVelocity(new Vector2(-vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmLeft);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponLeft);
@@ -417,7 +444,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.S)
                 && !keyboard.IsKeyDown(Key.KeyCode.W))
             {
-                this.collider.AddVelocity(new Vector2(vel, 0));
+                this.walkCollider.AddVelocity(new Vector2(vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmRight);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
@@ -430,7 +457,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.S)
                 && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
-                this.collider.AddVelocity(new Vector2(0, -vel));
+                this.walkCollider.AddVelocity(new Vector2(0, -vel));
                 this.baseSprite.animationController.SetActiveAnimation(runUpAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmUp);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponUp);
@@ -443,7 +470,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.W)
                 && !keyboard.IsKeyDown(Key.KeyCode.A))
             {
-                this.collider.AddVelocity(new Vector2(0, vel));
+                this.walkCollider.AddVelocity(new Vector2(0, vel));
                 this.baseSprite.animationController.SetActiveAnimation(runDownAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmDown);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponDown);
@@ -456,7 +483,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.W)
                 && !keyboard.IsKeyDown(Key.KeyCode.D))
             {
-                this.collider.AddVelocity(new Vector2(-vel, 0));
+                this.walkCollider.AddVelocity(new Vector2(-vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runLeftAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmLeft);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponLeft);
@@ -469,7 +496,7 @@ namespace OSHO
                 && !keyboard.IsKeyDown(Key.KeyCode.W)
                 && !keyboard.IsKeyDown(Key.KeyCode.A))
             {
-                this.collider.AddVelocity(new Vector2(vel, 0));
+                this.walkCollider.AddVelocity(new Vector2(vel, 0));
                 this.baseSprite.animationController.SetActiveAnimation(runRightAnimation);
                 this.playerArm.animationController.SetActiveAnimation(playerArmRight);
                 this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
@@ -481,37 +508,37 @@ namespace OSHO
             //w & a
             if (keyboard.IsKeyDown(Key.KeyCode.W) && keyboard.IsKeyDown(Key.KeyCode.A))
             {
-                this.collider.AddVelocity(new Vector2(-vel, -vel));
+                this.walkCollider.AddVelocity(new Vector2(-vel, -vel));
             }
 
             //a & s
             if (keyboard.IsKeyDown(Key.KeyCode.A) && keyboard.IsKeyDown(Key.KeyCode.S))
             {
-                this.collider.AddVelocity(new Vector2(-vel, vel));
+                this.walkCollider.AddVelocity(new Vector2(-vel, vel));
             }
 
             //s & d
             if (keyboard.IsKeyDown(Key.KeyCode.S) && keyboard.IsKeyDown(Key.KeyCode.D))
             {
-                this.collider.AddVelocity(new Vector2(vel, vel));
+                this.walkCollider.AddVelocity(new Vector2(vel, vel));
             }
 
             //d & w
             if (keyboard.IsKeyDown(Key.KeyCode.D) && keyboard.IsKeyDown(Key.KeyCode.W))
             {
-                this.collider.AddVelocity(new Vector2(vel, -vel));
+                this.walkCollider.AddVelocity(new Vector2(vel, -vel));
             }
 
             //w & s
             if (keyboard.IsKeyDown(Key.KeyCode.W) && keyboard.IsKeyDown(Key.KeyCode.S))
             {
-                this.collider.AddVelocity(new Vector2(0, 0));
+                this.walkCollider.AddVelocity(new Vector2(0, 0));
             }
 
             //a & d
             if (keyboard.IsKeyDown(Key.KeyCode.A) && keyboard.IsKeyDown(Key.KeyCode.D))
             {
-                this.collider.AddVelocity(new Vector2(0, 0));
+                this.walkCollider.AddVelocity(new Vector2(0, 0));
             }
 
 			// melee key (,)
