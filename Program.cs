@@ -60,7 +60,7 @@ namespace OSHO
             level1.AddObject(tree5);
             level1.AddObject(tree6);
 
-            /*level1.AddLight(sLight);
+            level1.AddLight(sLight);
             level1.AddLight(sLight2);
             level1.AddLight(sLight3);
             level1.AddLight(sLight21);
@@ -77,7 +77,7 @@ namespace OSHO
             level1.AddLight(asLight32);
             level1.AddLight(asLight31);
             level1.AddLight(asLight23);
-            level1.AddLight(asLight33);*/
+            level1.AddLight(asLight33);
 
             game.Start();
         }

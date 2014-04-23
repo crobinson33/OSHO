@@ -259,7 +259,7 @@ namespace OSHO
             CheckForIdle();
 
             base.Update(deltaTime);
-            camera.SetCenterPosition(this.position);
+            camera.SetCenterPosition(Util.Lerp(camera.GetCurCenter(), this.position, 0.08f));
 
             if (collider.debug)
             {
