@@ -65,12 +65,12 @@ namespace OSHO
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
-            diffuseSurface.Draw(aSprite, this.position, deltaTime);
+            diffuseSurface.Draw(aSprite);
 
-            lightMap.Draw(this.light, light.position, deltaTime);
+            lightMap.Draw(this.light);
 
             aSprite.AddShader(aSprite.selfIlluminateShader);
-            lightMap.Draw(aSprite, this.position, deltaTime);
+            lightMap.Draw(aSprite);
             aSprite.RemoveShader();
 
             base.Draw(diffuseSurface, lightMap, deltaTime);

@@ -153,7 +153,7 @@ namespace OSHO
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
-            diffuseSurface.Draw(enemyDrawable, this.position, deltaTime);
+            diffuseSurface.Draw(enemyDrawable);
 
             if (collider.debug)
             {

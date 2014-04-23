@@ -278,7 +278,7 @@ namespace OSHO
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             //Console.WriteLine("getting called...");
-            diffuseSurface.Draw(playerDrawable, this.position, deltaTime);
+            diffuseSurface.Draw(playerDrawable);
 
             if (collider.debug)
             {

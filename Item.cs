@@ -57,7 +57,7 @@ namespace OSHO
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
-            diffuseSurface.Draw(asprite, this.position, deltaTime);
+            diffuseSurface.Draw(asprite);
 
             if (collider.debug)
             {

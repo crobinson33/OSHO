@@ -39,7 +39,7 @@ namespace OSHO
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
-            diffuseSurface.Draw(sprite, this.position, deltaTime);
+            diffuseSurface.Draw(sprite);
 
             if (collider.debug)
             {
