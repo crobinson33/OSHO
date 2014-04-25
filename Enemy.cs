@@ -132,6 +132,14 @@ namespace OSHO
                     this.sprite.animationController.SetActiveAnimation(dying);
                     this.sprite.animationController.dontLoop = true;
                 }
+
+                Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+                Vector2 direction = target - this.collider.position;
+                direction.Normalize();
+
+                direction *= 10000;
+
+                this.collider.AddVelocity(-direction);
             }
         }
 
@@ -139,6 +147,7 @@ namespace OSHO
 		{
 			if (this.player.meleeButtonDown)
 			{
+                /*
 				Vector2 target = this.player.collider.position + this.player.collider.size / 2;
 				Vector2 direction = target - this.collider.position;
 				direction.Normalize();
@@ -146,6 +155,7 @@ namespace OSHO
 				direction *= 6000;
 
 				this.collider.AddVelocity(-direction);
+                 */
 				DeleteEnemy();
 			}
 		}

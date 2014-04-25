@@ -10,36 +10,28 @@ namespace OSHO
     public class Item : BaseObject
     {
         public BoxCollider collider;
+        public Vector2 colliderOffset;
 
         public Texture atexture;
         public AnimatedSprite asprite;
+
         public Animation defaultAnimation;
         public Animation downRunAnimation;
 
 
-        public Item(string tag, Vector2 pos, World world) : base(tag)
+        public Item(string tag, string texFilePath, Vector2 frameSize, Vector2 colliderSize, Vector2 pos, World world, Vector2 colliderOffset) : base(tag)
         {
             this.position = pos;
 
-            atexture = new Texture("assets/HunchSprite.png");
+            atexture = new Texture(texFilePath);
 
-            asprite = new AnimatedSprite(atexture, 64, 64, 0);
+            asprite = new AnimatedSprite(atexture, (int)frameSize.X, (int)frameSize.Y, 0);
 
-
-            // Create animations
-            downRunAnimation = new Animation("default", 10, 10);
-            defaultAnimation = new Animation("downRun", 11, 7);
-
-            // Add animations
-            asprite.AddAnimation(defaultAnimation);
-            asprite.AddAnimation(downRunAnimation);
-
-            // Test animation
-            asprite.animationController.SetActiveAnimation(downRunAnimation);
-
-            collider = new BoxCollider(tag, new Vector2(64, 64), this.position);
-            collider.isStatic = true;
-            this.collider.mass = 100000000;
+            this.colliderOffset = colliderOffset;
+            collider = new BoxCollider(tag, colliderSize, this.position);
+            
+            //collider.isStatic = true;
+            //this.collider.mass = 100000000;
             world.AddCollider(collider);
 
             this.objectDrawable = asprite;
@@ -47,11 +39,25 @@ namespace OSHO
             collider.debug = true;
         }
 
+        public void CreateAnimation(string animName, int frame, int numOfFrames)
+        {
+            // Create animations
+            Animation newAnim = new Animation(animName, frame, frame);
+            //defaultAnimation = new Animation("downRun", 11, 7);
+
+            // Add animations
+            asprite.AddAnimation(newAnim);
+            //asprite.AddAnimation(downRunAnimation);
+
+            // Test animation
+            asprite.animationController.SetActiveAnimation(newAnim);
+        }
+
 
         public override void Update(float deltaTime)
         {
             this.collider.CalculatePoints();
-            this.position = collider.position;
+            this.position = collider.position + this.colliderOffset;
             base.Update(deltaTime);
         }
 

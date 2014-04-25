@@ -12,6 +12,7 @@ namespace OSHO
         static void Main(string[] args)
         {
             Game game = new Game();
+            Keyboard keyboard = new Keyboard();
 
 			Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1000, 1000), new Color(1f, 1f, 1f, 1f));
             game.SetCurrentLevel(0);
@@ -40,9 +41,28 @@ namespace OSHO
             Spotlight asLight23 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(550, 300), 100, 0.33f, true);
             Spotlight asLight33 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
 
-            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera);
-            Item item1 = new Item("box1", new Vector2(300, 300), level1.world);
+
+
+
+            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard);
+
+            Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
+            item1.CreateAnimation("box1", 10, 10);
+            item1.collider.isStatic = true;
+            item1.collider.mass = 100000000;
+
+
             Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
+
+            Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(100, 25), level1.world, new Vector2(0, -32));
+            buttonOne.CreateAnimation("button", 0, 1);
+            buttonOne.collider.isStatic = true;
+            buttonOne.collider.mass = 100000000;
+            buttonOne.collider.AddTagToIgnore("one");
+
+
+
+
             Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
             Tree tree2 = new Tree("tree", new Vector2(305, 95), level1.world);
             Tree tree3 = new Tree("tree", new Vector2(350, 102), level1.world);
@@ -59,6 +79,8 @@ namespace OSHO
             level1.AddObject(tree4);
             level1.AddObject(tree5);
             level1.AddObject(tree6);
+
+            level1.AddObject(buttonOne);
 
             level1.AddLight(sLight);
             level1.AddLight(sLight2);
