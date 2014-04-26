@@ -615,14 +615,22 @@ namespace OSHO
 
                 //Console.WriteLine("checking button");
                 // if these are true means we are holding the button down.
-                if (this.playerMeleeWeapon.animationController.hasReachedEnd)
+                if (this.playerMeleeWeapon.animationController.GetActiveAnimationName() == "bellSwing" && this.playerMeleeWeapon.animationController.hasReachedEnd)
                 {
                     this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
+                    this.playerMeleeWeapon.animationController.dontLoop = false;
                 }
 
                 if (this.baseSprite.animationController.GetActiveAnimationName() == "playerMelee" && this.baseSprite.animationController.hasReachedEnd)
                 {
-                    this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
+                    this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
+                    this.baseSprite.animationController.dontLoop = false;
+                    CheckForIdle();
+                }
+
+                if (this.baseSprite.animationController.GetActiveAnimationName() != "playerMelee" && canMelee == false)
+                {
+                    this.baseSprite.animationController.dontLoop = false;
                 }
 			}
             else
