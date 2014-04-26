@@ -281,7 +281,6 @@ namespace OSHO
                 }
             }
 
-            Console.WriteLine(playerMeleeWeapon.animationController.GetActiveAnimationName());
 
             //remove bullets off screen
             CheckBulletScreenBounds();
