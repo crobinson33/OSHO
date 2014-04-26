@@ -31,27 +31,27 @@ namespace OSHO
                 xIndex += 13;
             }
 
-            xIndex = 0;
-            yIndex = 120;
+            //xIndex = 0;
+            //yIndex = 120;
 
-            for (int i = 0; i < 50; i++)
-            {
-                Tree newTree = new Tree("tree", new Vector2(xIndex, yIndex), level.world);
-                level.AddObject(newTree);
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    Tree newTree = new Tree("tree", new Vector2(xIndex, yIndex), level.world);
+            //    level.AddObject(newTree);
 
-                xIndex += 13;
-            }
+            //    xIndex += 13;
+            //}
 
-            xIndex = 0;
-            yIndex = 190;
+            //xIndex = 0;
+            //yIndex = 190;
 
-            for (int i = 0; i < 50; i++)
-            {
-                Tree newTree = new Tree("tree", new Vector2(xIndex, yIndex), level.world);
-                level.AddObject(newTree);
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    Tree newTree = new Tree("tree", new Vector2(xIndex, yIndex), level.world);
+            //    level.AddObject(newTree);
 
-                xIndex += 13;
-            }
+            //    xIndex += 13;
+            //}
 
         }
 

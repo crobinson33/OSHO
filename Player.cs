@@ -796,9 +796,11 @@ namespace OSHO
 			Bullet newBullet = new Bullet("bullet", spawnPosition, this.world, velocityToAdd);
 			newBullet.collider.AddVelocity(velocityToAdd);
 			DestroyBullet bulletCallback = DeleteBullet;
-            DestroyBullet bulletCallback2 = DeleteBullet;
+            //DestroyBullet bulletCallback2 = DeleteBullet;
+            //DestroyBullet bulletCallback3 = DeleteBullet;
 			newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
-			newBullet.collider.CreateOnCollisionEnter("enemy", () => bulletCallback2(newBullet));
+            newBullet.collider.CreateOnCollisionEnter("bigEye", () => bulletCallback(newBullet));
+            newBullet.collider.CreateOnCollisionEnter("littleEye", () => bulletCallback(newBullet));
 			bullets.Add(newBullet);
 		}
 

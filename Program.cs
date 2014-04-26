@@ -42,7 +42,7 @@ namespace OSHO
             Spotlight asLight33 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
 
 
-
+            EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
 
             Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard);
 
@@ -52,7 +52,9 @@ namespace OSHO
             item1.collider.mass = 100000000;
 
 
-            Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
+            //Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
+            BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, enemyManager);
+
 
             Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(100, 25), level1.world, new Vector2(0, -32));
             buttonOne.CreateAnimation("button", 0, 1);
@@ -72,7 +74,9 @@ namespace OSHO
 
             level1.AddObject(player1);
             level1.AddObject(item1);
-            level1.AddObject(newEnemy);
+            level1.AddObject(eyeEnemy);
+            level1.AddObject(enemyManager);
+            //level1.AddObject(newEnemy);
             /*level1.AddObject(tree1);
             level1.AddObject(tree2);
             level1.AddObject(tree3);
