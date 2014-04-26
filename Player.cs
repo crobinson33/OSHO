@@ -78,6 +78,7 @@ namespace OSHO
 		public delegate void HurtPlayer();
 		public delegate void CheckMelee();
 		public bool meleeButtonDown = false;
+        public bool canMelee = true;
         public delegate void CheckButton();
 
 
@@ -279,6 +280,8 @@ namespace OSHO
                     bullet.collider.UpdateVertices();
                 }
             }
+
+            Console.WriteLine(playerMeleeWeapon.animationController.GetActiveAnimationName());
 
             //remove bullets off screen
             CheckBulletScreenBounds();
@@ -596,33 +599,37 @@ namespace OSHO
 			if (keyboard.IsKeyDown(Key.KeyCode.Comma))
 			{
 				meleeButtonDown = true;
-                //this.baseSprite.animationController.dontLoop = false;
-                this.baseSprite.animationController.SetActiveAnimation(meleeAnimation);
-                this.baseSprite.animationController.dontLoop = true;
+                if (canMelee)
+                {
+                    canMelee = false;
+                    //this.baseSprite.animationController.dontLoop = false;
+                    this.baseSprite.animationController.SetActiveAnimation(meleeAnimation);
+                    this.baseSprite.animationController.dontLoop = true;
 
-                this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
-                this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+                    this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+                    this.playerArm.animationController.SetActiveAnimation(playerArmClear);
 
-                this.playerMeleeWeapon.animationController.SetActiveAnimation(bellSwing);
-                this.playerMeleeWeapon.animationController.dontLoop = true;
+                    this.playerMeleeWeapon.animationController.SetActiveAnimation(bellSwing);
+                    this.playerMeleeWeapon.animationController.dontLoop = true;
+
+                }
 
                 //Console.WriteLine("checking button");
                 // if these are true means we are holding the button down.
                 if (this.playerMeleeWeapon.animationController.hasReachedEnd)
                 {
-                    //this.playerMeleeWeapon.animationController.SetActiveAnimation(bellSwing);
-                    this.playerMeleeWeapon.animationController.dontLoop = false;
+                    this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
                 }
 
                 if (this.baseSprite.animationController.GetActiveAnimationName() == "playerMelee" && this.baseSprite.animationController.hasReachedEnd)
                 {
-                    this.baseSprite.animationController.dontLoop = false;
+                    this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
                 }
 			}
             else
 			{
 				meleeButtonDown = false;
-                
+                canMelee = true;
 
                 if (this.baseSprite.animationController.GetActiveAnimationName() == "playerMelee")
                 {
@@ -631,8 +638,7 @@ namespace OSHO
                         //Console.WriteLine("reached end");
                         this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
                         this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
-                        this.playerMeleeWeapon.animationController.dontLoop = false;
-                        this.baseSprite.animationController.dontLoop = false;
+                        canMelee = true;
                     }
                 }
                 else
