@@ -63,7 +63,7 @@ namespace OSHO
             this.collider = new BoxCollider(tag, new Vector2(20, 20), this.position + this.colliderOffset);
 			this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
-            this.collider.AddTagToIgnore(tag);
+            //this.collider.AddTagToIgnore(tag);
             this.world.AddCollider(collider);
 
 			DestroyEnemy enemyCallback = DeleteEnemy;

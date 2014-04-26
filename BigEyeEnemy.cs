@@ -38,6 +38,10 @@ namespace OSHO
         public delegate void DestroyEnemy();
         public delegate void MeleeDestoryEnemy();
 
+        //misc
+        Player player;
+        bool isAlive = true;
+
         public BigEyeEnemy(string tag, Vector2 position, World world, Player player, EnemyManager manager) : base(tag)
         {
             this.position = position;
@@ -68,6 +72,8 @@ namespace OSHO
             this.objectDrawable = enemyDrawable;
             this.collider.debug = true;
             this.enemyManager = manager;
+            this.player = player;
+            this.health = 10;
 
             //callbacks
             DestroyEnemy enemyCallback = DeleteEnemy;
@@ -78,14 +84,46 @@ namespace OSHO
 
         public override void Update(float deltaTime)
         {
-            this.position = this.collider.position + this.colliderOffset;
-
-            if (collider.debug)
+            if (isAlive)
             {
-                collider.UpdateVertices();
-            }
+                this.position = this.collider.position + this.colliderOffset;
+                //Console.WriteLine(this.player.position);
+                //FollowPlayer();
 
-            base.Update(deltaTime);
+                if (invulnerable)
+                {
+                    shaderTween += 0.05f;
+                    enemyHit.SetParameter("tweenValue", shaderTween);
+                }
+
+                if (shaderTween > 1)
+                {
+                    invulnerable = false;
+                    shaderTween = 0;
+                    sprite.shader = null;
+                }
+
+                //Console.WriteLine(shaderTween);
+
+                if (health == 0)
+                {
+                    if (shaderTween > 1)
+                    {
+                        if (this.sprite.animationController.hasReachedEnd)
+                        {
+                            this.sprite.animationController.SetActiveAnimation(placeholder);
+                            isAlive = false;
+                        }
+                    }
+                }
+
+                if (collider.debug)
+                {
+                    collider.UpdateVertices();
+                }
+
+                base.Update(deltaTime);
+            }
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
@@ -102,12 +140,35 @@ namespace OSHO
 
         public void DeleteEnemy()
         {
-            this.enemyManager.SpawnLittleEyes(this.position);
+            if (!invulnerable)
+            {
+                invulnerable = true;
+                health -= 1;
+                sprite.AddShader(enemyHit);
+                if (health == 0)
+                {
+                    this.world.RemoveCollider(this.collider);
+                    this.sprite.animationController.SetActiveAnimation(placeholder);
+                    this.sprite.animationController.dontLoop = true;
+                    this.enemyManager.SpawnLittleEyes(this.position + (this.collider.size / 2));
+                }
+
+                /*Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+                Vector2 direction = target - this.collider.position;
+                direction.Normalize();
+
+                direction *= 10000;*/
+
+                //this.collider.AddVelocity(-direction);
+            }
         }
 
         public void MeleeEnemy()
         {
-            DeleteEnemy();
+            if (this.player.meleeButtonDown)
+            {
+                DeleteEnemy();
+            }
         }
     }
 }

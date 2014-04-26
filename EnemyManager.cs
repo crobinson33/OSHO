@@ -17,6 +17,13 @@ namespace OSHO
 
         public Player player;
 
+        //local
+        private bool spawnFies;
+        private Vector2 spawnPosition;
+        private TimeSpan duration = new TimeSpan(0, 0, 1);
+        private TimeSpan accum = new TimeSpan();
+        private TimeSpan overAllDuration = new TimeSpan(0, 0, 10);
+        private TimeSpan overAllAccum = new TimeSpan();
 
         public EnemyManager(string tag, Level level) : base(tag)
         {
@@ -28,15 +35,60 @@ namespace OSHO
         public override void Update(float deltaTime)
         {
             //base.Update(deltaTime);
+
+            if (spawnFies)
+            {
+                //Console.WriteLine("checking flies");
+                PerformSpawn(deltaTime);
+            }
+        }
+
+        public void PerformSpawn(float deltaTime)
+        {
+            //Console.WriteLine(overAllDuration + ", " + overAllAccum);
+            if (overAllDuration > overAllAccum)
+            {
+                //Console.WriteLine("checking spawn time");
+                if (duration < accum)
+                {
+                    //Console.WriteLine("spawning fly");
+                    
+                    // time to spawn. only want to do one. that why it is here
+                    Enemy newEnemy = new Enemy("littleEye", this.spawnPosition, this.level.world, FindPlayer());
+                    level.AddObject(newEnemy);
+
+                    //reset
+                    accum = new TimeSpan();
+                }
+                else
+                {
+                    // its not time to spawn yet.
+                    accum += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
+                }
+            }
+            else
+            {
+                Console.WriteLine("ending little dudes");
+                // we have reached end of duration
+                spawnFies = false;
+            }
+
+            overAllAccum += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
         }
 
 
         public void SpawnLittleEyes(Vector2 incPosition)
         {
             Console.WriteLine("spawning little dudes");
+            this.spawnPosition = incPosition;
+            this.spawnFies = true;
+            overAllAccum = new TimeSpan();
 
-            Enemy newEnemy = new Enemy("littleEye", incPosition, this.level.world, FindPlayer());
-            level.AddObject(newEnemy);
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    Enemy newEnemy = new Enemy("littleEye", incPosition, this.level.world, FindPlayer());
+            //    level.AddObject(newEnemy);
+            //}
         }
 
         public Player FindPlayer()
@@ -46,6 +98,7 @@ namespace OSHO
             {
                 if (obj.tag == "one")
                 {
+                    this.player = (Player)obj;
                     return (Player)obj;
                 }
             }
