@@ -14,7 +14,7 @@ namespace OSHO
             Game game = new Game();
             Keyboard keyboard = new Keyboard();
 
-			Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1000, 1000), new Color(1f, 1f, 1f, 1f));
+			Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(1f, 1f, 1f, 1f));
             game.SetCurrentLevel(0);
 
             Spotlight sLight = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
@@ -60,25 +60,25 @@ namespace OSHO
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
 
+            LoadObjects trees = new LoadObjects();
+            trees.LoadTrees(level1);
 
-
-
-            Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
+            /*Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
             Tree tree2 = new Tree("tree", new Vector2(305, 95), level1.world);
             Tree tree3 = new Tree("tree", new Vector2(350, 102), level1.world);
             Tree tree4 = new Tree("tree", new Vector2(310, 80), level1.world);
             Tree tree5 = new Tree("tree", new Vector2(280, 91), level1.world);
-            Tree tree6 = new Tree("tree", new Vector2(265, 115), level1.world);
+            Tree tree6 = new Tree("tree", new Vector2(265, 115), level1.world);*/
 
             level1.AddObject(player1);
             level1.AddObject(item1);
             level1.AddObject(newEnemy);
-            level1.AddObject(tree1);
+            /*level1.AddObject(tree1);
             level1.AddObject(tree2);
             level1.AddObject(tree3);
             level1.AddObject(tree4);
             level1.AddObject(tree5);
-            level1.AddObject(tree6);
+            level1.AddObject(tree6);*/
 
             level1.AddObject(buttonOne);
 

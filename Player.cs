@@ -369,11 +369,7 @@ namespace OSHO
 
         public void CheckForIdle()
         {
-            /*playerStartShell = new Animation("startShell", 130, 4);
-            playerEndShell = new Animation("endShell", 140, 4);
-            shellShine = new Animation("shellShine", 150, 8);
-            shellEndWarning = new Animation("endShellWarning", 160, 8);*/
-            //Console.WriteLine("---");
+            //aConsole.WriteLine("---");
             if (Math.Abs(this.walkCollider.velocity.X) < 2.5f && Math.Abs(this.walkCollider.velocity.Y) < 2.5f)
             {
                 if (this.baseSprite.animationController.GetActiveAnimationName() != "idleFire" && this.baseSprite.animationController.GetActiveAnimationName() != "playerMelee")
