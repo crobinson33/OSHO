@@ -13,6 +13,8 @@ namespace OSHO
         World world;
         public BoxCollider collider;
         Vector2 colliderOffset;
+		public BoxCollider meleeCollider;
+		Vector2 meleeColliderOffset;
 
         //drawing stuff
         public Texture texture;
@@ -29,13 +31,19 @@ namespace OSHO
         public float hitCooldown;
 
         //animation
-        public Animation placeholder;
+        //public Animation placeholder;
+		public Animation hover;
+		public Animation attackRight;
+		public Animation attackLeft;
+		public Animation dying;
+		public Animation dead;
 
         //misc
         Player player;
         bool isAlive = true;
-        Camera camera;
+        //Camera camera;
         public EnemyManager enemyManager;
+		bool hasDealtDamage = false;
 
         //special move
         bool hasDashed = false;
@@ -47,6 +55,8 @@ namespace OSHO
         //callbacks
         public delegate void DestroyEnemy();
         public delegate void MeleeDestoryEnemy();
+
+		public delegate void CheckPlayerAndSwipe();
 
         public SkellyEnemy(string tag, Vector2 position, World world, Player player, Camera camera, EnemyManager manager) : base(tag)
         {
@@ -62,22 +72,51 @@ namespace OSHO
             enemyHit.SetCurrentTextureParameter("texture");
 
             //animation
-            placeholder = new Animation("placeholder", 0, 16);
+            //placeholder = new Animation("placeholder", 0, 16);
+			hover = new Animation("skellyHover", 0, 16);
+			attackRight = new Animation("skellyAttackRight", 16, 10);
+			attackLeft = new Animation("skellyAttackLeft", 16, 10, true);
+			dying = new Animation("skellyDying", 31, 8);
+			dead = new Animation("skellyDead", 38, 1);
 
-            sprite.AddAnimation(placeholder);
-            sprite.animationController.SetActiveAnimation(placeholder);
+            //sprite.AddAnimation(placeholder);
+			sprite.AddAnimation(hover);
+			sprite.AddAnimation(attackRight);
+			sprite.AddAnimation(attackLeft);
+			sprite.AddAnimation(dying);
+			sprite.AddAnimation(dead);
+            sprite.animationController.SetActiveAnimation(hover);
 
             //sprite.AddAnimation();
 
             //physics
             this.world = world;
-            colliderOffset = new Vector2(0, 0);
-            this.collider = new BoxCollider(tag, new Vector2(64, 64), this.position + this.colliderOffset);
+            colliderOffset = new Vector2(-13, -8);
+            this.collider = new BoxCollider(tag, new Vector2(35, 50), this.position + this.colliderOffset);
+			//this.collider.mass = 10000000;
             this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
             this.collider.AddTagToIgnore("enemyBullet");
+			this.collider.AddTagToIgnore("buttonOne");
+			this.collider.AddTagToIgnore("buttonTwo");
+			this.collider.AddTagToIgnore("buttonThree");
             this.collider.AddTagToIgnore("one");
+			this.collider.AddTagToIgnore(tag + "Melee");
             this.world.AddCollider(collider);
+
+			meleeColliderOffset = new Vector2(0, 0);
+			this.meleeCollider = new BoxCollider(tag + "Melee", new Vector2(64, 64), this.position + this.meleeColliderOffset);
+			this.meleeCollider.AddTagToIgnore("characterMelee");
+			this.meleeCollider.AddTagToIgnore("characterWalk");
+			this.meleeCollider.AddTagToIgnore("enemyBullet");
+			this.meleeCollider.AddTagToIgnore("buttonOne");
+			this.meleeCollider.AddTagToIgnore("buttonTwo");
+			this.meleeCollider.AddTagToIgnore("buttonThree");
+			this.meleeCollider.AddTagToIgnore("one");
+			this.meleeCollider.AddTagToIgnore("bullet");
+			this.meleeCollider.AddTagToIgnore(tag);
+			this.meleeCollider.debug = true;
+			this.world.AddCollider(meleeCollider);
 
             //misc
             this.objectDrawable = enemyDrawable;
@@ -85,13 +124,15 @@ namespace OSHO
             this.enemyManager = manager;
             this.player = player;
             this.health = 10;
-            this.camera = camera;
+            //this.camera = camera;
 
             //callbacks
             DestroyEnemy enemyCallback = DeleteEnemy;
             this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
             MeleeDestoryEnemy meleeEnemyCallback = MeleeEnemy;
             this.collider.CreateOnCollisionEnter("characterMelee", () => meleeEnemyCallback());
+			CheckPlayerAndSwipe playerCallback = CheckDamage;
+			this.meleeCollider.CreateOnCollisionEnter("one", () => playerCallback());
         }
 
         public override void Update(float deltaTime)
@@ -99,6 +140,7 @@ namespace OSHO
             if (isAlive)
             {
                 this.position = this.collider.position + this.colliderOffset;
+				this.meleeCollider.position = this.position;
 
                 if (health > 0)
                 {
@@ -130,7 +172,7 @@ namespace OSHO
                     if (this.sprite.animationController.hasReachedEnd)
                     {
                         Console.WriteLine("skelly dead!");
-                        this.sprite.animationController.SetActiveAnimation(placeholder);
+                        this.sprite.animationController.SetActiveAnimation(dead);
                         this.sprite.animationController.dontLoop = true;
                         isAlive = false;
                     }
@@ -141,6 +183,10 @@ namespace OSHO
                 {
                     collider.UpdateVertices();
                 }
+				if (meleeCollider.debug)
+				{
+					meleeCollider.UpdateVertices();
+				}
 
                 DashAtPlayer(deltaTime);
             }
@@ -156,6 +202,11 @@ namespace OSHO
             {
                 collider.DrawDebugBox(diffuseSurface, deltaTime);
             }
+
+			if (meleeCollider.debug)
+			{
+				meleeCollider.DrawDebugBox(diffuseSurface, deltaTime);
+			}
 
             base.Draw(diffuseSurface, lightMap, deltaTime);
         }
@@ -183,6 +234,19 @@ namespace OSHO
                 {
                     dashTime = new TimeSpan();
                     hasDashed = true;
+					// dash has ended play swipe.
+
+					// determine which direction player is to decide which animation to use.
+					if (player.position.X > this.position.X)
+					{
+						this.sprite.animationController.SetActiveAnimation(attackRight);
+						this.sprite.animationController.dontLoop = true;
+					}
+					else
+					{
+						this.sprite.animationController.SetActiveAnimation(attackLeft);
+						this.sprite.animationController.dontLoop = true;
+					}
                 }
                 dashTime += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
             }
@@ -198,6 +262,17 @@ namespace OSHO
                 timeOnCooldown += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
             }
 
+			if (this.sprite.animationController.GetActiveAnimationName() == "skellyAttackRight" ||
+			    this.sprite.animationController.GetActiveAnimationName() == "skellyAttackLeft")
+			{
+				if (this.sprite.animationController.hasReachedEnd)
+				{
+					this.sprite.animationController.SetActiveAnimation(hover);
+					this.sprite.animationController.dontLoop = false;
+					hasDealtDamage = false;
+				}
+			}
+
 
         }
 
@@ -211,7 +286,7 @@ namespace OSHO
                 if (health == 0)
                 {
                     this.world.RemoveCollider(this.collider);
-                    this.sprite.animationController.SetActiveAnimation(placeholder);
+                    this.sprite.animationController.SetActiveAnimation(dying);
                     this.sprite.animationController.dontLoop = true;
                 }
 
@@ -219,7 +294,7 @@ namespace OSHO
                 Vector2 direction = target - this.collider.position;
                 direction.Normalize();
 
-                direction *= 300;
+                direction *= 30;
 
                 this.collider.AddVelocity(-direction);
             }
@@ -233,5 +308,20 @@ namespace OSHO
                 DeleteEnemy();
             }
         }
+
+		public void CheckDamage()
+		{
+
+			if (this.sprite.animationController.GetActiveAnimationName() == "skellyAttackRight" ||
+			 this.sprite.animationController.GetActiveAnimationName() == "skellyAttackLeft")
+			{
+				if (hasDealtDamage == false)
+				{
+					Console.WriteLine ("we are inside the player.");
+					this.player.TakeDamage();
+					hasDealtDamage = true;
+				}
+			}
+		}
     }
 }

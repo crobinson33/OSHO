@@ -112,18 +112,7 @@ namespace OSHO
 
                 
 
-                if (invulnerable)
-                {
-                    shaderTween += 0.05f;
-                    enemyHit.SetParameter("tweenValue", shaderTween);
-                }
-
-                if (shaderTween > 1)
-                {
-                    invulnerable = false;
-                    shaderTween = 0;
-                    sprite.shader = null;
-                }
+                
 
                 if (health == 0)
                 {
@@ -144,6 +133,19 @@ namespace OSHO
                 
                 
             }
+
+			if (invulnerable)
+			{
+				shaderTween += 0.05f;
+				enemyHit.SetParameter("tweenValue", shaderTween);
+			}
+			
+			if (shaderTween > 1)
+			{
+				invulnerable = false;
+				shaderTween = 0;
+				sprite.shader = null;
+			}
 
             foreach (Bullet bullet in bullets)
             {
