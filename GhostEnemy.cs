@@ -172,8 +172,11 @@ namespace OSHO
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             diffuseSurface.Draw(enemyDrawable);
-            lightMap.Draw(this.leftEye);
-            lightMap.Draw(this.rightEye);
+            if (isAlive)
+            {
+                lightMap.Draw(this.leftEye);
+                lightMap.Draw(this.rightEye);
+            }
 
             foreach (Bullet bullet in bullets)
             {
