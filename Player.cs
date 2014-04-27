@@ -921,6 +921,8 @@ namespace OSHO
 			newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
             newBullet.collider.CreateOnCollisionEnter("bigEye", () => bulletCallback(newBullet));
             newBullet.collider.CreateOnCollisionEnter("littleEye", () => bulletCallback(newBullet));
+            newBullet.collider.CreateOnCollisionEnter("skelly", () => bulletCallback(newBullet));
+            newBullet.collider.CreateOnCollisionEnter("ghost", () => bulletCallback(newBullet));
 			bullets.Add(newBullet);
 		}
 

@@ -45,6 +45,8 @@ namespace OSHO
 
         //callbacks
         public delegate void DestroyBullet(Bullet bullet);
+        public delegate void DestroyEnemy();
+        public delegate void MeleeDestoryEnemy();
 
         public GhostEnemy(string tag, Vector2 position, World world, Player player, Camera camera, EnemyManager manager) : base(tag)
         {
@@ -82,17 +84,65 @@ namespace OSHO
             this.collider.debug = true;
             this.enemyManager = manager;
             this.player = player;
-            this.health = 10;
+            this.health = 3;
             this.camera = camera;
+
+            //callbacks
+            DestroyEnemy enemyCallback = DeleteEnemy;
+            this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
+            MeleeDestoryEnemy meleeEnemyCallback = MeleeEnemy;
+            this.collider.CreateOnCollisionEnter("characterMelee", () => meleeEnemyCallback());
         }
 
         public override void Update(float deltaTime)
         {
-            this.position = this.collider.position + this.colliderOffset;
-
-            if (collider.debug)
+            if (isAlive)
             {
-                collider.UpdateVertices();
+                this.position = this.collider.position + this.colliderOffset;
+
+                if (collider.debug)
+                {
+                    collider.UpdateVertices();
+                }
+
+                if (health > 0)
+                {
+                    CheckForRelocation(deltaTime);
+                }
+
+                
+
+                if (invulnerable)
+                {
+                    shaderTween += 0.05f;
+                    enemyHit.SetParameter("tweenValue", shaderTween);
+                }
+
+                if (shaderTween > 1)
+                {
+                    invulnerable = false;
+                    shaderTween = 0;
+                    sprite.shader = null;
+                }
+
+                if (health == 0)
+                {
+                    //Console.WriteLine(shaderTween);
+                    //if (shaderTween > 1)
+                    //{
+                    //Console.WriteLine(this.enemyManager.spawnFies);
+                    if (this.sprite.animationController.hasReachedEnd)
+                    {
+                        Console.WriteLine("ghost dead!");
+                        this.sprite.animationController.SetActiveAnimation(placeholder);
+                        this.sprite.animationController.dontLoop = true;
+                        isAlive = false;
+                    }
+                    //}
+                }
+
+                
+                
             }
 
             foreach (Bullet bullet in bullets)
@@ -100,7 +150,6 @@ namespace OSHO
                 bullet.Update(deltaTime);
             }
 
-            CheckForRelocation(deltaTime);
             CheckBulletScreenBounds();
 
             base.Update(deltaTime);
@@ -212,6 +261,40 @@ namespace OSHO
             //Console.WriteLine("removed");
             world.RemoveCollider(bullet.collider);
             bullets.Remove(bullet);
+        }
+
+        public void DeleteEnemy()
+        {
+            if (!invulnerable)
+            {
+                invulnerable = true;
+                health -= 1;
+                sprite.AddShader(enemyHit);
+                if (health == 0)
+                {
+                    Console.WriteLine("dying");
+                    this.world.RemoveCollider(this.collider);
+                    this.sprite.animationController.SetActiveAnimation(placeholder);
+                    this.sprite.animationController.dontLoop = true;
+                }
+
+                Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+                Vector2 direction = target - this.collider.position;
+                direction.Normalize();
+
+                direction *= 300;
+
+                this.collider.AddVelocity(-direction);
+            }
+        }
+
+        public void MeleeEnemy()
+        {
+            if (this.player.meleeButtonDown)
+            {
+                //Console.WriteLine("melee");
+                DeleteEnemy();
+            }
         }
     }
 }

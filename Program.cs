@@ -46,10 +46,10 @@ namespace OSHO
 
             Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard);
 
-            Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
-            item1.CreateAnimation("box1", 10, 10);
-            item1.collider.isStatic = true;
-            item1.collider.mass = 100000000;
+            //Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
+            //item1.CreateAnimation("box1", 10, 10);
+            //item1.collider.isStatic = true;
+            //item1.collider.mass = 100000000;
 
 
             //Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
@@ -64,8 +64,9 @@ namespace OSHO
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
 
-            LoadObjects trees = new LoadObjects();
-            trees.LoadTrees(level1);
+            LoadObjects objects = new LoadObjects();
+            objects.LoadTrees(level1);
+            objects.LoadGrass(level1);
 
             /*Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
             Tree tree2 = new Tree("tree", new Vector2(305, 95), level1.world);
@@ -75,7 +76,7 @@ namespace OSHO
             Tree tree6 = new Tree("tree", new Vector2(265, 115), level1.world);*/
 
             level1.AddObject(player1);
-            level1.AddObject(item1);
+            //level1.AddObject(item1);
             level1.AddObject(eyeEnemy);
             level1.AddObject(skellyEnemy);
             level1.AddObject(ghostEnemy);
