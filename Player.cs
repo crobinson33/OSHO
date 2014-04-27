@@ -259,11 +259,13 @@ namespace OSHO
             this.walkCollider.AddTagToIgnore("buttonOne");
             this.walkCollider.AddTagToIgnore("buttonTwo");
             this.walkCollider.AddTagToIgnore("buttonThree");
+			this.walkCollider.AddTagToIgnore("buttonFour");
 
             CheckButton buttonCallback = CheckButtonDown;
             this.walkCollider.CreateOnCollisionEnter("buttonOne", () => buttonCallback("buttonOne"));
             this.walkCollider.CreateOnCollisionEnter("buttonTwo", () => buttonCallback("buttonTwo"));
             this.walkCollider.CreateOnCollisionEnter("buttonThree", () => buttonCallback("buttonThree"));
+			this.walkCollider.CreateOnCollisionEnter("buttonFour", () => buttonCallback("buttonFour"));
 
             this.walkCollider.debug = true;
 
@@ -282,6 +284,11 @@ namespace OSHO
 
         public override void Update(float deltaTime)
         {
+			if (this.keyboard.IsKeyDown(Key.KeyCode.P))
+			{
+				this.walkCollider.position = new Vector2(1354, 1112);
+			}
+
             //this.collider.CalculatePoints();
             this.position = this.walkCollider.position - this.walkColliderOffset;
 			this.meleeCollider.position = new Vector2(this.position.X - 16, this.position.Y - 16);
@@ -384,6 +391,9 @@ namespace OSHO
                     case "buttonThree":
                         this.enemyManager.ButtonThreeDown();
                         break;
+					case "buttonFour":
+						this.enemyManager.ButtonFourDown();
+						break;
                 }
             }
         }

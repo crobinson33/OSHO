@@ -38,7 +38,7 @@ namespace OSHO
 
         //misc
         Player player;
-        bool isAlive = true;
+        //bool isAlive = true;
         Camera camera;
         public EnemyManager enemyManager;
         List<Bullet> bullets = new List<Bullet>();

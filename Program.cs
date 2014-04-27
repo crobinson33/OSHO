@@ -13,11 +13,11 @@ namespace OSHO
         {
             Game game = new Game();
 
-			Vector2 playerPos = new Vector2(1000, 1000);
+			Vector2 playerPos = new Vector2(1354, 1112);
 
             Keyboard keyboard = new Keyboard();
 
-            Level level1 = game.AddLevel(playerPos, new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(0.05f, 0.06f, 0.12f, 1f));
+            Level level1 = game.AddLevel(playerPos, new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2708, 2224), new Color(0.5f, 0.6f, 0.2f, 1f));
             game.SetCurrentLevel(0);
 
             //Spotlight sLight = new Spotlight(200, new Color(0.7f, 0.8f, 0.9f), new Vector2(400, 500), 100, 0.02f);
@@ -61,28 +61,29 @@ namespace OSHO
             //GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level1.world, player1, level1.camera, enemyManager);
 
 
-            Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(200, 200), level1.world, new Vector2(0, -32));
+			Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level1.world, new Vector2(0, -32));
             buttonOne.CreateAnimation("button", 0, 1);
             buttonOne.collider.isStatic = true;
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
             buttonOne.collider.AddTagToIgnore("bullet");
-            Item buttonTwo = new Item("buttonTwo", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(350, 200), level1.world, new Vector2(0, -32));
+            /*Item buttonTwo = new Item("buttonTwo", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(350, 200), level1.world, new Vector2(0, -32));
             buttonTwo.CreateAnimation("button", 0, 1);
             buttonTwo.collider.isStatic = true;
             buttonTwo.collider.mass = 100000000;
             buttonTwo.collider.AddTagToIgnore("one");
-            buttonOne.collider.AddTagToIgnore("bullet");
+            buttonTwo.collider.AddTagToIgnore("bullet");
             Item buttonThree = new Item("buttonThree", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(200, 350), level1.world, new Vector2(0, -32));
             buttonThree.CreateAnimation("button", 0, 1);
             buttonThree.collider.isStatic = true;
             buttonThree.collider.mass = 100000000;
             buttonThree.collider.AddTagToIgnore("one");
-            buttonOne.collider.AddTagToIgnore("bullet");
+            buttonThree.collider.AddTagToIgnore("bullet");*/
 
             LoadObjects objects = new LoadObjects();
-            //objects.LoadTrees(level1);
-            objects.LoadGrass(level1);
+            objects.LoadTrees(level1);
+            //objects.LoadGrass(level1);
+			objects.LoadBG(level1);
 
             /*Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
             Tree tree2 = new Tree("tree", new Vector2(305, 95), level1.world);
@@ -106,8 +107,8 @@ namespace OSHO
             level1.AddObject(tree6);*/
 
             level1.AddObject(buttonOne);
-            level1.AddObject(buttonTwo);
-            level1.AddObject(buttonThree);
+            //level1.AddObject(buttonTwo);
+            //level1.AddObject(buttonThree);
 
             //level1.AddLight(sLight);
             //level1.AddLight(sLight2);
@@ -127,6 +128,8 @@ namespace OSHO
             //level1.AddLight(asLight31);
             //level1.AddLight(asLight23);
             //level1.AddLight(asLight33);
+
+			enemyManager.level = level1;
 
             game.Start();
         }
