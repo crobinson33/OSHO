@@ -14,10 +14,10 @@ namespace OSHO
             Game game = new Game();
             Keyboard keyboard = new Keyboard();
 
-            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(0.25f, 0.25f, 0.25f, 1f));
+            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1048, 1048), new Color(0.05f, 0.13f, 0.18f, 1f));
             game.SetCurrentLevel(0);
 
-            Spotlight sLight = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
+            /*Spotlight sLight = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
             Spotlight sLight2 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(150, 100), 100, 1f);
             Spotlight sLight3 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(125, 150), 100, 1f);
 
@@ -39,12 +39,12 @@ namespace OSHO
 
             Spotlight asLight31 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(500, 300), 100, 0.33f, true);
             Spotlight asLight23 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(550, 300), 100, 0.33f, true);
-            Spotlight asLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
+            Spotlight asLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);*/
 
 
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
 
-            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
+            Player player1 = new Player("one", new Vector2(524, 524), level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
 
             //Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
             //item1.CreateAnimation("box1", 10, 10);
@@ -63,16 +63,19 @@ namespace OSHO
             buttonOne.collider.isStatic = true;
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
+            buttonOne.collider.AddTagToIgnore("bullet");
             Item buttonTwo = new Item("buttonTwo", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(350, 200), level1.world, new Vector2(0, -32));
             buttonTwo.CreateAnimation("button", 0, 1);
             buttonTwo.collider.isStatic = true;
             buttonTwo.collider.mass = 100000000;
             buttonTwo.collider.AddTagToIgnore("one");
+            buttonOne.collider.AddTagToIgnore("bullet");
             Item buttonThree = new Item("buttonThree", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(200, 350), level1.world, new Vector2(0, -32));
             buttonThree.CreateAnimation("button", 0, 1);
             buttonThree.collider.isStatic = true;
             buttonThree.collider.mass = 100000000;
             buttonThree.collider.AddTagToIgnore("one");
+            buttonOne.collider.AddTagToIgnore("bullet");
 
             LoadObjects objects = new LoadObjects();
             objects.LoadTrees(level1);
@@ -103,7 +106,7 @@ namespace OSHO
             level1.AddObject(buttonTwo);
             level1.AddObject(buttonThree);
 
-            level1.AddLight(sLight);
+            /*level1.AddLight(sLight);
             level1.AddLight(sLight2);
             level1.AddLight(sLight3);
             level1.AddLight(sLight21);
@@ -120,7 +123,7 @@ namespace OSHO
             level1.AddLight(asLight32);
             level1.AddLight(asLight31);
             level1.AddLight(asLight23);
-            level1.AddLight(asLight33);
+            level1.AddLight(asLight33);*/
 
             game.Start();
         }

@@ -41,6 +41,9 @@ namespace OSHO
             collider.AddTagToIgnore(tag);
             collider.AddTagToIgnore("characterWalk");
 			collider.AddTagToIgnore("characterMelee");
+            collider.AddTagToIgnore("buttonOne");
+            collider.AddTagToIgnore("buttonTwo");
+            collider.AddTagToIgnore("buttonThree");
             collider.clearVelocityAmount = 1;
             world.AddCollider(collider);
 
@@ -48,7 +51,7 @@ namespace OSHO
 
             this.collider.debug = true;
 
-            this.light = new Spotlight(20, new Color(1f, 1f, 1f), this.collider.position, 100, 0.05f, true);
+            this.light = new Spotlight(30, new Color(0.419f, 1f, 0f), this.collider.position, 100, 0.1f, true, true, 1.5f, 20f);
             light.shader.SetParameter("thisLightIntensity", light.intensity);
 
             aSprite.selfIlluminateShader = new Shader(null, "shaders/selfIlluminate.frag");
@@ -60,7 +63,7 @@ namespace OSHO
             //this.collider.AddVelocity(this.velocity);
             this.position = this.collider.position + this.colliderOffset;
             base.Update(deltaTime);
-            light.Update(new Vector2((this.collider.position.X + (aSprite.width / 2)), (this.collider.position.Y + (aSprite.height / 2))), deltaTime);
+            light.Update(new Vector2((this.collider.position.X + 5), (this.collider.position.Y + 5)), deltaTime);
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
