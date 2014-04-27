@@ -23,6 +23,10 @@ namespace OSHO
         public int health;
         public bool invulnerable;
 
+        // lights for eyes
+        public Spotlight leftEye;
+        public Spotlight rightEye;
+
         //shader
         public Shader enemyHit;
         public float shaderTween;
@@ -95,6 +99,12 @@ namespace OSHO
             this.collider.CreateOnCollisionEnter("bullet", () => enemyCallback());
             MeleeDestoryEnemy meleeEnemyCallback = MeleeEnemy;
             this.collider.CreateOnCollisionEnter("characterMelee", () => meleeEnemyCallback());
+
+            // eyes as candles
+            this.leftEye = new Spotlight(4, new Color(1f, 1f, 1f), new Vector2(this.collider.position.X + 25, this.collider.position.Y + 18), 100, 0.5f, true);
+            leftEye.shader.SetParameter("thisLightIntensity", leftEye.intensity);
+            this.rightEye = new Spotlight(4, new Color(1f, 1f, 1f), new Vector2(this.collider.position.X + 34, this.collider.position.Y + 18), 100, 0.5f, true);
+            rightEye.shader.SetParameter("thisLightIntensity", rightEye.intensity);
         }
 
         public override void Update(float deltaTime)
@@ -102,6 +112,7 @@ namespace OSHO
             if (isAlive)
             {
                 this.position = this.collider.position + this.colliderOffset;
+                setEyeLightPosition(deltaTime);
 
                 if (collider.debug)
                 {
@@ -112,10 +123,6 @@ namespace OSHO
                 {
                     CheckForRelocation(deltaTime);
                 }
-
-                
-
-                
 
                 if (health == 0)
                 {
@@ -163,6 +170,8 @@ namespace OSHO
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             diffuseSurface.Draw(enemyDrawable);
+            lightMap.Draw(this.leftEye);
+            lightMap.Draw(this.rightEye);
 
             foreach (Bullet bullet in bullets)
             {
@@ -305,6 +314,58 @@ namespace OSHO
             {
                 //Console.WriteLine("melee");
                 DeleteEnemy();
+            }
+        }
+
+        /// <summary>
+        /// This is so ugly
+        /// </summary>
+        public void setEyeLightPosition(float deltaTime)
+        {
+            if (sprite.animationController.curFrame == 0 || sprite.animationController.curFrame == 8)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 25 + 3), (this.collider.position.Y + 18 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 34 + 3), (this.collider.position.Y + 18 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 1 || sprite.animationController.curFrame == 7)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 26 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 35 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 2 || sprite.animationController.curFrame == 6)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 26 + 3), (this.collider.position.Y + 16 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 35 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 3 || sprite.animationController.curFrame == 5)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 27 + 3), (this.collider.position.Y + 15 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 36 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 4)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 27 + 3), (this.collider.position.Y + 15 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 36 + 3), (this.collider.position.Y + 19 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 9 || sprite.animationController.curFrame == 15)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 24 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 33 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 10 || sprite.animationController.curFrame == 14)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 24 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 33 + 3), (this.collider.position.Y + 16 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 11 || sprite.animationController.curFrame == 13)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 23 + 3), (this.collider.position.Y + 17 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 32 + 3), (this.collider.position.Y + 15 + 3)), deltaTime);
+            }
+            else if (sprite.animationController.curFrame == 12)
+            {
+                leftEye.Update(new Vector2((this.collider.position.X + 23 + 3), (this.collider.position.Y + 19 + 3)), deltaTime);
+                rightEye.Update(new Vector2((this.collider.position.X + 32 + 3), (this.collider.position.Y + 15 + 3)), deltaTime);
             }
         }
     }
