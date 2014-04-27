@@ -25,6 +25,10 @@ namespace OSHO
         private TimeSpan overAllDuration = new TimeSpan(0, 0, 10);
         private TimeSpan overAllAccum = new TimeSpan();
 
+        bool buttonOneDown = false;
+        bool buttonTwoDown = false;
+        bool buttonThreeDown = false;
+
         public EnemyManager(string tag, Level level) : base(tag)
         {
             this.level = level;
@@ -38,6 +42,42 @@ namespace OSHO
             {
                 //Console.WriteLine("checking flies");
                 PerformSpawn(deltaTime);
+            }
+        }
+
+        public void ButtonOneDown()
+        {
+            if (buttonOneDown != true)
+            {
+                FindPlayer();
+                Console.WriteLine("added eye");
+                BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level.world, this.player, level.camera, this);
+                this.level.AddObject(eyeEnemy);
+                buttonOneDown = true;
+            }
+        }
+
+        public void ButtonTwoDown()
+        {
+            if (buttonTwoDown != true)
+            {
+                FindPlayer();
+                Console.WriteLine("added skelly");
+                SkellyEnemy skellyEnemy = new SkellyEnemy("skelly", new Vector2(200, 100), level.world, player, level.camera, this);
+                this.level.AddObject(skellyEnemy);
+                buttonTwoDown = true;
+            }
+        }
+
+        public void ButtonThreeDown()
+        {
+            if (buttonThreeDown != true)
+            {
+                FindPlayer();
+                Console.WriteLine("added ghost");
+                GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level.world, player, level.camera, this);
+                this.level.AddObject(ghostEnemy);
+                buttonThreeDown = true;
             }
         }
 

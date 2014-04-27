@@ -77,6 +77,7 @@ namespace OSHO
 
         List<Bullet> bullets = new List<Bullet>();
         World world;
+        EnemyManager enemyManager;
 
         //Mouse mouse;
 
@@ -86,7 +87,7 @@ namespace OSHO
 		public bool meleeButtonDown = false;
         public bool canMelee = true;
         public bool canDealMeleeDamage = false;
-        public delegate void CheckButton();
+        public delegate void CheckButton(string button);
 
 
 		// for the sheild.
@@ -104,11 +105,12 @@ namespace OSHO
         TimeSpan timeToFire = new TimeSpan(0, 0, 0, 0, 150);
         //bool hasFired = false;
 
-        public Player(string tag, Vector2 position, World world, Mouse mouse, Camera camera, Keyboard keyboard) : base(tag)
+        public Player(string tag, Vector2 position, World world, Mouse mouse, Camera camera, Keyboard keyboard, EnemyManager enemyManager) : base(tag)
         {
             Console.WriteLine("player start...");
             this.position = position;
             this.keyboard = keyboard;
+            this.enemyManager = enemyManager;
 
 
             atexture = new Texture("assets/Hunch2.png");
@@ -254,9 +256,13 @@ namespace OSHO
             this.walkCollider.AddTagToIgnore("characterMelee");
             this.walkCollider.AddTagToIgnore("enemy");
             this.walkCollider.AddTagToIgnore("buttonOne");
+            this.walkCollider.AddTagToIgnore("buttonTwo");
+            this.walkCollider.AddTagToIgnore("buttonThree");
 
             CheckButton buttonCallback = CheckButtonDown;
-            this.walkCollider.CreateOnCollisionEnter("buttonOne", () => buttonCallback());
+            this.walkCollider.CreateOnCollisionEnter("buttonOne", () => buttonCallback("buttonOne"));
+            this.walkCollider.CreateOnCollisionEnter("buttonTwo", () => buttonCallback("buttonTwo"));
+            this.walkCollider.CreateOnCollisionEnter("buttonThree", () => buttonCallback("buttonThree"));
 
             this.walkCollider.debug = true;
 
@@ -359,13 +365,25 @@ namespace OSHO
 			Console.WriteLine ("do we do dmg: " + meleeButtonDown);
 		}*/
 
-        public void CheckButtonDown()
+        public void CheckButtonDown(string button)
         {
             //Console.WriteLine("on button");
             if (keyboard.IsKeyDown(Key.KeyCode.E))
             {
-                Console.WriteLine("on button and e down");
-                // do button event here.
+                switch(button)
+                { 
+                    case "buttonOne":
+                        //Console.WriteLine("on button and e down");
+                        // do button event here.
+                        this.enemyManager.ButtonOneDown();
+                        break;
+                    case "buttonTwo":
+                        this.enemyManager.ButtonTwoDown();
+                        break;
+                    case "buttonThree":
+                        this.enemyManager.ButtonThreeDown();
+                        break;
+                }
             }
         }
 

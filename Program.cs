@@ -44,7 +44,7 @@ namespace OSHO
 
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
 
-            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard);
+            Player player1 = new Player("one", new Vector2(320, 200), level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
 
             //Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
             //item1.CreateAnimation("box1", 10, 10);
@@ -53,16 +53,26 @@ namespace OSHO
 
 
             //Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
-            BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, level1.camera, enemyManager);
-            SkellyEnemy skellyEnemy = new SkellyEnemy("skelly", new Vector2(200, 100), level1.world, player1, level1.camera, enemyManager);
-            GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level1.world, player1, level1.camera, enemyManager);
+            //BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, level1.camera, enemyManager);
+            //SkellyEnemy skellyEnemy = new SkellyEnemy("skelly", new Vector2(200, 100), level1.world, player1, level1.camera, enemyManager);
+            //GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level1.world, player1, level1.camera, enemyManager);
 
 
-            Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(100, 25), level1.world, new Vector2(0, -32));
+            Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(200, 200), level1.world, new Vector2(0, -32));
             buttonOne.CreateAnimation("button", 0, 1);
             buttonOne.collider.isStatic = true;
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
+            Item buttonTwo = new Item("buttonTwo", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(350, 200), level1.world, new Vector2(0, -32));
+            buttonTwo.CreateAnimation("button", 0, 1);
+            buttonTwo.collider.isStatic = true;
+            buttonTwo.collider.mass = 100000000;
+            buttonTwo.collider.AddTagToIgnore("one");
+            Item buttonThree = new Item("buttonThree", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(200, 350), level1.world, new Vector2(0, -32));
+            buttonThree.CreateAnimation("button", 0, 1);
+            buttonThree.collider.isStatic = true;
+            buttonThree.collider.mass = 100000000;
+            buttonThree.collider.AddTagToIgnore("one");
 
             LoadObjects objects = new LoadObjects();
             objects.LoadTrees(level1);
@@ -77,9 +87,9 @@ namespace OSHO
 
             level1.AddObject(player1);
             //level1.AddObject(item1);
-            level1.AddObject(eyeEnemy);
-            level1.AddObject(skellyEnemy);
-            level1.AddObject(ghostEnemy);
+            //level1.AddObject(eyeEnemy);
+            //level1.AddObject(skellyEnemy);
+            //level1.AddObject(ghostEnemy);
             level1.AddManagerObject(enemyManager);
             //level1.AddObject(newEnemy);
             /*level1.AddObject(tree1);
@@ -90,6 +100,8 @@ namespace OSHO
             level1.AddObject(tree6);*/
 
             level1.AddObject(buttonOne);
+            level1.AddObject(buttonTwo);
+            level1.AddObject(buttonThree);
 
             level1.AddLight(sLight);
             level1.AddLight(sLight2);
