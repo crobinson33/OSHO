@@ -26,6 +26,8 @@ namespace OSHO
         public Animation dying;
         public Animation dead;
 
+        public bool hasBeenMeleeHit = false;
+
         // need to know where the player is.
         public Player player;
 		public bool isAlive = true;
@@ -146,7 +148,7 @@ namespace OSHO
 
 		public void MeleeEnemy()
 		{
-			if (this.player.meleeButtonDown)
+            if (this.player.meleeButtonDown)
 			{
                 /*
 				Vector2 target = this.player.collider.position + this.player.collider.size / 2;
@@ -157,8 +159,17 @@ namespace OSHO
 
 				this.collider.AddVelocity(-direction);
                  */
-				DeleteEnemy();
+                if (!hasBeenMeleeHit)
+                {
+                    DeleteEnemy();
+                    this.player.canDealMeleeDamage = false;
+                    hasBeenMeleeHit = true;
+                }
 			}
+            else
+            {
+                hasBeenMeleeHit = false;
+            }
 		}
 
 

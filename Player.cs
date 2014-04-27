@@ -85,6 +85,7 @@ namespace OSHO
 		public delegate void CheckMelee();
 		public bool meleeButtonDown = false;
         public bool canMelee = true;
+        public bool canDealMeleeDamage = false;
         public delegate void CheckButton();
 
 
@@ -654,6 +655,7 @@ namespace OSHO
                 if (canMelee)
                 {
                     canMelee = false;
+                    canDealMeleeDamage = true;
                     //this.baseSprite.animationController.dontLoop = false;
                     this.baseSprite.animationController.SetActiveAnimation(meleeAnimation);
                     this.baseSprite.animationController.dontLoop = true;
@@ -699,6 +701,7 @@ namespace OSHO
                         this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
                         this.playerMeleeWeapon.animationController.SetActiveAnimation(bellClear);
                         canMelee = true;
+                        canDealMeleeDamage = false;
                     }
                 }
                 else

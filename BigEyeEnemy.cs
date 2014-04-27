@@ -22,6 +22,7 @@ namespace OSHO
         //health stuff
         public int health;
         public bool invulnerable;
+        public bool hasBeenMeleeHit = false;
 
         //shader
         public Shader enemyHit;
@@ -318,7 +319,25 @@ namespace OSHO
         {
             if (this.player.meleeButtonDown)
             {
-                DeleteEnemy();
+                /*
+				Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+				Vector2 direction = target - this.collider.position;
+				direction.Normalize();
+
+				direction *= 6000;
+
+				this.collider.AddVelocity(-direction);
+                 */
+                if (!hasBeenMeleeHit)
+                {
+                    DeleteEnemy();
+                    this.player.canDealMeleeDamage = false;
+                    hasBeenMeleeHit = true;
+                }
+            }
+            else
+            {
+                hasBeenMeleeHit = false;
             }
         }
 
