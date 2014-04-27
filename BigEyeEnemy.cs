@@ -48,9 +48,10 @@ namespace OSHO
         Player player;
         bool isAlive = true;
         Camera camera;
+		bool hasBeenKnockedBack = false;
 
         //bullet logic
-        bool canFire = true;
+        //bool canFire = true;
         TimeSpan fireCooldown = new TimeSpan(0, 0, 0, 4);
         TimeSpan timeSinceLastFire = new TimeSpan();
         List<Bullet> bullets = new List<Bullet>();
@@ -89,6 +90,11 @@ namespace OSHO
             this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
             this.collider.AddTagToIgnore("skelly");
+			this.collider.AddTagToIgnore("skellyMelee");
+			this.collider.AddTagToIgnore("enemyBullet");
+			this.collider.AddTagToIgnore("buttonOne");
+			this.collider.AddTagToIgnore("buttonTwo");
+			this.collider.AddTagToIgnore("buttonThree");
             this.world.AddCollider(collider);
 
             //misc
@@ -118,6 +124,7 @@ namespace OSHO
                 {
                     //CheckForFire(deltaTime);
                     FollowPlayer();
+					CheckForKnockback();
                 }
 
                 CheckBulletScreenBounds();
@@ -354,5 +361,34 @@ namespace OSHO
             this.collider.AddVelocity(direction);
 
         }
+
+		public void CheckForKnockback()
+		{
+			if (hasBeenKnockedBack == false)
+			{
+				if (this.player.sheildOnCooldown)
+				{
+					Console.WriteLine ("knocking back");
+					hasBeenKnockedBack = true;
+					
+					Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+					Vector2 direction = target - this.collider.position;
+					direction.Normalize();
+					
+					direction *= 500;
+					
+					this.collider.AddVelocity(-direction);
+				}
+			}
+			else
+			{
+				if (this.player.sheildOnCooldown == false)
+				{
+					hasBeenKnockedBack = false;
+				}
+			}
+			
+			
+		}
     }
 }

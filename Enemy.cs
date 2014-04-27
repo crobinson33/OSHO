@@ -31,6 +31,7 @@ namespace OSHO
         // need to know where the player is.
         public Player player;
 		public bool isAlive = true;
+		bool hasBeenKnockedBack = false;
 
 		public delegate void DestroyEnemy();
 		public delegate void MeleeDestoryEnemy();
@@ -87,6 +88,7 @@ namespace OSHO
                 this.position = this.collider.position + this.colliderOffset;
                 //Console.WriteLine(this.player.position);
                 FollowPlayer();
+				CheckForKnockback();
 
                 if (invulnerable)
                 {
@@ -196,5 +198,34 @@ namespace OSHO
             this.collider.AddVelocity(direction);
             
         }
+
+		public void CheckForKnockback()
+		{
+			if (hasBeenKnockedBack == false)
+			{
+				if (this.player.sheildOnCooldown)
+				{
+					Console.WriteLine ("knocking back");
+					hasBeenKnockedBack = true;
+					
+					Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+					Vector2 direction = target - this.collider.position;
+					direction.Normalize();
+					
+					direction *= 500;
+					
+					this.collider.AddVelocity(-direction);
+				}
+			}
+			else
+			{
+				if (this.player.sheildOnCooldown == false)
+				{
+					hasBeenKnockedBack = false;
+				}
+			}
+			
+			
+		}
     }
 }

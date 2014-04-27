@@ -12,9 +12,12 @@ namespace OSHO
         static void Main(string[] args)
         {
             Game game = new Game();
+
+			Vector2 playerPos = new Vector2(1000, 1000);
+
             Keyboard keyboard = new Keyboard();
 
-            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(1048, 1048), new Color(0.05f, 0.06f, 0.12f, 1f));
+            Level level1 = game.AddLevel(playerPos, new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(0.05f, 0.06f, 0.12f, 1f));
             game.SetCurrentLevel(0);
 
             //Spotlight sLight = new Spotlight(200, new Color(0.7f, 0.8f, 0.9f), new Vector2(400, 500), 100, 0.02f);
@@ -44,7 +47,7 @@ namespace OSHO
 
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
 
-            Player player1 = new Player("one", new Vector2(524, 524), level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
+            Player player1 = new Player("one", playerPos, level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
 
             //Item item1 = new Item("box1", "assets/HunchSprite.png", new Vector2(64, 64), new Vector2(64, 64), new Vector2(300, 300), level1.world, new Vector2(0, 0));
             //item1.CreateAnimation("box1", 10, 10);
@@ -78,7 +81,7 @@ namespace OSHO
             buttonOne.collider.AddTagToIgnore("bullet");
 
             LoadObjects objects = new LoadObjects();
-            objects.LoadTrees(level1);
+            //objects.LoadTrees(level1);
             objects.LoadGrass(level1);
 
             /*Tree tree1 = new Tree("tree", new Vector2(310, 110), level1.world);
