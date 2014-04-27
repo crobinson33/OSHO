@@ -7,7 +7,7 @@ using SpaceBagel;
 
 namespace OSHO
 {
-    public class Bullet : BaseObject
+    public class Bullet : VisibleObject
     {
         public Texture texture;
         public AnimatedSprite aSprite;

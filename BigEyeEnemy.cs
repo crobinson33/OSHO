@@ -7,7 +7,7 @@ using SpaceBagel;
 
 namespace OSHO
 {
-    public class BigEyeEnemy : BaseObject
+    public class BigEyeEnemy : VisibleObject
     {
         //physics stuff
         World world;

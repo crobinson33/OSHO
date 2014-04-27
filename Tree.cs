@@ -7,7 +7,7 @@ using SpaceBagel;
 
 namespace OSHO
 {
-    public class Tree : BaseObject
+    public class Tree : VisibleObject
     {
         public BoxCollider collider;
         Vector2 colliderOffset;

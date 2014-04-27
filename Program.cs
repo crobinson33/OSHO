@@ -75,7 +75,7 @@ namespace OSHO
             level1.AddObject(player1);
             level1.AddObject(item1);
             level1.AddObject(eyeEnemy);
-            level1.AddObject(enemyManager);
+            level1.AddManagerObject(enemyManager);
             //level1.AddObject(newEnemy);
             /*level1.AddObject(tree1);
             level1.AddObject(tree2);

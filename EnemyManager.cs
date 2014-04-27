@@ -28,8 +28,6 @@ namespace OSHO
         public EnemyManager(string tag, Level level) : base(tag)
         {
             this.level = level;
-            this.objectDrawable = null;
-
         }
 
         public override void Update(float deltaTime)

@@ -7,7 +7,7 @@ using SpaceBagel;
 
 namespace OSHO
 {
-    public class Player : BaseObject
+    public class Player : VisibleObject
     {
         public Texture atexture;
         public Texture meleeTexture;
