@@ -62,7 +62,7 @@ namespace OSHO
             enemyHit.SetCurrentTextureParameter("texture");
 
             //animation
-            placeholder = new Animation("placeholder", 0, 1);
+            placeholder = new Animation("placeholder", 0, 16);
 
             sprite.AddAnimation(placeholder);
             sprite.animationController.SetActiveAnimation(placeholder);
@@ -177,8 +177,8 @@ namespace OSHO
             if (timeSinceLastMove > specialCooldown)
             {
                 // lets move
-                this.collider.position = new Vector2(random.Next((int)camera.GetTopLeftScreenBounds().X, (int)camera.GetBottomRightScreenBounds().X), 
-                                                     random.Next((int)camera.GetTopLeftScreenBounds().Y, (int)camera.GetBottomRightScreenBounds().Y));
+                this.collider.position = new Vector2(random.Next((int)camera.GetTopLeftScreenBounds().X, (int)camera.GetBottomRightScreenBounds().X - this.sprite.width), 
+                                                     random.Next((int)camera.GetTopLeftScreenBounds().Y, (int)camera.GetBottomRightScreenBounds().Y - this.sprite.height));
                 timeSinceLastMove = new TimeSpan();
 
 

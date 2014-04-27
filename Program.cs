@@ -14,32 +14,32 @@ namespace OSHO
             Game game = new Game();
             Keyboard keyboard = new Keyboard();
 
-			Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(1f, 1f, 1f, 1f));
+            Level level1 = game.AddLevel(new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(0.25f, 0.25f, 0.25f, 1f));
             game.SetCurrentLevel(0);
 
-            Spotlight sLight = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
-            Spotlight sLight2 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(150, 100), 100, 1f);
-            Spotlight sLight3 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(125, 150), 100, 1f);
+            Spotlight sLight = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(100, 100), 100, 1f);
+            Spotlight sLight2 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(150, 100), 100, 1f);
+            Spotlight sLight3 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(125, 150), 100, 1f);
 
-            Spotlight sLight21 = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(300, 100), 100, 0.66f);
-            Spotlight sLight22 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(350, 100), 100, 0.66f);
-            Spotlight sLight32 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(325, 150), 100, 0.66f);
+            Spotlight sLight21 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(300, 100), 100, 0.66f);
+            Spotlight sLight22 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(350, 100), 100, 0.66f);
+            Spotlight sLight32 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(325, 150), 100, 0.66f);
 
-            Spotlight sLight31 = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(500, 100), 100, 0.33f);
-            Spotlight sLight23 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(550, 100), 100, 0.33f);
-            Spotlight sLight33 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(525, 150), 100, 0.33f);
+            Spotlight sLight31 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(500, 100), 100, 0.33f);
+            Spotlight sLight23 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(550, 100), 100, 0.33f);
+            Spotlight sLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(525, 150), 100, 0.33f);
 
-            Spotlight asLight = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(100, 300), 100, 1f, true);
-            Spotlight asLight2 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(150, 300), 100, 1f, true);
-            Spotlight asLight3 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(125, 350), 100, 1f, true);
+            Spotlight asLight = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(100, 300), 100, 1f, true);
+            Spotlight asLight2 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(150, 300), 100, 1f, true);
+            Spotlight asLight3 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(125, 350), 100, 1f, true);
 
-            Spotlight asLight21 = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(300, 300), 100, 0.66f, true);
-            Spotlight asLight22 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(350, 300), 100, 0.66f, true);
-            Spotlight asLight32 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(325, 350), 100, 0.66f, true);
+            Spotlight asLight21 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(300, 300), 100, 0.66f, true);
+            Spotlight asLight22 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(350, 300), 100, 0.66f, true);
+            Spotlight asLight32 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(325, 350), 100, 0.66f, true);
 
-            Spotlight asLight31 = new Spotlight(50, new Color(1f, 0f, 0f), new Vector2(500, 300), 100, 0.33f, true);
-            Spotlight asLight23 = new Spotlight(50, new Color(0f, 1f, 0f), new Vector2(550, 300), 100, 0.33f, true);
-            Spotlight asLight33 = new Spotlight(50, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
+            Spotlight asLight31 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(500, 300), 100, 0.33f, true);
+            Spotlight asLight23 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(550, 300), 100, 0.33f, true);
+            Spotlight asLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(525, 350), 100, 0.33f, true);
 
 
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);

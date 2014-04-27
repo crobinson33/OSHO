@@ -62,7 +62,7 @@ namespace OSHO
             enemyHit.SetCurrentTextureParameter("texture");
 
             //animation
-            placeholder = new Animation("placeholder", 0, 1);
+            placeholder = new Animation("placeholder", 0, 16);
 
             sprite.AddAnimation(placeholder);
             sprite.animationController.SetActiveAnimation(placeholder);
