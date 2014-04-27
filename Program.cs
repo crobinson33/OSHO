@@ -20,32 +20,11 @@ namespace OSHO
             Level level1 = game.AddLevel(playerPos, new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2000, 2000), new Color(0.05f, 0.06f, 0.12f, 1f));
             game.SetCurrentLevel(0);
 
-            //Spotlight sLight = new Spotlight(200, new Color(0.7f, 0.8f, 0.9f), new Vector2(400, 500), 100, 0.02f);
-            //Spotlight sLight2 = new Spotlight(300, new Color(0.05f, 0.5f, 1f), new Vector2(250, 150), 100, 0.04f);
-            //Spotlight sLight3 = new Spotlight(150, new Color(0.8f, 0.2f, 0.35f), new Vector2(605, 320), 100, 0.03f);
 
-            //Spotlight sLight21 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(300, 100), 100, 0.66f);
-            //Spotlight sLight22 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(350, 100), 100, 0.66f);
-            //Spotlight sLight32 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(325, 150), 100, 0.66f);
-
-            //Spotlight sLight31 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(500, 100), 100, 0.33f);
-            //Spotlight sLight23 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(550, 100), 100, 0.33f);
-            //Spotlight sLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(525, 150), 100, 0.33f);
-
-            //Spotlight asLight = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(700, 500), 100, 0.7f, true);
-            //Spotlight asLight2 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(150, 300), 100, 0.6f, true);
-            //Spotlight asLight3 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(325, 850), 100, 0.3f, true);
-
-            //Spotlight asLight21 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(300, 300), 100, 0.66f, true);
-            //Spotlight asLight22 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(450, 100), 100, 0.66f, true);
-            //Spotlight asLight32 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(325, 350), 100, 0.66f, true);
-
-            //Spotlight asLight31 = new Spotlight(500, new Color(1f, 0f, 0f), new Vector2(500, 300), 100, 0.33f, true);
-            //Spotlight asLight23 = new Spotlight(500, new Color(0f, 1f, 0f), new Vector2(350, 760), 100, 0.33f, true);
-            //Spotlight asLight33 = new Spotlight(500, new Color(0f, 0f, 1f), new Vector2(825, 450), 100, 0.33f, true);
 
 
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
+            LightManager lightManager = new LightManager("lightManager", level1);
 
             Player player1 = new Player("one", playerPos, level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
 
@@ -108,25 +87,6 @@ namespace OSHO
             level1.AddObject(buttonOne);
             level1.AddObject(buttonTwo);
             level1.AddObject(buttonThree);
-
-            //level1.AddLight(sLight);
-            //level1.AddLight(sLight2);
-            //level1.AddLight(sLight3);
-            //level1.AddLight(sLight21);
-            //level1.AddLight(sLight22);
-            //level1.AddLight(sLight32);
-            //level1.AddLight(sLight31);
-            //level1.AddLight(sLight23);
-            //level1.AddLight(sLight33);
-            //level1.AddLight(asLight);
-            //level1.AddLight(asLight2);
-            //level1.AddLight(asLight3);
-            //level1.AddLight(asLight21);
-            //level1.AddLight(asLight22);
-            //level1.AddLight(asLight32);
-            //level1.AddLight(asLight31);
-            //level1.AddLight(asLight23);
-            //level1.AddLight(asLight33);
 
             game.Start();
         }
