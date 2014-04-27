@@ -88,6 +88,7 @@ namespace OSHO
             this.collider = new BoxCollider(tag, new Vector2(64, 64), this.position + this.colliderOffset);
             this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
+            this.collider.AddTagToIgnore("skelly");
             this.world.AddCollider(collider);
 
             //misc
@@ -115,7 +116,7 @@ namespace OSHO
 
                 if (health > 0)
                 {
-                    CheckForFire(deltaTime);
+                    //CheckForFire(deltaTime);
                     FollowPlayer();
                 }
 
@@ -233,7 +234,7 @@ namespace OSHO
             Vector2 direction = target - (this.collider.position + new Vector2(32, 32));
             direction.Normalize();
 
-            direction *= 1000;
+            direction *= 300;
 
             Bullet newBullet = new Bullet("enemyBullet", (this.collider.position + new Vector2(32, 32)), this.world, direction);
             newBullet.collider.AddVelocity(direction);
@@ -241,6 +242,7 @@ namespace OSHO
             newBullet.collider.AddTagToIgnore("littleEye");
             newBullet.collider.AddTagToIgnore("characterMelee");
             newBullet.collider.AddTagToIgnore("characterWalk");
+            newBullet.collider.AddTagToIgnore("skelly");
             DestroyBullet bulletCallback = DeleteBullet;
 
             //callbacks
@@ -347,7 +349,7 @@ namespace OSHO
             Vector2 direction = target - this.collider.position;
             direction.Normalize();
 
-            direction *= 50;
+            direction *= 1;
 
             this.collider.AddVelocity(direction);
 

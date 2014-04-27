@@ -140,7 +140,7 @@ namespace OSHO
                 Vector2 direction = target - this.collider.position;
                 direction.Normalize();
 
-                direction *= 10000;
+                direction *= 100;
 
                 this.collider.AddVelocity(-direction);
             }
@@ -191,7 +191,7 @@ namespace OSHO
             Vector2 direction = target - this.collider.position;
             direction.Normalize();
 
-            direction *= 500;
+            direction *= 3;
 
             this.collider.AddVelocity(direction);
             
