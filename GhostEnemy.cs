@@ -30,6 +30,7 @@ namespace OSHO
 
         //animation
         public Animation placeholder;
+		public Animation dead;
 
         //misc
         Player player;
@@ -63,8 +64,10 @@ namespace OSHO
 
             //animation
             placeholder = new Animation("placeholder", 0, 16);
+			dead = new Animation("ghostDead", 19, 1);
 
             sprite.AddAnimation(placeholder);
+			sprite.AddAnimation(dead);
             sprite.animationController.SetActiveAnimation(placeholder);
 
             //sprite.AddAnimation();
@@ -123,7 +126,7 @@ namespace OSHO
                     if (this.sprite.animationController.hasReachedEnd)
                     {
                         Console.WriteLine("ghost dead!");
-                        this.sprite.animationController.SetActiveAnimation(placeholder);
+                        this.sprite.animationController.SetActiveAnimation(dead);
                         this.sprite.animationController.dontLoop = true;
                         isAlive = false;
                     }
@@ -216,6 +219,9 @@ namespace OSHO
             newBullet.collider.AddTagToIgnore("characterMelee");
             newBullet.collider.AddTagToIgnore("characterWalk");
             newBullet.collider.AddTagToIgnore("skelly");
+			newBullet.collider.AddTagToIgnore("buttonOne");
+			newBullet.collider.AddTagToIgnore("buttonTwo");
+			newBullet.collider.AddTagToIgnore("buttonThree");
             DestroyBullet bulletCallback = DeleteBullet;
 
             //callbacks
@@ -269,6 +275,9 @@ namespace OSHO
         {
             if (!invulnerable)
             {
+				//we want our guy to move now.
+				timeSinceLastMove += specialCooldown;
+
                 invulnerable = true;
                 health -= 1;
                 sprite.AddShader(enemyHit);
@@ -286,7 +295,7 @@ namespace OSHO
 
                 direction *= 300;
 
-                this.collider.AddVelocity(-direction);
+                //this.collider.AddVelocity(-direction);
             }
         }
 

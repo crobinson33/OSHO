@@ -233,6 +233,7 @@ namespace OSHO
 			HurtPlayer damageCallback = TakeDamage;
 			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
             this.collider.CreateOnCollisionEnter("bigEye", () => damageCallback());
+			this.collider.CreateOnCollisionEnter("enemyBullet", () => damageCallback());
 
 			// our melee weapons
 
