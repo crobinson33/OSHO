@@ -30,7 +30,7 @@ namespace OSHO
 
         // need to know where the player is.
         public Player player;
-		public bool isAlive = true;
+		//public bool isAlive = true;
 		bool hasBeenKnockedBack = false;
 
 		public delegate void DestroyEnemy();
@@ -66,6 +66,9 @@ namespace OSHO
             this.collider = new BoxCollider(tag, new Vector2(20, 20), this.position + this.colliderOffset);
 			this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
+			this.collider.AddTagToIgnore("buttonOne");
+			this.collider.AddTagToIgnore("buttonTwo");
+			this.collider.AddTagToIgnore("buttonThree");
             //this.collider.AddTagToIgnore(tag);
             this.world.AddCollider(collider);
 

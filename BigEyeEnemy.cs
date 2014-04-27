@@ -46,7 +46,7 @@ namespace OSHO
 
         //misc
         Player player;
-        bool isAlive = true;
+        //bool isAlive = true;
         Camera camera;
 		bool hasBeenKnockedBack = false;
 
@@ -55,6 +55,14 @@ namespace OSHO
         TimeSpan fireCooldown = new TimeSpan(0, 0, 0, 4);
         TimeSpan timeSinceLastFire = new TimeSpan();
         List<Bullet> bullets = new List<Bullet>();
+
+		private TimeSpan duration = new TimeSpan(0, 0, 0, 0, 500);
+		private TimeSpan accum = new TimeSpan();
+		private TimeSpan overAllDuration = new TimeSpan(0, 0, 10);
+		private TimeSpan overAllAccum = new TimeSpan();
+		private bool spawnFlies = false;
+		private bool canEnd = false;
+
 
 
         public BigEyeEnemy(string tag, Vector2 position, World world, Player player, Camera camera, EnemyManager manager) : base(tag)
@@ -85,8 +93,8 @@ namespace OSHO
 
             //physics
             this.world = world;
-            colliderOffset = new Vector2(0, 0);
-            this.collider = new BoxCollider(tag, new Vector2(64, 64), this.position + this.colliderOffset);
+            colliderOffset = new Vector2(-10, -5);
+            this.collider = new BoxCollider(tag, new Vector2(40, 50), this.position + this.colliderOffset);
             this.collider.AddTagToIgnore("characterMelee");
             this.collider.AddTagToIgnore("characterWalk");
             this.collider.AddTagToIgnore("skelly");
@@ -127,6 +135,11 @@ namespace OSHO
 					CheckForKnockback();
                 }
 
+				if (spawnFlies)
+				{
+					PerformSpawn(deltaTime);
+				}
+
                 CheckBulletScreenBounds();
 
                 foreach (Bullet bullet in bullets)
@@ -149,7 +162,7 @@ namespace OSHO
 
                 //Console.WriteLine(shaderTween);
 
-                if (health == 0)
+                if (health == 0 && canEnd)
                 {
                     //Console.WriteLine(shaderTween);
                     //if (shaderTween > 1)
@@ -311,7 +324,8 @@ namespace OSHO
                     this.world.RemoveCollider(this.collider);
                     this.sprite.animationController.SetActiveAnimation(dying);
                     //this.sprite.animationController.dontLoop = true;
-                    this.enemyManager.SpawnLittleEyes(this.position + (this.collider.size / 2));
+                    //this.enemyManager.SpawnLittleEyes();
+					this.spawnFlies = true;
                 }
 
                 /*Vector2 target = this.player.collider.position + this.player.collider.size / 2;
@@ -389,6 +403,41 @@ namespace OSHO
 			}
 			
 			
+		}
+
+		public void PerformSpawn(float deltaTime)
+		{
+			//Console.WriteLine(overAllDuration + ", " + overAllAccum);
+			if (overAllDuration > overAllAccum)
+			{
+				//Console.WriteLine("checking spawn time");
+				if (duration < accum)
+				{
+					//Console.WriteLine("spawning fly");
+
+					// time to spawn. only want to do one. that why it is here
+					Enemy newEnemy = new Enemy("littleEye", this.position + new Vector2(this.sprite.width /2, this.sprite.height /2), this.enemyManager.level.world, this.enemyManager.FindPlayer());
+					this.enemyManager.level.AddObject(newEnemy);
+					
+					//reset
+					accum = new TimeSpan();
+				}
+				else
+				{
+					// its not time to spawn yet.
+					accum += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
+				}
+			}
+			else
+			{
+				Console.WriteLine("ending little dudes");
+				// we have reached end of duration
+				//spawnFies = false;
+				spawnFlies= false;
+				canEnd = true;
+			}
+			
+			overAllAccum += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
 		}
     }
 }

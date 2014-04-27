@@ -18,6 +18,8 @@ namespace OSHO
         public Animation defaultAnimation;
         public Animation downRunAnimation;
 
+		public bool isFinished = false;
+
 
         public Item(string tag, string texFilePath, Vector2 frameSize, Vector2 colliderSize, Vector2 pos, World world, Vector2 colliderOffset) : base(tag)
         {
@@ -37,6 +39,7 @@ namespace OSHO
             this.objectDrawable = asprite;
 
             collider.debug = true;
+			this.isAlive = false;
         }
 
         public void CreateAnimation(string animName, int frame, int numOfFrames)

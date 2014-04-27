@@ -46,6 +46,12 @@ namespace OSHO
             }
         }
 
+		public void LoadBG(Level level)
+		{
+			BackgroundItem newBG = new BackgroundItem("grass", "assets/FinalBackground.png", new Vector2(2708, 2224), new Vector2(0, 0));
+			level.AddBackgroundObject(newBG);
+		}
+
 
 
         public void LoadTrees(Level level)
@@ -86,14 +92,14 @@ namespace OSHO
 
 			// bout to get real ugly up in here.
 
-			int numberOfRings = 15;
-			int pointIncrementor = 10;
-			int radiusIncrementor = 40;
+			int numberOfRings = 6;
+			int pointIncrementor = 3;
+			int radiusIncrementor = 100;
 
 			int points = 1;
 			//int points2 = 20;
 			//int points3 = 30;
-			int radius = 400;
+			int radius = 200;
 			//int radius2 = 600;
 			//int radius3 = 620;
 
@@ -108,17 +114,17 @@ namespace OSHO
 				{
 					double angle = slice * i;
 					//Console.WriteLine("angle: " + angle);
-					float x = (float)(1000 + radius * Math.Cos(angle));
-					float y = (float)(1000 + radius * Math.Sin(angle));
+					float x = (float)(1354 + radius * Math.Cos(angle));
+					float y = (float)(1112 + radius * Math.Sin(angle));
 					Vector2 target = new Vector2(x, y);
 
-					/*Console.WriteLine ("creating tree at: " + target);
+					//Console.WriteLine ("creating tree at: " + target);
 					Tree newTree = new Tree("tree", target, level.world);
-					level.AddObject(newTree);*/
+					level.AddObject(newTree);
 
 
-					BackgroundItem newTree = new BackgroundItem("tree", "assets/tree.png", new Vector2(32, 128), target);
-					level.AddBackgroundObject(newTree);
+					/*BackgroundItem newTree = new BackgroundItem("tree", "assets/tree.png", new Vector2(32, 128), target);
+					level.AddBackgroundObject(newTree);*/
 				}
 
 				points += pointIncrementor;

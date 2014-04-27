@@ -29,6 +29,7 @@ namespace OSHO
             this.objectDrawable = sprite;
 
             collider.debug = true;
+			this.isAlive = false;
         }
 
         public override void Update(float deltaTime)
