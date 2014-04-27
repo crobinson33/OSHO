@@ -21,9 +21,15 @@ namespace OSHO
 
         public Animation idleDownAnimation;
         public Animation idleDownFire;
-        //public Animation idleUpAnimation;
-        //public Animation idleLeftAnimation;
-        //public Animation idleRightAnimation;
+
+        public Animation idleUpAnimation;
+        public Animation idleUpFire;
+
+        public Animation idleLeftAnimation;
+        public Animation idleLeftFire;
+
+        public Animation idleRightAnimation;
+        public Animation idleRightFire;
 
 
         public Animation weaponDown;
@@ -122,9 +128,15 @@ namespace OSHO
             // Create animations
             idleDownAnimation = new Animation("idleDown", 20, 7);
             idleDownFire = new Animation("idleFire", 50, 7);
-            //idleUpAnimation = new Animation("idleUp", 30, 7);
-            //idleRightAnimation = new Animation("idleRight", 40, 7);
-            //idleLeftAnimation = new Animation("idleLeft", 40, 7, true);
+
+            idleUpAnimation = new Animation("idleUp", 30, 7);
+            idleUpFire = new Animation("idleUpFire", 60, 7);
+
+            idleRightAnimation = new Animation("idleRight", 40, 7);
+            idleRightFire = new Animation("idleRightFire", 70, 7);
+
+            idleLeftAnimation = new Animation("idleLeft", 40, 7, true);
+            idleLeftFire = new Animation("idleLeftFire", 80, 7);
 
             //runs.
             runDownAnimation = new Animation("runDown", 90, 10);
@@ -162,9 +174,9 @@ namespace OSHO
             // Add animations
             baseSprite.AddAnimation(idleDownAnimation);
             baseSprite.AddAnimation(idleDownFire);
-            //baseSprite.AddAnimation(idleUpAnimation);
-            //baseSprite.AddAnimation(idleRightAnimation);
-            //baseSprite.AddAnimation(idleLeftAnimation);
+            baseSprite.AddAnimation(idleUpAnimation);
+            baseSprite.AddAnimation(idleRightAnimation);
+            baseSprite.AddAnimation(idleLeftAnimation);
             baseSprite.AddAnimation(runDownAnimation);
             baseSprite.AddAnimation(runUpAnimation);
             baseSprite.AddAnimation(runRightAnimation);
@@ -217,6 +229,7 @@ namespace OSHO
 			//add on collision enter with enemies.
 			HurtPlayer damageCallback = TakeDamage;
 			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
+            this.collider.CreateOnCollisionEnter("bigEye", () => damageCallback());
 
 			// our melee weapons
 
@@ -225,6 +238,7 @@ namespace OSHO
 			this.meleeCollider.AddTagToIgnore("one");
             this.meleeCollider.AddTagToIgnore("characterWalk");
 			this.meleeCollider.AddTagToIgnore("bullet");
+            this.meleeCollider.AddTagToIgnore("enemyBullet");
 
 			//CheckMelee meleeCallback = CheckMeleeRange;
 			//this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
@@ -369,19 +383,46 @@ namespace OSHO
 			}
 		}
 
+        public void SetIdleDirection(Animation direction)
+        {
+            //Console.WriteLine("setting idle");
+            this.baseSprite.animationController.SetActiveAnimation(direction);
+            this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+            this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+        }
+
         public void CheckForIdle()
         {
             //aConsole.WriteLine("---");
             if (Math.Abs(this.walkCollider.velocity.X) < 2.5f && Math.Abs(this.walkCollider.velocity.Y) < 2.5f)
             {
-                if (this.baseSprite.animationController.GetActiveAnimationName() != "idleFire" && this.baseSprite.animationController.GetActiveAnimationName() != "playerMelee")
+                if (CheckForIdleFire() != true && this.baseSprite.animationController.GetActiveAnimationName() != "playerMelee")
                 {
                     if (CheckIfInShell() == false)
                     {
-                        //Console.WriteLine("setting idle");
-                        this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
-                        this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
-                        this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+                        /*runDownAnimation = new Animation("runDown", 90, 10);
+                        runUpAnimation = new Animation("runUp", 100, 10);
+                        runRightAnimation = new Animation("runRight", 110, 10);
+                        runLeftAnimation = new Animation("runLeft", 120, 10);*/
+                        switch(this.baseSprite.animationController.GetActiveAnimationName())
+                        {
+                            case "runDown":
+                                SetIdleDirection(idleDownAnimation);
+                                break;
+                            case "runUp":
+                                SetIdleDirection(idleUpAnimation);
+                                break;
+                            case "runRight":
+                                SetIdleDirection(idleRightAnimation);
+                                break;
+                            case "runLeft":
+                                SetIdleDirection(idleLeftAnimation);
+                                break;
+                            /*case default:
+                                Console.WriteLine("default idle");
+                                break;*/
+                        }
+                        
                     }
                 }
             }
@@ -467,6 +508,18 @@ namespace OSHO
                         this.baseSprite.animationController.GetActiveAnimationName() == "startShell" ||
                         this.baseSprite.animationController.GetActiveAnimationName() == "endShell" ||
                         this.baseSprite.animationController.GetActiveAnimationName() == "endShellWarning")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckForIdleFire()
+        {
+            if (this.baseSprite.animationController.GetActiveAnimationName() == "idleFire" ||
+                this.baseSprite.animationController.GetActiveAnimationName() == "idleUpFire" ||
+                this.baseSprite.animationController.GetActiveAnimationName() == "idleLeftFire" ||
+                this.baseSprite.animationController.GetActiveAnimationName() == "idleRightFire")
             {
                 return true;
             }
@@ -780,6 +833,42 @@ namespace OSHO
 							FireBullet(velocityToAdd5, spawnPosition5);
 
 							break;
+
+                        case "idleUp":
+                        case "idleUpFire":
+                            this.baseSprite.animationController.SetActiveAnimation(idleUpFire);
+                            this.playerArm.animationController.SetActiveAnimation(playerArmUp);
+                            this.playerWeaponSprite.animationController.SetActiveAnimation(weaponUp);
+                            this.playerDrawable.drawPartsInFront = false;
+
+                            Vector2 velocityToAdd6 = new Vector2(0, -(bulletVelocity));
+                            Vector2 spawnPosition6 = new Vector2(this.position.X + 28, this.position.Y);
+							FireBullet(velocityToAdd6, spawnPosition6);
+                            break;
+
+                        case "idleRight":
+                        case "idleRightFire":
+                            this.baseSprite.animationController.SetActiveAnimation(idleRightFire);
+                            this.playerArm.animationController.SetActiveAnimation(playerArmRight);
+                            this.playerWeaponSprite.animationController.SetActiveAnimation(weaponRight);
+                            this.playerDrawable.drawPartsInFront = false;
+
+                            Vector2 velocityToAdd7 = new Vector2(bulletVelocity, 0);
+                            Vector2 spawnPosition7 = new Vector2(this.position.X + 50, this.position.Y + 24);
+							FireBullet(velocityToAdd7, spawnPosition7);
+                            break;
+
+                        case "idleLeft":
+                        case "idleLeftFire":
+                            this.baseSprite.animationController.SetActiveAnimation(idleLeftFire);
+                            this.playerArm.animationController.SetActiveAnimation(playerArmLeft);
+                            this.playerWeaponSprite.animationController.SetActiveAnimation(weaponLeft);
+                            this.playerDrawable.drawPartsInFront = true;
+
+                            Vector2 velocityToAdd8 = new Vector2(-(bulletVelocity), 0);
+                            Vector2 spawnPosition8 = new Vector2(this.position.X + 10, this.position.Y + 24);
+							FireBullet(velocityToAdd8, spawnPosition8);
+                            break;
 						default:
 							Console.WriteLine("Default case");
 							break;
@@ -790,11 +879,26 @@ namespace OSHO
             }
             else
             {
-                if (this.baseSprite.animationController.GetActiveAnimationName() == "idleFire")
+                if (CheckForIdleFire())
                 {
-                    this.baseSprite.animationController.SetActiveAnimation(idleDownAnimation);
-                    this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
-                    this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+                    switch (this.baseSprite.animationController.GetActiveAnimationName())
+                    {
+                        case "idleFire":
+                            SetIdleDirection(idleDownAnimation);
+                            break;
+                        case "idleUpFire":
+                            SetIdleDirection(idleUpAnimation);
+                            break;
+                        case "idleRightFire":
+                            SetIdleDirection(idleRightAnimation);
+                            break;
+                        case "idleLeftFire":
+                            SetIdleDirection(idleLeftAnimation);
+                            break;
+                        /*case default:
+                            Console.WriteLine("default idle");
+                            break;*/
+                    }
                 }
             }
             //Console.WriteLine((int)(deltaTime * 1000));

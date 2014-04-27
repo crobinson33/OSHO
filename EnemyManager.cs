@@ -18,9 +18,9 @@ namespace OSHO
         public Player player;
 
         //local
-        private bool spawnFies;
+        public bool spawnFies;
         private Vector2 spawnPosition;
-        private TimeSpan duration = new TimeSpan(0, 0, 1);
+        private TimeSpan duration = new TimeSpan(0, 0, 0, 0, 500);
         private TimeSpan accum = new TimeSpan();
         private TimeSpan overAllDuration = new TimeSpan(0, 0, 10);
         private TimeSpan overAllAccum = new TimeSpan();

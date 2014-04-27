@@ -53,7 +53,7 @@ namespace OSHO
 
 
             //Enemy newEnemy = new Enemy("enemy", new Vector2(100, 100), level1.world, player1);
-            BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, enemyManager);
+            BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, level1.camera, enemyManager);
 
 
             Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(100, 25), level1.world, new Vector2(0, -32));

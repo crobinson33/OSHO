@@ -29,7 +29,11 @@ namespace OSHO
         public float hitCooldown;
 
         //animation
-        public Animation placeholder;
+        //public Animation placeholder;
+        public Animation flyAnimation;
+        public Animation dying;
+        public Animation exploding;
+        public Animation dead;
 
         //manager
         public EnemyManager enemyManager;
@@ -37,12 +41,21 @@ namespace OSHO
         //callbacks
         public delegate void DestroyEnemy();
         public delegate void MeleeDestoryEnemy();
+        public delegate void DestroyBullet(Bullet bullet);
 
         //misc
         Player player;
         bool isAlive = true;
+        Camera camera;
 
-        public BigEyeEnemy(string tag, Vector2 position, World world, Player player, EnemyManager manager) : base(tag)
+        //bullet logic
+        bool canFire = true;
+        TimeSpan fireCooldown = new TimeSpan(0, 0, 0, 4);
+        TimeSpan timeSinceLastFire = new TimeSpan();
+        List<Bullet> bullets = new List<Bullet>();
+
+
+        public BigEyeEnemy(string tag, Vector2 position, World world, Player player, Camera camera, EnemyManager manager) : base(tag)
         {
             this.position = position;
 
@@ -56,9 +69,17 @@ namespace OSHO
             enemyHit.SetCurrentTextureParameter("texture");
 
             //animation
-            placeholder = new Animation("placeHolder", 0, 1);
-            sprite.AddAnimation(placeholder);
-            sprite.animationController.SetActiveAnimation(placeholder);
+            //placeholder = new Animation("placeHolder", 0, 1);
+            flyAnimation = new Animation("bigEyeFlying", 0, 8);
+            dying = new Animation("bigEyeDying", 9, 5);
+            exploding = new Animation("bigEyeExploding", 14, 4);
+            dead = new Animation("bigEyeDead", 8, 1);
+
+            //sprite.AddAnimation(placeholder);
+            sprite.AddAnimation(flyAnimation);
+            sprite.AddAnimation(dying);
+            sprite.AddAnimation(exploding);
+            sprite.animationController.SetActiveAnimation(flyAnimation);
 
             //physics
             this.world = world;
@@ -74,6 +95,7 @@ namespace OSHO
             this.enemyManager = manager;
             this.player = player;
             this.health = 10;
+            this.camera = camera;
 
             //callbacks
             DestroyEnemy enemyCallback = DeleteEnemy;
@@ -89,6 +111,19 @@ namespace OSHO
                 this.position = this.collider.position + this.colliderOffset;
                 //Console.WriteLine(this.player.position);
                 //FollowPlayer();
+
+                if (health > 0)
+                {
+                    CheckForFire(deltaTime);
+                    FollowPlayer();
+                }
+
+                CheckBulletScreenBounds();
+
+                foreach (Bullet bullet in bullets)
+                {
+                    bullet.Update(deltaTime);
+                }
 
                 if (invulnerable)
                 {
@@ -107,13 +142,22 @@ namespace OSHO
 
                 if (health == 0)
                 {
-                    if (shaderTween > 1)
+                    //Console.WriteLine(shaderTween);
+                    //if (shaderTween > 1)
+                    //{
+                    //    //Console.WriteLine(this.enemyManager.spawnFies);
+                        
+                    //}
+
+                    if (this.enemyManager.spawnFies == false)
                     {
-                        if (this.sprite.animationController.hasReachedEnd)
-                        {
-                            this.sprite.animationController.SetActiveAnimation(placeholder);
-                            isAlive = false;
-                        }
+                        //if (this.sprite.animationController.hasReachedEnd)
+                        //{
+                        Console.WriteLine("exploding!!!");
+                        this.sprite.animationController.SetActiveAnimation(exploding);
+                        this.sprite.animationController.dontLoop = true;
+                        isAlive = false;
+                        //}
                     }
                 }
 
@@ -122,13 +166,26 @@ namespace OSHO
                     collider.UpdateVertices();
                 }
 
-                base.Update(deltaTime);
+                
             }
+
+            if (this.sprite.animationController.GetActiveAnimationName() == "bigEyeExploding" && this.sprite.animationController.hasReachedEnd)
+            {
+                this.sprite.animationController.SetActiveAnimation(dead);
+            }
+
+
+            base.Update(deltaTime);
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
         {
             diffuseSurface.Draw(enemyDrawable);
+
+            foreach (Bullet bullet in bullets)
+            {
+                bullet.Draw(diffuseSurface, lightMap, deltaTime);
+            }
 
             if (collider.debug)
             {
@@ -136,6 +193,100 @@ namespace OSHO
             }
 
             base.Draw(diffuseSurface, lightMap, deltaTime);
+        }
+
+        /// <summary>
+        /// See if its time to fire. if so, call fire.
+        /// </summary>
+        /// <param name="deltaTime">float deltaTime</param>
+        public void CheckForFire(float deltaTime)
+        {
+            //Console.WriteLine("checking fire");
+            if (timeSinceLastFire > fireCooldown)
+            {
+                //Console.WriteLine("firing");
+                // get the points around the circle.
+                int points = 10;
+                int radius = 5;
+                double slice = 2 * Math.PI / points;
+                for (int i = 0; i < points; i++)
+                {
+                    double angle = slice * i;
+                    //Console.WriteLine("angle: " + angle);
+                    float x = (float)((this.position.X + 32) + radius * Math.Cos(angle));
+                    float y = (float)((this.position.Y + 32) + radius * Math.Sin(angle));
+                    Vector2 target = new Vector2(x, y);
+                    //Console.WriteLine(target);
+                    Fire(target);
+                }
+
+                    
+                timeSinceLastFire = new TimeSpan();
+            }
+
+            timeSinceLastFire += new TimeSpan(0, 0, 0, 0, (int)(deltaTime * 1000));
+        }
+
+        public void Fire(Vector2 target)
+        {
+            Vector2 direction = target - (this.collider.position + new Vector2(32, 32));
+            direction.Normalize();
+
+            direction *= 1000;
+
+            Bullet newBullet = new Bullet("enemyBullet", (this.collider.position + new Vector2(32, 32)), this.world, direction);
+            newBullet.collider.AddVelocity(direction);
+            newBullet.collider.AddTagToIgnore(this.tag);
+            newBullet.collider.AddTagToIgnore("littleEye");
+            newBullet.collider.AddTagToIgnore("characterMelee");
+            newBullet.collider.AddTagToIgnore("characterWalk");
+            DestroyBullet bulletCallback = DeleteBullet;
+
+            //callbacks
+            newBullet.collider.CreateOnCollisionEnter("box1", () => bulletCallback(newBullet));
+            newBullet.collider.CreateOnCollisionEnter("one", () => bulletCallback(newBullet));
+            //newBullet.collider.CreateOnCollisionEnter("littleEye", () => bulletCallback(newBullet));
+
+
+            bullets.Add(newBullet);
+
+        }
+
+        public void CheckBulletScreenBounds()
+        {
+            for (int i = bullets.Count - 1; i >= 0; i--)
+            {
+
+                if (bullets[i].position.X < camera.GetTopLeftScreenBounds().X)
+                {
+                    DeleteBullet(bullets[i]);
+                    return;
+                }
+                //Console.WriteLine(bullets[i].position.X + ", " + (bullets[i].position.X + bullets[i].width )+ ", " + bullets[i].collider.bottomRight.X);
+                if (bullets[i].position.X + bullets[i].width > camera.GetBottomRightScreenBounds().X)
+                {
+                    DeleteBullet(bullets[i]);
+                    return;
+                }
+                if (bullets[i].position.Y < camera.GetTopLeftScreenBounds().Y)
+                {
+                    DeleteBullet(bullets[i]);
+                    return;
+                }
+                if (bullets[i].position.Y + bullets[i].height > camera.GetBottomRightScreenBounds().Y)
+                {
+                    DeleteBullet(bullets[i]);
+                    return;
+                }
+
+            }
+        }
+
+        public void DeleteBullet(Bullet bullet)
+        {
+            //Console.WriteLine("removed");
+            world.RemoveCollider(bullet.collider);
+            bullets.Remove(bullet);
         }
 
         public void DeleteEnemy()
@@ -148,8 +299,8 @@ namespace OSHO
                 if (health == 0)
                 {
                     this.world.RemoveCollider(this.collider);
-                    this.sprite.animationController.SetActiveAnimation(placeholder);
-                    this.sprite.animationController.dontLoop = true;
+                    this.sprite.animationController.SetActiveAnimation(dying);
+                    //this.sprite.animationController.dontLoop = true;
                     this.enemyManager.SpawnLittleEyes(this.position + (this.collider.size / 2));
                 }
 
@@ -169,6 +320,18 @@ namespace OSHO
             {
                 DeleteEnemy();
             }
+        }
+
+        public void FollowPlayer()
+        {
+            Vector2 target = this.player.collider.position + this.player.collider.size / 2;
+            Vector2 direction = target - this.collider.position;
+            direction.Normalize();
+
+            direction *= 50;
+
+            this.collider.AddVelocity(direction);
+
         }
     }
 }
