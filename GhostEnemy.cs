@@ -89,7 +89,7 @@ namespace OSHO
 
             //misc
             this.objectDrawable = enemyDrawable;
-            this.collider.debug = true;
+            //this.collider.debug = true;
             this.enemyManager = manager;
             this.player = player;
             this.health = 3;

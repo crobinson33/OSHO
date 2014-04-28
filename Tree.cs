@@ -17,11 +17,11 @@ namespace OSHO
         public Tree(string tag, Vector2 pos, World world) : base(tag)
         {
             this.position = pos;
-            texture = new Texture("assets/tree.png");
-            sprite = new Sprite(texture, 32, 128, 98);
+            texture = new Texture("assets/bigtree.png");
+            sprite = new Sprite(texture, 160, 160, 150);
 
-            colliderOffset = new Vector2(-14, -94);
-            collider = new BoxCollider(tag, new Vector2(5, 5), this.position);
+            colliderOffset = new Vector2(-64, -124);
+            collider = new BoxCollider(tag, new Vector2(30, 30), this.position);
             collider.isStatic = true;
             this.collider.mass = 100000000;
             world.AddCollider(collider);

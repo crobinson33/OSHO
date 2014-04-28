@@ -61,8 +61,9 @@ namespace OSHO
 				if (FindObject("buttonOne").isFinished)
 				{
 					Console.WriteLine ("all enemies dead, adding next button");
-					Item buttonTwo = new Item("buttonTwo", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
+					Item buttonTwo = new Item("buttonTwo", "assets/Button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
 					buttonTwo.CreateAnimation("button", 0, 1);
+					//buttonTwo.CreateAnimation("buttonDown", 1, 2);
 					buttonTwo.collider.isStatic = true;
 					buttonTwo.collider.mass = 100000000;
 					buttonTwo.collider.AddTagToIgnore("one");
@@ -83,8 +84,9 @@ namespace OSHO
 				if (FindObject("buttonTwo").isFinished)
 				{
 					Console.WriteLine ("all enemies dead, adding next button");
-					Item buttonThree = new Item("buttonThree", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
+					Item buttonThree = new Item("buttonThree", "assets/Button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
 					buttonThree.CreateAnimation("button", 0, 1);
+					//buttonThree.CreateAnimation("buttonDown", 1, 2);
 					buttonThree.collider.isStatic = true;
 					buttonThree.collider.mass = 100000000;
 					buttonThree.collider.AddTagToIgnore("one");
@@ -105,8 +107,9 @@ namespace OSHO
 				if (FindObject("buttonThree").isFinished)
 				{
 					Console.WriteLine ("all enemies dead, adding next button");
-					Item buttonFour = new Item("buttonFour", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
+					Item buttonFour = new Item("buttonFour", "assets/Button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level.world, new Vector2(0, -32));
 					buttonFour.CreateAnimation("button", 0, 1);
+					//buttonFour.CreateAnimation("buttonDown", 1, 2);
 					buttonFour.collider.isStatic = true;
 					buttonFour.collider.mass = 100000000;
 					buttonFour.collider.AddTagToIgnore("one");
@@ -168,6 +171,8 @@ namespace OSHO
                 this.level.AddObject(eyeEnemy);*/
                 buttonOneDown = true;
 
+				FindObject("buttonOne").CreateAnimation("button", 1, 2);
+
 
 				int enemies = 3;
 				int radius = 400;
@@ -215,6 +220,7 @@ namespace OSHO
                 //SkellyEnemy skellyEnemy = new SkellyEnemy("skelly", this.player.position, level.world, player, level.camera, this);
                 //this.level.AddObject(skellyEnemy);
                 buttonTwoDown = true;
+				FindObject("buttonTwo").CreateAnimation("button", 1, 2);
 
 				int enemies = 2;
 				int radius = 400;
@@ -245,6 +251,7 @@ namespace OSHO
                 //GhostEnemy ghostEnemy = new GhostEnemy("ghost", this.player.position, level.world, player, level.camera, this);
                 //this.level.AddObject(ghostEnemy);
                 buttonThreeDown = true;
+				FindObject("buttonThree").CreateAnimation("button", 1, 2);
 
 				int enemies = 3;
 				int radius = 400;
@@ -275,6 +282,7 @@ namespace OSHO
 				//GhostEnemy ghostEnemy = new GhostEnemy("ghost", this.player.position, level.world, player, level.camera, this);
 				//this.level.AddObject(ghostEnemy);
 				buttonFourDown = true;
+				FindObject("buttonFour").CreateAnimation("button", 1, 2);
 
 				int enemies = 3;
 				int radius = 400;

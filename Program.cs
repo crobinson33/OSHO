@@ -40,8 +40,9 @@ namespace OSHO
             //GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level1.world, player1, level1.camera, enemyManager);
 
 
-			Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level1.world, new Vector2(0, -32));
-            buttonOne.CreateAnimation("button", 0, 1);
+			Item buttonOne = new Item("buttonOne", "assets/Button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level1.world, new Vector2(0, -32));
+			//buttonOne.CreateAnimation("buttonDown", 1, 2);
+			buttonOne.CreateAnimation("button", 0, 1);
             buttonOne.collider.isStatic = true;
             buttonOne.collider.mass = 100000000;
             buttonOne.collider.AddTagToIgnore("one");
