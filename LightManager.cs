@@ -65,9 +65,9 @@ namespace OSHO
             sLight5 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.05f);
             sLight6 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.04f);
 
-            sLight7 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.08f, true);
-            sLight8 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.04f, true);
-            sLight9 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.02f, true);
+            sLight7 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.12f, true);
+            sLight8 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.18f, true);
+            sLight9 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.2f, true);
             sLight10 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.01f);
             sLight11 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.04f);
             sLight12 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.02f);
