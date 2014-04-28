@@ -65,26 +65,26 @@ namespace OSHO
             sLight5 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.05f);
             sLight6 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.04f);
 
-            sLight7 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.2f, true);
-            sLight8 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.2f, true);
-            sLight9 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.15f, true);
-            sLight10 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.02f);
-            sLight11 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.05f);
-            sLight12 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.07f);
+            sLight7 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.08f, true);
+            sLight8 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.04f, true);
+            sLight9 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.02f, true);
+            sLight10 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.01f);
+            sLight11 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.04f);
+            sLight12 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.02f);
 
-            sLight13 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.15f, true);
-            sLight14 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.15f, true);
-            sLight15 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.2f, true);
-            sLight16 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.02f);
-            sLight17 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.06f);
-            sLight18 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.08f);
+            sLight13 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.1f, true);
+            sLight14 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.09f, true);
+            sLight15 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.07f, true);
+            sLight16 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.01f);
+            sLight17 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.005f);
+            sLight18 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.003f);
 
-            sLight19 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.1f, true);
-            sLight20 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.1f, true);
-            sLight21 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.2f, true);
-            sLight22 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.02f);
-            sLight23 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.04f);
-            sLight24 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.08f);
+            sLight19 = new Spotlight(300, new Color(0.7f, 0.5f, 0.4f), new Vector2(1254, 1112), 100, 0.06f, true);
+            sLight20 = new Spotlight(200, new Color(0.2f, 0.6f, 0.3f), new Vector2(1404, 1112), 100, 0.08f, true);
+            sLight21 = new Spotlight(400, new Color(0.3f, 0.2f, 0.8f), new Vector2(1104, 1112), 100, 0.04f, true);
+            sLight22 = new Spotlight(500, new Color(0.3f, 0.4f, 0.8f), new Vector2(1254, 1112), 100, 0.001f);
+            sLight23 = new Spotlight(600, new Color(0.6f, 0.2f, 0.1f), new Vector2(1404, 1112), 100, 0.0006f);
+            sLight24 = new Spotlight(600, new Color(0.4f, 0.8f, 0.3f), new Vector2(1104, 1112), 100, 0.0008f);
         }
         public override void Update(float deltaTime)
         {
@@ -106,7 +106,7 @@ namespace OSHO
             }
             if (enemyManager.buttonTwoDown && !phaseTwoSpawned)
             {
-                level.ambientColor = new Color(0.06f, 0.05f, 0.08f, 1f);
+                level.ambientColor = new Color(0.06f, 0.03f, 0.02f, 1f);
                 level.RemoveLight(sLight1);
                 level.RemoveLight(sLight2);
                 level.RemoveLight(sLight3);
@@ -123,7 +123,7 @@ namespace OSHO
             }
             if (enemyManager.buttonThreeDown && !phaseThreeSpawned)
             {
-                level.ambientColor = new Color(0.015f, 0.06f, 0.07f, 1f);
+                level.ambientColor = new Color(0.005f, 0.015f, 0.03f, 1f);
                 level.RemoveLight(sLight7);
                 level.RemoveLight(sLight8);
                 level.RemoveLight(sLight9);
@@ -140,7 +140,7 @@ namespace OSHO
             }
             if (enemyManager.buttonFourDown && !phaseFourSpawned)
             {
-                level.ambientColor = new Color(0.01f, 0.02f, 0.03f, 1f);
+                level.ambientColor = new Color(0.003f, 0.008f, 0.01f, 1f);
                 level.RemoveLight(sLight13);
                 level.RemoveLight(sLight14);
                 level.RemoveLight(sLight15);
