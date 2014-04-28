@@ -20,11 +20,8 @@ namespace OSHO
             Level level1 = game.AddLevel(playerPos, new Vector2(game.windowWidth / 2, game.windowHeight / 2), new Vector2(2708, 2224), new Color(0.5f, 0.6f, 0.2f, 1f));
             game.SetCurrentLevel(0);
 
-
-
-
             EnemyManager enemyManager = new EnemyManager("enemyManager", level1);
-            LightManager lightManager = new LightManager("lightManager", level1);
+            LightManager lightManager = new LightManager("lightManager", level1, enemyManager);
 
             Player player1 = new Player("one", playerPos, level1.world, level1.mouse, level1.camera, keyboard, enemyManager);
 
@@ -38,7 +35,6 @@ namespace OSHO
             //BigEyeEnemy eyeEnemy = new BigEyeEnemy("bigEye", new Vector2(100, 100), level1.world, player1, level1.camera, enemyManager);
             //SkellyEnemy skellyEnemy = new SkellyEnemy("skelly", new Vector2(200, 100), level1.world, player1, level1.camera, enemyManager);
             //GhostEnemy ghostEnemy = new GhostEnemy("ghost", new Vector2(300, 100), level1.world, player1, level1.camera, enemyManager);
-
 
 			Item buttonOne = new Item("buttonOne", "assets/red_button.png", new Vector2(64, 64), new Vector2(64, 32), new Vector2(1354, 1112), level1.world, new Vector2(0, -32));
             buttonOne.CreateAnimation("button", 0, 1);
@@ -77,6 +73,7 @@ namespace OSHO
             //level1.AddObject(skellyEnemy);
             //level1.AddObject(ghostEnemy);
             level1.AddManagerObject(enemyManager);
+            level1.AddManagerObject(lightManager);
             //level1.AddObject(newEnemy);
             /*level1.AddObject(tree1);
             level1.AddObject(tree2);
@@ -90,6 +87,7 @@ namespace OSHO
             //level1.AddObject(buttonThree);
 
 			enemyManager.level = level1;
+            lightManager.level = level1;
             game.Start();
         }
     }

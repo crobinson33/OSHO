@@ -25,13 +25,13 @@ namespace OSHO
         private TimeSpan overAllDuration = new TimeSpan(0, 0, 10);
         private TimeSpan overAllAccum = new TimeSpan();
 
-        bool buttonOneDown = false;
-		bool buttonOneOver = false;
-        bool buttonTwoDown = false;
-		bool buttonTwoOver = false;
-        bool buttonThreeDown = false;
-		bool buttonThreeOver = false;
-		bool buttonFourDown = false;
+        public bool buttonOneDown = false;
+        public bool buttonOneOver = false;
+        public bool buttonTwoDown = false;
+        public bool buttonTwoOver = false;
+        public bool buttonThreeDown = false;
+        public bool buttonThreeOver = false;
+        public bool buttonFourDown = false;
 
         public EnemyManager(string tag, Level level) : base(tag)
         {

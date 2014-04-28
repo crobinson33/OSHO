@@ -49,6 +49,7 @@
     <Compile Include="EnemyManager.cs" />
     <Compile Include="GhostEnemy.cs" />
     <Compile Include="Item.cs" />
+    <Compile Include="LightManager.cs" />
     <Compile Include="LoadObjects.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
