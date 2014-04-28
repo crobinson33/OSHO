@@ -103,11 +103,12 @@ namespace OSHO
 			this.collider.AddTagToIgnore("buttonOne");
 			this.collider.AddTagToIgnore("buttonTwo");
 			this.collider.AddTagToIgnore("buttonThree");
+			this.collider.AddTagToIgnore("tree");
             this.world.AddCollider(collider);
 
             //misc
             this.objectDrawable = enemyDrawable;
-            this.collider.debug = true;
+            //this.collider.debug = true;
             this.enemyManager = manager;
             this.player = player;
             this.health = 10;

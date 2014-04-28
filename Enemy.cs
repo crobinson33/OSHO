@@ -81,7 +81,7 @@ namespace OSHO
 
             this.objectDrawable = enemyDrawable;
 
-            this.collider.debug = true;
+            //this.collider.debug = true;
         }
 
         public override void Update(float deltaTime)

@@ -246,7 +246,7 @@ namespace OSHO
 
 			//CheckMelee meleeCallback = CheckMeleeRange;
 			//this.meleeCollider.CreateOnCollisionEnter("enemy", () => meleeCallback());
-			this.meleeCollider.debug = true;
+			//this.meleeCollider.debug = true;
 
             // Walk collider on his little feetsies
             this.walkColliderOffset = new Vector2(26, 41);
@@ -267,7 +267,7 @@ namespace OSHO
             this.walkCollider.CreateOnCollisionEnter("buttonThree", () => buttonCallback("buttonThree"));
 			this.walkCollider.CreateOnCollisionEnter("buttonFour", () => buttonCallback("buttonFour"));
 
-            this.walkCollider.debug = true;
+            //this.walkCollider.debug = true;
 
             this.world.AddCollider(this.walkCollider);
             this.world.AddCollider(this.collider);
@@ -277,7 +277,7 @@ namespace OSHO
 
             //this.mouse = mouse;
 
-            this.collider.debug = true;
+            //this.collider.debug = true;
 
             Console.WriteLine("player end...");
         }

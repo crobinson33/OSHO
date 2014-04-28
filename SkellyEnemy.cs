@@ -116,12 +116,12 @@ namespace OSHO
 			this.meleeCollider.AddTagToIgnore("one");
 			this.meleeCollider.AddTagToIgnore("bullet");
 			this.meleeCollider.AddTagToIgnore(tag);
-			this.meleeCollider.debug = true;
+			//this.meleeCollider.debug = true;
 			this.world.AddCollider(meleeCollider);
 
             //misc
             this.objectDrawable = enemyDrawable;
-            this.collider.debug = true;
+            //this.collider.debug = true;
             this.enemyManager = manager;
             this.player = player;
             this.health = 10;
