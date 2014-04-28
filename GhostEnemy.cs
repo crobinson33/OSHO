@@ -236,6 +236,7 @@ namespace OSHO
 			newBullet.collider.AddTagToIgnore("buttonOne");
 			newBullet.collider.AddTagToIgnore("buttonTwo");
 			newBullet.collider.AddTagToIgnore("buttonThree");
+			newBullet.collider.AddTagToIgnore("tree");
             DestroyBullet bulletCallback = DeleteBullet;
 
             //callbacks

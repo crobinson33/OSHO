@@ -44,6 +44,7 @@ namespace OSHO
             collider.AddTagToIgnore("buttonOne");
             collider.AddTagToIgnore("buttonTwo");
             collider.AddTagToIgnore("buttonThree");
+			collider.AddTagToIgnore("tree");
             collider.clearVelocityAmount = 1;
             world.AddCollider(collider);
 
