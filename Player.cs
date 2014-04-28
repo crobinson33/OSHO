@@ -98,6 +98,8 @@ namespace OSHO
 		TimeSpan timeSinceLastSheild = new TimeSpan(0, 0, 0);
 		TimeSpan sheildCooldown = new TimeSpan(0, 0, 5);
 
+		public int health = 100;
+
 
         // for fire rate.
         //int fireRateSeconds = 1;
@@ -231,7 +233,7 @@ namespace OSHO
 
 			//add on collision enter with enemies.
 			HurtPlayer damageCallback = TakeDamage;
-			this.collider.CreateOnCollisionEnter("enemy", () => damageCallback());
+			this.collider.CreateOnCollisionEnter("littleEye", () => damageCallback());
             this.collider.CreateOnCollisionEnter("bigEye", () => damageCallback());
 			this.collider.CreateOnCollisionEnter("enemyBullet", () => damageCallback());
 
@@ -279,57 +281,68 @@ namespace OSHO
 
             //this.collider.debug = true;
 
+
+
             Console.WriteLine("player end...");
         }
 
         public override void Update(float deltaTime)
         {
-			if (this.keyboard.IsKeyDown(Key.KeyCode.P))
+			Console.WriteLine (health);
+			if (health > 0)
 			{
-				this.walkCollider.position = new Vector2(1354, 1112);
+				if (this.keyboard.IsKeyDown(Key.KeyCode.P))
+				{
+					this.walkCollider.position = new Vector2(1354, 1112);
+				}
+
+	            //this.collider.CalculatePoints();
+	            this.position = this.walkCollider.position - this.walkColliderOffset;
+				this.meleeCollider.position = new Vector2(this.position.X - 16, this.position.Y - 16);
+	            this.collider.position = this.position - this.colliderOffset;
+
+				//Console.WriteLine ("pos: " + this.position + ", col pos: " + this.meleeCollider.position);
+	            //asprite.Update(this.position);
+	            HandleInput(deltaTime);
+	            //Console.WriteLine("getting called...");
+
+	            //Console.WriteLine(bullets.Count);
+	            foreach(Bullet bullet in bullets)
+	            {
+	                bullet.Update(deltaTime);
+
+	                if (bullet.collider.debug)
+	                {
+	                    bullet.collider.UpdateVertices();
+	                }
+	            }
+
+
+	            //remove bullets off screen
+	            CheckBulletScreenBounds();
+	            CheckForIdle();
+
+	            base.Update(deltaTime);
+	            camera.SetCenterPosition(Util.Lerp(camera.GetCurCenter(), this.position, 0.08f));
+
+	            if (collider.debug)
+	            {
+	                collider.UpdateVertices();
+	            }
+				if (this.meleeCollider.debug)
+				{
+					this.meleeCollider.UpdateVertices();
+				}
+	            if (this.walkCollider.debug)
+	            {
+	                this.walkCollider.UpdateVertices(Color.Magenta);
+	            }
 			}
 
-            //this.collider.CalculatePoints();
-            this.position = this.walkCollider.position - this.walkColliderOffset;
-			this.meleeCollider.position = new Vector2(this.position.X - 16, this.position.Y - 16);
-            this.collider.position = this.position - this.colliderOffset;
-
-			//Console.WriteLine ("pos: " + this.position + ", col pos: " + this.meleeCollider.position);
-            //asprite.Update(this.position);
-            HandleInput(deltaTime);
-            //Console.WriteLine("getting called...");
-
-            //Console.WriteLine(bullets.Count);
-            foreach(Bullet bullet in bullets)
-            {
-                bullet.Update(deltaTime);
-
-                if (bullet.collider.debug)
-                {
-                    bullet.collider.UpdateVertices();
-                }
-            }
-
-
-            //remove bullets off screen
-            CheckBulletScreenBounds();
-            CheckForIdle();
-
-            base.Update(deltaTime);
-            camera.SetCenterPosition(Util.Lerp(camera.GetCurCenter(), this.position, 0.08f));
-
-            if (collider.debug)
-            {
-                collider.UpdateVertices();
-            }
-			if (this.meleeCollider.debug)
+			if (this.keyboard.IsKeyDown(Key.KeyCode.R))
 			{
-				this.meleeCollider.UpdateVertices();
+				this.health += 100;
 			}
-            if (this.walkCollider.debug)
-            {
-                this.walkCollider.UpdateVertices(Color.Magenta);
-            }
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
@@ -405,6 +418,7 @@ namespace OSHO
 			{
 				Console.WriteLine("i got hit!");
 				//this.collider.isStatic = false;
+				this.health -= 1;
 			}
 			else
 			{
