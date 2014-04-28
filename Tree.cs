@@ -28,7 +28,7 @@ namespace OSHO
 
             this.objectDrawable = sprite;
 
-            collider.debug = true;
+            //collider.debug = true;
 			this.isAlive = false;
         }
 
