@@ -11,6 +11,9 @@ namespace OSHO
     {
         public Texture atexture;
         public Texture meleeTexture;
+
+		public Texture deathTex;
+
         public MultiDrawable playerDrawable;
 
         //public Texture playerWeapon;
@@ -18,6 +21,7 @@ namespace OSHO
         public AnimatedSprite playerWeaponSprite;
         public AnimatedSprite playerArm;
         public AnimatedSprite playerMeleeWeapon;
+		public AnimatedSprite playerDeath;
 
         public Animation idleDownAnimation;
         public Animation idleDownFire;
@@ -63,6 +67,9 @@ namespace OSHO
         public Animation meleeAnimation;
         public Animation bellSwing;
         public Animation bellClear;
+
+		public Animation death;
+		public Animation playerClear;
 
         public Shader test;
 
@@ -117,16 +124,19 @@ namespace OSHO
 
             atexture = new Texture("assets/Hunch2.png");
             meleeTexture = new Texture("assets/Bell.png");
+			deathTex = new Texture("assets/Death.png");
 
             baseSprite = new AnimatedSprite(atexture, 64, 64, 48);
             playerWeaponSprite = new AnimatedSprite(atexture, 64, 64);
             playerArm = new AnimatedSprite(atexture, 64, 64);
             playerMeleeWeapon = new AnimatedSprite(meleeTexture, 128, 128);
+			playerDeath = new AnimatedSprite(deathTex, 64, 64);
 
             playerDrawable = new MultiDrawable(baseSprite);
             playerDrawable.AddDrawable(playerArm);
             playerDrawable.AddDrawable(playerWeaponSprite);
             playerDrawable.AddDrawable(playerMeleeWeapon);
+			playerDrawable.AddDrawable(playerDeath);
 
             this.camera = camera;
             
@@ -175,6 +185,10 @@ namespace OSHO
             meleeAnimation = new Animation("playerMelee", 170, 8);
             bellSwing = new Animation("bellSwing", 1, 8);
             bellClear = new Animation("bellClear", 0, 1);
+
+			playerClear = new Animation("playerClear", 29, 1);
+			death = new Animation("playerDead", 0, 4);
+			this.playerDeath.animationController.SetActiveAnimation(runUpAnimation);
 
             // Add animations
             baseSprite.AddAnimation(idleDownAnimation);
@@ -338,11 +352,29 @@ namespace OSHO
 	                this.walkCollider.UpdateVertices(Color.Magenta);
 	            }
 			}
+			else
+			{
+				if (this.playerDeath.animationController.GetActiveAnimationName() != "playerDead")
+				{
+					this.baseSprite.animationController.SetActiveAnimation(playerClear);
+					this.playerWeaponSprite.animationController.SetActiveAnimation(weaponClear);
+					this.playerArm.animationController.SetActiveAnimation(playerArmClear);
+					this.playerDeath.animationController.SetActiveAnimation(death);
+					this.playerDeath.animationController.dontLoop = true;
+
+
+				}
+				base.Update(deltaTime);
+			}
 
 			if (this.keyboard.IsKeyDown(Key.KeyCode.R))
 			{
 				this.health += 100;
+				this.playerDeath.animationController.SetActiveAnimation(runUpAnimation);
+				this.playerDeath.animationController.dontLoop = false;
 			}
+
+			//base.Update(deltaTime);
         }
 
         public override void Draw(Surface diffuseSurface, Surface lightMap, float deltaTime)
